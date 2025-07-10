@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+     <meta charset="UTF-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <title>Keloola Corporation | Detail Popular Article</title>
+     <link rel="stylesheet" href="./dist/css/output.css">
+</head>
+
+<body>
+     <!-- Navbar -->
+     <nav class="bg-white-primary shadow">
+          <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+               <div class="flex items-center space-x-4">
+                    <img src="./assets/keloola-logo.png" alt="Logo" class="w-20 h-20 object-contain">
+               </div>
+               <ul class="hidden md:flex items-center space-x-6 font-medium" id="nav-menu">
+                    <li><a href="index.html" target="_blank" class="text-black-keloola hover:text-red-keloola">Home</a>
+                    </li>
+                    <li><a href="knowledge.html" target="_blank"
+                              class="active text-black-keloola hover:text-red-keloola">Knowledge Base</a></li>
+                    <li><a href="#" class="text-black-keloola hover:text-red-keloola">Community</a></li>
+                    <li><a href="#" class="text-black-keloola hover:text-red-keloola">Sign In</a></li>
+                    <li class="relative ml-2">
+                         <button id="font-button"
+                              class="text-black-keloola hover:text-red-keloola">A<sup>+</sup></button>
+                         <div id="font-menu"
+                              class="absolute hidden mt-2 bg-white-primary shadow-md rounded-md p-2 z-50 right-0 w-max">
+                              <h3 class="text-black-keloola mb-2">Font Size</h3>
+                              <div class="flex items-center space-x-2 border border-gray-primary p-2 rounded">
+                                   <button id="decrease-font"
+                                        class="bg-gray-primary px-2 py-1 rounded text-md hover:bg-gray-secondary">-</button>
+                                   <span id="font-size-display" class="px-2 py-1">16px</span>
+                                   <button id="increase-font"
+                                        class="bg-gray-primary text-white px-2 py-1 rounded text-md hover:bg-gray-secondary">+</button>
+                              </div>
+                              <h3 class="text-black-keloola mt-4 mb-2">Layout</h3>
+                              <div class="flex space-x-4">
+                                   <button id="layout-1"
+                                        class="border border-rgb-keloola rounded p-2 hover:bg-gray-secondary">
+                                        <div class="w-10 h-10 bg-gray-primary"></div>
+                                   </button>
+                                   <button id="layout-2"
+                                        class="border border-rgb-keloola rounded p-2 hover:bg-gray-secondary">
+                                        <div class="w-10 h-10 bg-gray-primary"></div>
+                                   </button>
+                              </div>
+                              <div class="flex justify-between items-center mt-4">
+                                   <label class="text-sm text-black-keloola">Full Width</label>
+                                   <div class="relative">
+                                        <input type="checkbox" id="full-width-toggle" class="hidden">
+                                        <label for="full-width-toggle" class="flex items-center cursor-pointer">
+                                             <div
+                                                  class="w-12 h-6 bg-gray-primary rounded-full transition-colors duration-200">
+                                             </div>
+                                             <div id="toggle-circle"
+                                                  class="absolute w-4 h-4 bg-blue-primary rounded-full transform translate-x-1 transition-transform duration-200">
+                                             </div>
+                                        </label>
+                                   </div>
+                              </div>
+                         </div>
+                    </li>
+
+                    <li class="relative">
+                         <button id="desktop-language-button"
+                              class="text-black-keloola text-sm hover:text-red-keloola flex items-center">
+
+                              English <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 ml-1" fill="none"
+                                   viewBox="0 0 24 24" stroke="currentColor">
+                                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M19 9l-7 7-7-7" />
+                              </svg>
+                         </button>
+                         <ul id="desktop-language-menu"
+                              class="absolute hidden mt-2 p-2 bg-white-primary shadow rounded-md text-sm z-50 right-0">
+                              <li><a href="#" class="block px-4 py-2 hover:text-primary">English</a></li>
+                              <li><a href="#" class="block px-4 py-2 hover:text-primary">Spanish</a></li>
+                              <li><a href="#" class="block px-4 py-2 hover:text-primary">French</a></li>
+                         </ul>
+                    </li>
+               </ul>
+               <button class="md:hidden text-black-keloola" id="mobile-menu-button">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                         class="w-6 h-6">
+                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                              d="M4 6h16M4 12h16m-7 6h7" />
+                    </svg>
+               </button>
+          </div>
+          <!-- Mobile Menu -->
+          <div id="mobile-menu" class="hidden md:hidden">
+               <div class="min-h-screen bg-white-primary">
+                    <ul class="flex flex-col items-center justify-center space-y-4 py-8">
+                         <li><a href="index.html" target="_blank" class="text-black-keloola text-lg">Home</a>
+                         </li>
+                         <li><a href="knowledge.html" target="_blank"
+                                   class="active text-black-keloola text-lg">Knowledge
+                                   Base</a></li>
+                         <li><a href="#" class="text-black-keloola text-lg">Community</a></li>
+                         <li><a href="#" class="text-black-keloola text-lg">Sign In</a></li>
+                         <li class="relative">
+                              <button id="mobile-language-button"
+                                   class="text-black-keloola bg-gray-parent px-4 py-2 rounded text-lg hover:bg-gray-primary flex items-center">
+                                   English <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 ml-1" fill="none"
+                                        viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                             d="M19 9l-7 7-7-7" />
+                                   </svg>
+                              </button>
+                              <ul id="mobile-language-menu"
+                                   class="hidden absolute mt-2 bg-white shadow rounded-md text-lg w-full">
+                                   <li><a href="#" class="block px-4 py-2 hover:bg-gray-parent text-center">English</a>
+                                   </li>
+                                   <li><a href="#" class="block px-4 py-2 hover:bg-gray-parent text-center">Spanish</a>
+                                   </li>
+                                   <li><a href="#" class="block px-4 py-2 hover:bg-gray-parent text-center">French</a>
+                                   </li>
+                              </ul>
+                         </li>
+                    </ul>
+               </div>
+          </div>
+     </nav>
+
+     <!-- Search Section -->
+     <section class="bg-search-section py-8">
+          <div class="container mx-auto px-4">
+               <div class="relative">
+                    <div class="items-center space-x-4 hidden md:flex">
+                         <div class="relative flex-1">
+                              <!-- <input id="search-input" type="text" placeholder="Search articles"
+                                   class="w-4/5 p-4 pr-32 border border-gray-primary outline-none"> -->
+                              <input id="desktop-search-input" type="text" placeholder="Search articles"
+                                   class="w-4/5 p-4 pr-32 border border-gray-primary outline-none">
+                              <button id="desktop-search-dropdown"
+                                   class="absolute right-[20%] top-0 h-full px-4 rounded-r-lg flex items-center hover:shadow-md">
+                                   <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 ml-1" fill="none"
+                                        viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                             d="M19 9l-7 7-7-7" />
+                                   </svg>
+                              </button>
+                              <!-- Dropdown menu -->
+                              <ul id="desktop-search-menu"
+                                   class="absolute hidden right-[15%] mt-1 w-48 bg-white-primary shadow-md rounded-md z-50">
+                                   <li><a href="#" class="block px-4 py-2 hover:text-blue-primary text-gray-700"
+                                             data-placeholder="Search articles" data-value="kb">Knowledge Base</a></li>
+                                   <li><a href="#" class="block px-4 py-2 hover:text-blue-primary"
+                                             data-placeholder="Search community" data-value="community">Community</a>
+                                   </li>
+                              </ul>
+                         </div>
+                         <button
+                              class="flex flex-wrap gap-1 text-primary font-semibold bg-white-primary px-4 py-3 rounded hover:text-blue-primary shadow-xl">
+                              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                                   stroke="currentColor" class="flex flex-col w-5 h-5">
+                                   <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M16.5 6v.75m0 3v.75m0 3v.75m0 3V18m-9-5.25h5.25M7.5 15h3M3.375 5.25c-.621 0-1.125.504-1.125 1.125v3.026a2.999 2.999 0 0 1 0 5.198v3.026c0 .621.504 1.125 1.125 1.125h17.25c.621 0 1.125-.504 1.125-1.125v-3.026a2.999 2.999 0 0 1 0-5.198V6.375c0-.621-.504-1.125-1.125-1.125H3.375Z" />
+                              </svg>
+
+                              Add Request</button>
+
+                         <button
+                              class="flex gap-1 text-primary font-semibold bg-white-primary px-4 py-3 rounded hover:text-blue-primary shadow-xl">
+                              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                                   stroke="currentColor" class="w-5 h-5">
+                                   <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
+                              </svg>
+                              Add Topic
+                         </button>
+                    </div>
+                    <!-- Mobile search -->
+                    <div class="md:hidden">
+                         <input id="mobile-search-input" type="text" placeholder="Search articles"
+                              class="w-full p-4 border border-gray-primary outline-none rounded">
+                         <button id="mobile-search-dropdown"
+                              class="absolute right-0 top-0 h-full px-4 rounded-r-lg flex items-center hover:shadow-md">
+                              <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 ml-1" fill="none"
+                                   viewBox="0 0 24 24" stroke="currentColor">
+                                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M19 9l-7 7-7-7" />
+                              </svg>
+                         </button>
+                         <!-- Mobile dropdown menu -->
+                         <ul id="mobile-search-menu"
+                              class="absolute hidden w-full mt-1 bg-white-primary shadow-md rounded-md z-50">
+                              <li><a href="#" class="block px-4 py-2 hover:text-blue-primary text-gray-700"
+                                        data-placeholder="Search articles" data-value="kb">Knowledge Base</a></li>
+                              <li><a href="#" class="block px-4 py-2 hover:text-blue-primary"
+                                        data-placeholder="Search community" data-value="community">Community</a>
+                              </li>
+                         </ul>
+                         <div class="fixed bottom-6 right-6 z-50">
+                              <button id="mobile-fab"
+                                   class="w-14 h-14 bg-red-keloola text-white-primary rounded-full shadow-lg flex items-center justify-center">
+                                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                        stroke-width="2" stroke="currentColor" class="w-8 h-8">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                             d="M12 4.5v15m7.5-7.5h-15" />
+                                   </svg>
+                              </button>
+                              <div id="fab-menu" class="absolute bottom-16 right-0 hidden flex-col gap-2 items-end">
+                                   <div class="mb-2 flex items-center gap-2">
+                                        <span class="bg-white-primary px-3 py-2 rounded shadow-lg text-gray-txt">Add
+                                             Request</span>
+                                        <button
+                                             class="w-12 h-12 bg-white-primary text-blue-primary rounded-full shadow-lg flex items-center justify-center">
+                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                                  stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                                  <path stroke-linecap="round" stroke-linejoin="round"
+                                                       d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
+                                             </svg>
+                                        </button>
+                                   </div>
+                                   <div class="flex items-center gap-2">
+                                        <span
+                                             class="bg-white-primary flex flex-col px-3 py-2 rounded shadow-lg text-gray-txt">Add
+                                             Topic</span>
+                                        <button
+                                             class="w-12 h-12 bg-white-primary text-blue-primary rounded-full shadow-lg flex items-center justify-center">
+                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                                  stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                                  <path stroke-linecap="round" stroke-linejoin="round"
+                                                       d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
+                                             </svg>
+                                        </button>
+                                   </div>
+                              </div>
+                         </div>
+                    </div>
+               </div>
+          </div>
+
+          <!-- Breadcrumb -->
+          <div class="container mx-auto px-4 py-4">
+               <div class="text-sm text-primary">
+                    <a href="#" class="text-primary lg:inline hidden">Knowledge Base</a>
+                    <span class="mx-2 text-icon-breadcrumb lg:inline hidden">/</span>
+                    <a href="#" class="text-icon-breadcrumb">Keloola Accounting</a>
+               </div>
+          </div>
+     </section>
+
+     <!-- Departments Section -->
+     <section class="bg-form-section py-5">
+          <div class="departments-container container mx-auto px-4">
+               <div class="flex flex-col lg:flex-row gap-8">
+                    <div class="flex flex-wrap justify-between p-4 lg:w-3/4 bg-white-primary rounded-md">
+                         <div class="w-full">
+                              <div class="flex justify-between items-center mb-4">
+                                   <h1 class="text-3xl font-bold text-black-keloola">Welcome to Zoho Recruit</h1>
+                                   <div class="flex gap-4">
+                                        <!-- Icon Download PDF -->
+                                        <div class="cursor-pointer hover:text-blue-primary" title="Download as PDF">
+                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                                  stroke-width="1.5" stroke="currentColor" class="size-6">
+                                                  <path stroke-linecap="round" stroke-linejoin="round"
+                                                       d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m.75 12 3 3m0 0 3-3m-3 3v-6m-1.5-9H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
+                                             </svg>
+                                        </div>
+
+                                        <!-- Icon Print File -->
+                                        <div class="cursor-pointer hover:text-blue-primary" title="Print">
+                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                                  stroke-width="1.5" stroke="currentColor" class="size-6">
+                                                  <path stroke-linecap="round" stroke-linejoin="round"
+                                                       d="M6.72 13.829c-.24.03-.48.062-.72.096m.72-.096a42.415 42.415 0 0 1 10.56 0m-10.56 0L6.34 18m10.94-4.171c.24.03.48.062.72.096m-.72-.096L17.66 18m0 0 .229 2.523a1.125 1.125 0 0 1-1.12 1.227H7.231c-.662 0-1.18-.568-1.12-1.227L6.34 18m11.318 0h1.091A2.25 2.25 0 0 0 21 15.75V9.456c0-1.081-.768-2.015-1.837-2.175a48.055 48.055 0 0 0-1.913-.247M6.34 18H5.25A2.25 2.25 0 0 1 3 15.75V9.456c0-1.081.768-2.015 1.837-2.175a48.041 48.041 0 0 1 1.913-.247m10.5 0a48.536 48.536 0 0 0-10.5 0m10.5 0V3.375c0-.621-.504-1.125-1.125-1.125h-8.25c-.621 0-1.125.504-1.125 1.125v3.659M18 10.5h.008v.008H18V10.5Zm-3 0h.008v.008H15V10.5Z" />
+                                             </svg>
+                                        </div>
+
+                                        <!-- Icon Reader View -->
+                                        <div class="cursor-pointer hover:text-blue-primary" title="Reader View">
+                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                                  stroke-width="1.5" stroke="currentColor" class="size-6">
+                                                  <path stroke-linecap="round" stroke-linejoin="round"
+                                                       d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
+                                             </svg>
+                                        </div>
+
+                                   </div>
+                              </div>
+                              <p class="text-lg my-8 leading-relaxed">
+                                   Welcome to Recruit, Zoho's end-to-end <b>Applicant Tracking System (ATS)</b> designed
+                                   to
+                                   simplify
+                                   and streamline your hiring process. Be it a staffing agency that handles large scale
+                                   recruitment drives for third-party clients or a corporate HR team looking to add
+                                   talented
+                                   employees to their ranks, Zoho Recruit acts as a centralized platform to manage your
+                                   recruitment efforts, enabling collaboration, automation, and insightful
+                                   decision-making.
+                              </p>
+                              <img src="https://help.zoho.com/galleryDocuments/edbsn009e66cf4d7c6cc235a78b570b21444064f0d03ca537d3fdbe0a7876d041116a4fcb33df08f6c38d5d963a5b64a405a2?inline=true"
+                                   alt="image-zoho">
+                              <!-- Key Highlights -->
+                              <h3 id="key-highlights" class="text-red-keloola my-5 text-lg font-medium">Key Highlights
+                              </h3>
+                              <div class="px-4">
+                                   <ul class="list-disc list-outside pl-5">
+                                        <li class="ml-2">Recruit is a cloud-based recruitment software accessible
+                                             anytime, anywhere.</li>
+                                        <li class="ml-2">It can be tailored to fit your unique hiring needs, whether
+                                             you're a staffing agency,
+                                             corporate HR, or an independent recruiter.</li>
+                                        <li class="ml-2">It is designed to automate key tasks and improve effectiveness.
+                                        </li>
+                                   </ul>
+                              </div>
+
+                              <!-- Why Do Businesses Need Zoho Recruit? -->
+                              <h1 id="why-do-businesses" class="text-red-keloola my-5 text-3xl font-medium">Why Do
+                                   Businesses Need Zoho
+                                   Recruit?</h3>
+                                   <p class="text-base text-black-keloola my-4">
+                                        Recruitment is one of the most critical aspects of business growth, but it’s
+                                        often plagued by challenges like:
+                                   </p>
+                                   <div class="px-4">
+                                        <ul class="list-disc list-outside pl-5">
+                                             <li class="ml-2">Inefficient tracking of candidates.</li>
+                                             <li class="ml-2">Lack of collaboration between hiring teams.</li>
+                                             <li class="ml-2">Manual and repetitive tasks that consume valuable time.
+                                             </li>
+                                             <li class="ml-2">Difficulty in sourcing and hiring the right talent.
+                                             </li>
+                                        </ul>
+                                   </div>
+                                   <p class="text-base font-bold text-black-keloola my-4">
+                                        Zoho Recruit solves these problems by:
+                                   </p>
+                                   <div class="px-4">
+                                        <ul class="list-disc list-outside pl-5">
+                                             <li class="ml-2">Automating time-consuming tasks like resume parsing and
+                                                  candidate tracking.</li>
+                                             <li class="ml-2">Providing a centralized system for better communication
+                                                  and collaboration.</li>
+                                             <li class="ml-2">Delivering real-time analytics to optimize recruitment
+                                                  strategies.
+                                             </li>
+                                             <li class="ml-2">Enabling you to source candidates more effectively through
+                                                  integrations with popular job boards and social platforms.
+                                             </li>
+                                        </ul>
+                                   </div>
+                                   <p class="text-base text-black-keloola my-4">Spend less time juggling spreadsheets
+                                        and emails, and more time building the team your business deserves.</p>
+
+                                   <!-- Benefits of Having Zoho Recruit -->
+                                   <h1 id="benefits-of-having" class="text-red-keloola my-5 text-3xl font-medium">
+                                        Benefits of Having Zoho
+                                        Recruit</h1>
+                                   <p class="text-base text-black-keloola my-4">
+                                        Using Zoho Recruit comes with a host of benefits tailored to meet the unique
+                                        needs of recruiters and HR
+                                        professionals:
+                                   </p>
+                                   <div class="px-4">
+                                        <ul class="list-disc list-outside pl-5">
+                                             <li class="ml-2 font-bold">
+                                                  Save Time with Automation
+                                                  <p class="lg:ml-0 md:ml-0 sm:ml-6 font-normal">
+                                                       Automate repetitive tasks like scheduling interviews, sending
+                                                       emails, and tracking applicant
+                                                       statuses.
+                                                  </p>
+                                             </li>
+                                             <li class="ml-2 font-bold">
+                                                  Enhance Candidate Experience
+                                                  <p class="lg:ml-0 md:ml-0 sm:ml-6 font-normal">
+                                                       Deliver faster, personalized communication, and keep candidates
+                                                       informed throughout the hiring
+                                                       process.
+                                                  </p>
+                                             </li>
+                                             <li class="ml-2 font-bold">
+                                                  Improve Team Collaboration
+                                                  <p class="lg:ml-0 md:ml-0 sm:ml-6 font-normal">
+                                                       Give your team access to shared candidate records and real-time
+                                                       updates, ensuring seamless
+                                                       coordination.
+                                                  </p>
+                                             </li>
+                                             <li class="ml-2 font-bold">
+                                                  Leverage Actionable Insights
+                                                  <p class="lg:ml-0 md:ml-0 sm:ml-6 font-normal">
+                                                       Use advanced analytics and reports to identify bottlenecks, track
+                                                       performance, and make informed
+                                                       decisions.
+                                                  </p>
+                                             </li>
+                                             <li class="ml-2 font-bold">
+                                                  Stay Compliant
+                                                  <p class="lg:ml-0 md:ml-0 sm:ml-6 font-normal">
+                                                       Ensure your hiring process adheres to local regulations with
+                                                       built-in compliance features.
+                                                  </p>
+                                             </li>
+                                        </ul>
+                                   </div>
+
+                                   <!-- Key Functionalities in Zoho Recruit -->
+                                   <h1 id="key-functionalities" class="text-red-keloola my-5 text-3xl font-medium">Key
+                                        Functionalities in Zoho
+                                        Recruit</h1>
+                                   <p class="text-base text-black-keloola my-4">
+                                        Zoho Recruit is packed with powerful features that make hiring more efficient
+                                        and effective. Here are some of the key
+                                        functionalities:
+                                   </p>
+                                   <div class="px-4">
+                                        <ul class="list-disc list-outside pl-5">
+                                             <li class="ml-2 font-bold">
+                                                  Customizable Workflows
+                                                  <p class="lg:ml-0 md:ml-0 sm:ml-6 font-normal">
+                                                       Automate your recruitment process by setting up workflows that
+                                                       align with your specific needs.
+                                                  </p>
+                                             </li>
+                                             <li class="ml-2 font-bold">
+                                                  Job Posting and Sourcing
+                                                  <p class="lg:ml-0 md:ml-0 sm:ml-6 font-normal">
+                                                       Post jobs on multiple platforms, including LinkedIn, Naukri, and
+                                                       Indeed, directly from Zoho Recruit.
+                                                  </p>
+                                             </li>
+                                             <li class="ml-2 font-bold">
+                                                  Resume Parsing
+                                                  <p class="lg:ml-0 md:ml-0 sm:ml-6 font-normal">
+                                                       Quickly extract key details from resumes to build comprehensive
+                                                       candidate profiles.
+                                                  </p>
+                                             </li>
+                                             <li class="ml-2 font-bold">
+                                                  Candidate Management
+                                                  <p class="lg:ml-0 md:ml-0 sm:ml-6 font-normal">
+                                                       Track every candidate’s journey from application to onboarding in
+                                                       one unified platform.
+                                                  </p>
+                                             </li>
+                                             <li class="ml-2 font-bold">
+                                                  Interview Scheduling
+                                                  <p class="lg:ml-0 md:ml-0 sm:ml-6 font-normal">
+                                                       Coordinate interviews effortlessly with in-built scheduling tools
+                                                       and calendar integrations.
+                                                  </p>
+                                             </li>
+                                             <li class="ml-2 font-bold">
+                                                  AI Assist
+                                                  <p class="lg:ml-0 md:ml-0 sm:ml-6 font-normal">
+                                                       Leverage AI to create smarter email templates, generate SMS
+                                                       content, and automate suggestions for improved
+                                                       communication.
+                                                  </p>
+                                             </li>
+                                             <li class="ml-2 font-bold">
+                                                  Integration Capabilities
+                                                  <p class="lg:ml-0 md:ml-0 sm:ml-6 font-normal">
+                                                       Seamlessly connect with other platforms like Zoho People to
+                                                       transfer offer details or with analytics tools to track ROI
+                                                       and candidate status.
+                                                  </p>
+                                             </li>
+                                        </ul>
+                                   </div>
+                                   <p class="text-base text-black-keloola my-4">Let’s build the team your business
+                                        deserves together. Welcome aboard!</p>
+
+                                   <!-- Related Articles -->
+                                   <h1 id="related-articles" class="text-red-keloola my-5 text-3xl font-medium">Related
+                                        Articles</h1>
+                                   <div class="flex flex-col gap-y-2">
+                                        <a href="#" class="text-base text-primary">
+                                             Editions & Plans
+                                        </a>
+                                        <a href="#" class="text-base text-primary">
+                                             Supported Languages
+                                        </a>
+                                        <a href="#" class="text-base text-primary">
+                                             System Requirements
+                                        </a>
+                                        <a href="#" class="text-base text-primary">
+                                             Manage Storage
+                                        </a>
+                                        <a href="#" class="text-base text-primary">
+                                             Contact Support
+                                        </a>
+                                   </div>
+
+                                   <div class="flex justify-between items-center mt-8 border-t border-gray-primary">
+                                        <div class="flex gap-2">
+                                             <h1 class=" text-xl font-bold text-black-keloola ml-5">Helpful?
+                                             </h1>
+                                             <div class="flex gap-1">
+                                                  <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                       viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                                                       class="size-6 hover:text-blue-primary cursor-pointer">
+                                                       <path stroke-linecap="round" stroke-linejoin="round"
+                                                            d="M6.633 10.25c.806 0 1.533-.446 2.031-1.08a9.041 9.041 0 0 1 2.861-2.4c.723-.384 1.35-.956 1.653-1.715a4.498 4.498 0 0 0 .322-1.672V2.75a.75.75 0 0 1 .75-.75 2.25 2.25 0 0 1 2.25 2.25c0 1.152-.26 2.243-.723 3.218-.266.558.107 1.282.725 1.282m0 0h3.126c1.026 0 1.945.694 2.054 1.715.045.422.068.85.068 1.285a11.95 11.95 0 0 1-2.649 7.521c-.388.482-.987.729-1.605.729H13.48c-.483 0-.964-.078-1.423-.23l-3.114-1.04a4.501 4.501 0 0 0-1.423-.23H5.904m10.598-9.75H14.25M5.904 18.5c.083.205.173.405.27.602.197.4-.078.898-.523.898h-.908c-.889 0-1.713-.518-1.972-1.368a12 12 0 0 1-.521-3.507c0-1.553.295-3.036.831-4.398C3.387 9.953 4.167 9.5 5 9.5h1.053c.472 0 .745.556.5.96a8.958 8.958 0 0 0-1.302 4.665c0 1.194.232 2.333.654 3.375Z" />
+                                                  </svg>
+                                                  <span class="text-base font-bold">0</span>
+
+                                                  <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                       viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                                                       class="size-6 hover:text-blue-primary cursor-pointer">
+                                                       <path stroke-linecap="round" stroke-linejoin="round"
+                                                            d="M7.498 15.25H4.372c-1.026 0-1.945-.694-2.054-1.715a12.137 12.137 0 0 1-.068-1.285c0-2.848.992-5.464 2.649-7.521C5.287 4.247 5.886 4 6.504 4h4.016a4.5 4.5 0 0 1 1.423.23l3.114 1.04a4.5 4.5 0 0 0 1.423.23h1.294M7.498 15.25c.618 0 .991.724.725 1.282A7.471 7.471 0 0 0 7.5 19.75 2.25 2.25 0 0 0 9.75 22a.75.75 0 0 0 .75-.75v-.633c0-.573.11-1.14.322-1.672.304-.76.93-1.33 1.653-1.715a9.04 9.04 0 0 0 2.86-2.4c.498-.634 1.226-1.08 2.032-1.08h.384m-10.253 1.5H9.7m8.075-9.75c.01.05.027.1.05.148.593 1.2.925 2.55.925 3.977 0 1.487-.36 2.89-.999 4.125m.023-8.25c-.076-.365.183-.75.575-.75h.908c.889 0 1.713.518 1.972 1.368.339 1.11.521 2.287.521 3.507 0 1.553-.295 3.036-.831 4.398-.306.774-1.086 1.227-1.918 1.227h-1.053c-.472 0-.745-.556-.5-.96a8.95 8.95 0 0 0 .303-.54" />
+                                                  </svg>
+                                                  <span class="text-base font-bold text-red-keloola">0</span>
+                                             </div>
+                                        </div>
+
+                                        <div class="flex justify-center items-center">
+                                             <h1 class=" text-xl font-bold text-black-keloola ml-5">Share:
+                                             </h1>
+                                             <div class="flex">
+                                                  <a href="https://www.linkedin.com" target="_blank">
+                                                       <img src="https://www.keloola.com/app/assets/icon-linkedin.svg"
+                                                            class="w-16 h-16 cursor-pointer" alt="Linkedin">
+                                                  </a>
+                                                  <a href="https://www.youtube.com" target="_blank">
+                                                       <img src="https://www.keloola.com/app/assets/icon-youtube.svg"
+                                                            class="w-16 h-16 cursor-pointer" alt="Youtube">
+                                                  </a>
+                                                  <a href="https://twitter.com" target="_blank">
+                                                       <img src="https://www.keloola.com/app/assets/icon-x.svg"
+                                                            class="w-16 h-16 cursor-pointer" alt="Twitter">
+                                                  </a>
+                                             </div>
+                                        </div>
+                                   </div>
+                         </div>
+                    </div>
+                    <div class="lg:w-1/4 space-y-6 h-[calc(100vh-200px)] sticky top-24 overflow-y-scroll">
+                         <div class="mt-2">
+                              <ul>
+                                   <li>
+                                        <div class="flex flex-col">
+                                             <button
+                                                  class="w-1/4 h-8 my-5 font-medium rounded-md border border-blue-primary text-black-keloola hover:bg-blue-primary hover:text-white-primary">Follow</button>
+                                             <div class="text-sm">Subscribe to receive notifications from this article.
+                                             </div>
+                                        </div>
+                                   </li>
+                              </ul>
+                         </div>
+                         <div>
+                              <h2 class="text-xl font-semibold mb-4">On this page</h2>
+                              <ul class="space-y-4">
+                                   <li>
+                                        <a href="#key-highlights"
+                                             class="flex items-start gap-2 text-black-keloola hover:text-blue-primary">
+                                             Key Highlights
+                                        </a>
+                                   </li>
+                                   <li>
+                                        <a href="#why-do-businesses"
+                                             class="flex items-start gap-2 text-black-keloola hover:text-blue-primary">
+                                             Why Do Businesses Need Keloola Recruit?
+                                        </a>
+                                   </li>
+                                   <li>
+                                        <a href="#benefits-of-having"
+                                             class="flex items-start gap-2 text-black-keloola hover:text-blue-primary">
+                                             Benefits of Having Keloola Recruit
+                                        </a>
+                                   </li>
+                                   <li>
+                                        <a href="#key-functionalities"
+                                             class="flex items-start gap-2 text-black-keloola hover:text-blue-primary">
+                                             Key Functionalities in Keloola Recruit
+                                        </a>
+                                   </li>
+                                   <li>
+                                        <a href="#related-articles"
+                                             class="flex items-start gap-2 text-black-keloola hover:text-blue-primary">
+                                             Related Articles
+                                        </a>
+                                   </li>
+                              </ul>
+                         </div>
+                         <div>
+                              <h2 class="text-xl font-semibold mb-4">Overview</h2>
+                              <ul class="space-y-2">
+                                   <li>
+                                        <a href="#"
+                                             class="flex items-start gap-2 text-black-keloola hover:text-blue-primary">
+                                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mb-1 flex-shrink-0"
+                                                  fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                                                       d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9.5a2.5 2.5 0 00-2.5-2.5H15" />
+                                             </svg>
+                                             Welcome to Keloola
+                                             Recruit
+                                        </a>
+                                   </li>
+                              </ul>
+                         </div>
+                         <div class="my-2">
+                              <ul>
+                                   <li>
+                                        <div class="flex flex-col">
+                                             <div class="text-xl font-semibold">New to Keloola Recruit?
+                                             </div>
+                                             <button
+                                                  class="w-1/3 lg:w-3/5 md:w-1/2 sm:w-1/4 h-10 my-5 font-medium bg-red-keloola text-white-primary uppercase">Sign
+                                                  Up Now</button>
+                                        </div>
+                                   </li>
+                              </ul>
+                         </div>
+                         <div>
+                              <h2 class="text-xl font-semibold mb-4">Related Articles</h2>
+                              <ul class="space-y-2">
+                                   <li>
+                                        <a href="#"
+                                             class="flex items-start gap-2 text-black-keloola hover:text-blue-primary">
+                                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mb-1 flex-shrink-0"
+                                                  fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                                                       d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9.5a2.5 2.5 0 00-2.5-2.5H15" />
+                                             </svg>
+                                             Activate Keloola
+                                             Recruit
+                                        </a>
+                                   </li>
+                                   <li>
+                                        <a href="#"
+                                             class="flex items-start gap-2 text-black-keloola hover:text-blue-primary">
+                                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mb-1 flex-shrink-0"
+                                                  fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                                                       d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9.5a2.5 2.5 0 00-2.5-2.5H15" />
+                                             </svg>
+                                             Criteria for Keloola
+                                             Recruit
+                                        </a>
+                                   </li>
+                                   <li>
+                                        <a href="#"
+                                             class="flex items-start gap-2 text-black-keloola hover:text-blue-primary">
+                                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mb-1 flex-shrink-0"
+                                                  fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                                                       d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9.5a2.5 2.5 0 00-2.5-2.5H15" />
+                                             </svg>
+                                             Jobma for Keloola Recruit
+                                        </a>
+                                   </li>
+                                   <li>
+                                        <a href="#"
+                                             class="flex items-start gap-2 text-black-keloola hover:text-blue-primary">
+                                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mb-1 flex-shrink-0"
+                                                  fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                                                       d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9.5a2.5 2.5 0 00-2.5-2.5H15" />
+                                             </svg>
+                                             ZipRecruiter and Keloola
+                                             Recruit Int...</a>
+                                   </li>
+                                   </a>
+                                   </li>
+                                   <li>
+                                        <a href="#"
+                                             class="flex items-start gap-2 text-black-keloola hover:text-blue-primary">
+                                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mb-1 flex-shrink-0"
+                                                  fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                                                       d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9.5a2.5 2.5 0 00-2.5-2.5H15" />
+                                             </svg>
+                                             Gmail Add-on for Keloola
+                                             Recruit
+                                        </a>
+                                   </li>
+                              </ul>
+                         </div>
+                    </div>
+               </div>
+          </div>
+     </section>
+
+     <!-- Footer -->
+     <div class="grid lg:grid-cols-4 md:grid-cols-2 grid-cols-1 p-2 bg-white-primary">
+          <div class="flex items-center justify-center">
+               <span class="text-sm font-medium">Follow us on :</span>
+               <div class="flex">
+                    <a href="https://www.linkedin.com" target="_blank">
+                         <img src="https://www.keloola.com/app/assets/icon-linkedin.svg"
+                              class="w-16 h-16 cursor-pointer" alt="Linkedin">
+                    </a>
+                    <a href="https://www.youtube.com" target="_blank">
+                         <img src="https://www.keloola.com/app/assets/icon-youtube.svg" class="w-16 h-16 cursor-pointer"
+                              alt="Youtube">
+                    </a>
+                    <a href="https://twitter.com" target="_blank">
+                         <img src="https://www.keloola.com/app/assets/icon-x.svg" class="w-16 h-16 cursor-pointer"
+                              alt="Twitter">
+                    </a>
+               </div>
+          </div>
+     </div>
+     <footer class="bg-section-footer text-txt-footer pt-8 pb-4">
+          <div class="container mx-auto px-4">
+               <div class="grid grid-cols-1 md:grid-cols-5 gap-8">
+                    <div>
+                         <h3 class="text-lg font-semibold mb-4">Apps</h3>
+                         <ul class="space-y-2">
+                              <li><a href="#" class="hover:text-white-primary">Mobile Apps</a></li>
+                              <li><a href="#" class="hover:text-white-primary">G Suite Integration</a></li>
+                              <li><a href="#" class="hover:text-white-primary">Microsoft Office 365 Integration</a></li>
+                              <li><a href="#" class="hover:text-white-primary">Apps for Apple Watch</a></li>
+                         </ul>
+                    </div>
+                    <div>
+                         <h3 class="text-lg font-semibold mb-4">Partners</h3>
+                         <ul class="space-y-2">
+                              <li><a href="#" class="hover:text-white-primary">Hosting Providers</a></li>
+                              <li><a href="#" class="hover:text-white-primary">Partners</a></li>
+                              <li><a href="#" class="hover:text-white-primary">Consulting Partners</a></li>
+                              <li><a href="#" class="hover:text-white-primary">Platform Partners</a></li>
+                              <li><a href="#" class="hover:text-white-primary">Technology Partners</a></li>
+                         </ul>
+                    </div>
+                    <div>
+                         <h3 class="text-lg font-semibold mb-4">Resources</h3>
+                         <ul class="space-y-2">
+                              <li><a href="#" class="hover:text-white-primary">Zia</a></li>
+                              <li><a href="#" class="hover:text-white-primary">Support</a></li>
+                              <li><a href="#" class="hover:text-white-primary">Community</a></li>
+                              <li><a href="#" class="hover:text-white-primary">Forums</a></li>
+                              <li><a href="#" class="hover:text-white-primary">Blogs</a></li>
+                              <li><a href="#" class="hover:text-white-primary">Academy</a></li>
+                         </ul>
+                    </div>
+                    <div>
+                         <h3 class="text-lg font-semibold mb-4">About</h3>
+                         <ul class="space-y-2">
+                              <li><a href="#" class="hover:text-white-primary">About Keloola</a></li>
+                              <li><a href="#" class="hover:text-white-primary">Perspectives</a></li>
+                              <li><a href="#" class="hover:text-white-primary">Events</a></li>
+                              <li><a href="#" class="hover:text-white-primary">Press</a></li>
+                              <li><a href="#" class="hover:text-white-primary">Keloola in the News</a></li>
+                              <li><a href="#" class="hover:text-white-primary">Keloola Opinions</a></li>
+                              <li><a href="#" class="hover:text-white-primary">Contact Us</a></li>
+                              <li><a href="#" class="hover:text-white-primary">Keloola Schools</a></li>
+                              <li><a href="#" class="hover:text-white-primary">Keloola Merchandise</a></li>
+                         </ul>
+                    </div>
+                    <div>
+                         <h3 class="text-lg font-semibold mb-4">Contact - Indonesia</h3>
+                         <div class="space-y-4">
+                              <div>
+                                   <h4 class="font-medium mb-2">GST Helpline</h4>
+                                   <!-- <p>1800 123 7711</p>
+                                             <p class="text-sm">gstindia@zohofinance.com</p> -->
+                                   <p>(+62) 822-9998-8870</p>
+                                   <p class="text-sm">hello@keloola.com</p>
+                              </div>
+                              <div>
+                                   <h4 class="font-medium mb-2">Sales</h4>
+                                   <!-- <p>1800 103 1123</p> -->
+                                   <p>(+62) 822-9998-8870</p>
+                                   <p class="text-sm">hello@keloola.com</p>
+                              </div>
+                         </div>
+                    </div>
+               </div>
+               <div class="mt-8 pt-4 border-t border-gray-700">
+                    <div class="flex flex-wrap justify-center gap-4 text-sm">
+                         <a href="#" class="hover:text-white-primary">Keloola Home</a>
+                         <span>|</span>
+                         <a href="#" class="hover:text-white-primary">Contact</a>
+                         <span>|</span>
+                         <a href="#" class="hover:text-white-primary">Security</a>
+                         <span>|</span>
+                         <a href="#" class="hover:text-white-primary">IPR Complaints</a>
+                         <span>|</span>
+                         <a href="#" class="hover:text-white-primary">Anti-spam Policy</a>
+                         <span>|</span>
+                         <a href="#" class="hover:text-white-primary">Terms of Service</a>
+                         <span>|</span>
+                         <a href="#" class="hover:text-white-primary">Privacy Policy</a>
+                         <span>|</span>
+                         <a href="#" class="hover:text-white-primary">Cookie Policy</a>
+                         <span>|</span>
+                         <a href="#" class="hover:text-white-primary">GDPR Compliance</a>
+                         <span>|</span>
+                         <a href="#" class="hover:text-white-primary">Abuse Policy</a>
+                    </div>
+                    <p class="text-center mt-4 text-sm">© 2025, Keloola. All Rights Reserved</p>
+               </div>
+          </div>
+     </footer>
+     <script src="./dist/js/app.js"></script>
+</body>
+
+</html>

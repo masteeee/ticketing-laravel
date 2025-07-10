@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+     <meta charset="UTF-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <title>Keloola Corporation | My Area | Submit a Request</title>
+     <link rel="stylesheet" href="./dist/css/output.css">
+</head>
+
+<body>
+     <!-- Navbar -->
+     <nav class="bg-white-primary shadow">
+          <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+               <div class="flex items-center space-x-4">
+                    <img src="./assets/keloola-logo.png" alt="Logo" class="w-20 h-20 object-contain">
+               </div>
+               <ul class="hidden md:flex items-center space-x-6 font-medium" id="nav-menu">
+                    <li><a href="index.html" target="_blank"
+                              class="active text-black-keloola hover:text-red-keloola">Home</a></li>
+                    <li><a href="knowledge.html" target="_blank"
+                              class="text-black-keloola hover:text-red-keloola">Knowledge Base</a></li>
+                    <li><a href="#" class="text-black-keloola hover:text-red-keloola">Community</a></li>
+                    <li><a href="#" class="text-black-keloola hover:text-red-keloola">Sign In</a></li>
+                    <li class="relative ml-2">
+                         <button id="font-button"
+                              class="text-black-keloola hover:text-red-keloola">A<sup>+</sup></button>
+                         <div id="font-menu"
+                              class="absolute hidden mt-2 bg-white-primary shadow-md rounded-md p-2 z-50 right-0 w-max">
+                              <h3 class="text-black-keloola mb-2">Font Size</h3>
+                              <div class="flex items-center space-x-2 border border-gray-primary p-2 rounded">
+                                   <button id="decrease-font"
+                                        class="bg-gray-primary px-2 py-1 rounded text-md hover:bg-gray-secondary">-</button>
+                                   <span id="font-size-display" class="px-2 py-1">16px</span>
+                                   <button id="increase-font"
+                                        class="bg-gray-primary text-white px-2 py-1 rounded text-md hover:bg-gray-secondary">+</button>
+                              </div>
+                              <h3 class="text-black-keloola mt-4 mb-2">Layout</h3>
+                              <div class="flex space-x-4">
+                                   <button id="layout-1"
+                                        class="border border-rgb-keloola rounded p-2 hover:bg-gray-secondary">
+                                        <div class="w-10 h-10 bg-gray-primary"></div>
+                                   </button>
+                                   <button id="layout-2"
+                                        class="border border-rgb-keloola rounded p-2 hover:bg-gray-secondary">
+                                        <div class="w-10 h-10 bg-gray-primary"></div>
+                                   </button>
+                              </div>
+                              <div class="flex justify-between items-center mt-4">
+                                   <label class="text-sm text-black-keloola">Full Width</label>
+                                   <div class="relative">
+                                        <input type="checkbox" id="full-width-toggle" class="hidden">
+                                        <label for="full-width-toggle" class="flex items-center cursor-pointer">
+                                             <div
+                                                  class="w-12 h-6 bg-gray-primary rounded-full transition-colors duration-200">
+                                             </div>
+                                             <div id="toggle-circle"
+                                                  class="absolute w-4 h-4 bg-blue-primary rounded-full transform translate-x-1 transition-transform duration-200">
+                                             </div>
+                                        </label>
+                                   </div>
+                              </div>
+                         </div>
+                    </li>
+
+                    <li class="relative">
+                         <button id="desktop-language-button"
+                              class="text-black-keloola text-sm hover:text-red-keloola flex items-center">
+
+                              English <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 ml-1" fill="none"
+                                   viewBox="0 0 24 24" stroke="currentColor">
+                                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M19 9l-7 7-7-7" />
+                              </svg>
+                         </button>
+                         <ul id="desktop-language-menu"
+                              class="absolute hidden mt-2 p-2 bg-white-primary shadow rounded-md text-sm z-50 right-0">
+                              <li><a href="#" class="block px-4 py-2 hover:text-primary">English</a></li>
+                              <li><a href="#" class="block px-4 py-2 hover:text-primary">Spanish</a></li>
+                              <li><a href="#" class="block px-4 py-2 hover:text-primary">French</a></li>
+                         </ul>
+                    </li>
+               </ul>
+               <button class="md:hidden text-black-keloola" id="mobile-menu-button">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                         class="w-6 h-6">
+                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                              d="M4 6h16M4 12h16m-7 6h7" />
+                    </svg>
+               </button>
+          </div>
+          <!-- Mobile Menu -->
+          <div id="mobile-menu" class="hidden md:hidden">
+               <div class="min-h-screen bg-white-primary">
+                    <ul class="flex flex-col items-center justify-center space-y-4 py-8">
+                         <li><a href="index.html" target="_blank" class="active text-black-keloola text-lg">Home</a>
+                         </li>
+                         <li><a href="knowledge.html" target="_blank" class="text-black-keloola text-lg">Knowledge
+                                   Base</a></li>
+                         <li><a href="#" class="text-black-keloola text-lg">Community</a></li>
+                         <li><a href="#" class="text-black-keloola text-lg">Sign In</a></li>
+                         <li class="relative">
+                              <button id="mobile-language-button"
+                                   class="text-black-keloola bg-gray-parent px-4 py-2 rounded text-lg hover:bg-gray-primary flex items-center">
+                                   English <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 ml-1" fill="none"
+                                        viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                             d="M19 9l-7 7-7-7" />
+                                   </svg>
+                              </button>
+                              <ul id="mobile-language-menu"
+                                   class="hidden absolute mt-2 bg-white shadow rounded-md text-lg w-full">
+                                   <li><a href="#" class="block px-4 py-2 hover:bg-gray-parent text-center">English</a>
+                                   </li>
+                                   <li><a href="#" class="block px-4 py-2 hover:bg-gray-parent text-center">Spanish</a>
+                                   </li>
+                                   <li><a href="#" class="block px-4 py-2 hover:bg-gray-parent text-center">French</a>
+                                   </li>
+                              </ul>
+                         </li>
+                    </ul>
+               </div>
+          </div>
+     </nav>
+
+     <!-- Search Section -->
+     <section class="bg-search-section py-8">
+          <div class="container mx-auto px-4">
+               <div class="relative">
+                    <div class="items-center space-x-4 hidden md:flex">
+                         <div class="relative flex-1">
+                              <!-- <input id="search-input" type="text" placeholder="Search articles"
+                                             class="w-4/5 p-4 pr-32 border border-gray-primary outline-none"> -->
+                              <input id="desktop-search-input" type="text" placeholder="Search articles"
+                                   class="w-4/5 p-4 pr-32 border border-gray-primary outline-none">
+                              <button id="desktop-search-dropdown"
+                                   class="absolute right-[20%] top-0 h-full px-4 rounded-r-lg flex items-center hover:shadow-md">
+                                   <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 ml-1" fill="none"
+                                        viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                             d="M19 9l-7 7-7-7" />
+                                   </svg>
+                              </button>
+                              <!-- Dropdown menu -->
+                              <ul id="desktop-search-menu"
+                                   class="absolute hidden right-[15%] mt-1 w-48 bg-white-primary shadow-md rounded-md z-50">
+                                   <li><a href="#" class="block px-4 py-2 hover:text-blue-primary text-gray-700"
+                                             data-placeholder="Search articles" data-value="kb">Knowledge Base</a></li>
+                                   <li><a href="#" class="block px-4 py-2 hover:text-blue-primary"
+                                             data-placeholder="Search community" data-value="community">Community</a>
+                                   </li>
+                              </ul>
+                         </div>
+                         <button
+                              class="flex gap-1 text-primary font-semibold bg-white-primary px-4 py-3 rounded hover:text-blue-primary shadow-xl">
+                              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                                   stroke="currentColor" class="w-5 h-5">
+                                   <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
+                              </svg>
+                              Add Topic
+                         </button>
+                    </div>
+                    <!-- Mobile search -->
+                    <div class="md:hidden">
+                         <input id="mobile-search-input" type="text" placeholder="Search articles"
+                              class="w-full p-4 border border-gray-primary outline-none rounded">
+                         <button id="mobile-search-dropdown"
+                              class="absolute right-0 top-0 h-full px-4 rounded-r-lg flex items-center hover:shadow-md">
+                              <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 ml-1" fill="none"
+                                   viewBox="0 0 24 24" stroke="currentColor">
+                                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M19 9l-7 7-7-7" />
+                              </svg>
+                         </button>
+                         <!-- Mobile dropdown menu -->
+                         <ul id="mobile-search-menu"
+                              class="absolute hidden w-full mt-1 bg-white-primary shadow-md rounded-md z-50">
+                              <li><a href="#" class="block px-4 py-2 hover:text-blue-primary text-gray-700"
+                                        data-placeholder="Search articles" data-value="kb">Knowledge Base</a></li>
+                              <li><a href="#" class="block px-4 py-2 hover:text-blue-primary"
+                                        data-placeholder="Search community" data-value="community">Community</a>
+                              </li>
+                         </ul>
+                         <div class="fixed bottom-6 right-6 z-50">
+                              <button id="mobile-fab"
+                                   class="w-14 h-14 bg-red-keloola text-white-primary rounded-full shadow-lg flex items-center justify-center">
+                                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                        stroke-width="2" stroke="currentColor" class="w-8 h-8">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                             d="M12 4.5v15m7.5-7.5h-15" />
+                                   </svg>
+                              </button>
+                              <div id="fab-menu" class="absolute bottom-16 right-0 hidden flex-col gap-2 items-end">
+                                   <div class="flex items-center gap-2">
+                                        <span
+                                             class="bg-white-primary flex flex-col px-3 py-2 rounded shadow-lg text-gray-txt">Add
+                                             Topic</span>
+                                        <button
+                                             class="w-12 h-12 bg-white-primary text-blue-primary rounded-full shadow-lg flex items-center justify-center">
+                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                                  stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                                  <path stroke-linecap="round" stroke-linejoin="round"
+                                                       d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
+                                             </svg>
+                                        </button>
+                                   </div>
+                              </div>
+                         </div>
+                    </div>
+               </div>
+          </div>
+
+          <!-- Breadcrumb -->
+          <div class="container mx-auto px-4 py-4">
+               <div class="text-sm text-primary">
+                    <a href="#" class="text-primary lg:inline hidden">My Area</a>
+                    <span class="mx-2 text-icon-breadcrumb lg:inline hidden">/</span>
+                    <a href="#" class="text-primary lg:inline hidden">Submit a Request</a>
+                    <span class="mx-2 text-icon-breadcrumb lg:inline hidden">/</span>
+                    <a href="#" class="text-primary">Keloola CRM</a>
+                    <span class="mx-2 text-icon-breadcrumb">/</span>
+                    <span class="text-icon-breadcrumb">Keloola CRM</span>
+               </div>
+          </div>
+     </section>
+
+     <!-- Departments Section -->
+     <section class="bg-form-section py-5">
+          <div class="departments-container container mx-auto px-4">
+               <div
+                    class="bg-section-text-form p-4 border border-section-bor-form rounded-md my-4 flex lg:w-[73.5%] md:w-full">
+                    <h2 class="lg:text-xl sm:text-sm font-semibold">Keloola Corporation's Help Center is hosted in
+                         our
+                         US data center
+                    </h2>
+               </div>
+               <div class="flex flex-col lg:flex-row gap-8">
+                    <div class="lg:w-3/4 bg-white-primary border border-section-bor rounded-md">
+                         <div class="p-6">
+                              <h1 class="text-3xl font-semibold mb-6">Submit a request</h1>
+
+                              <div>
+                                   <h4 class="text-xl font-semibold my-10">Request Information</h4>
+                              </div>
+
+                              <form class="space-y-6">
+                                   <div>
+                                        <label class="block text-sm font-medium mb-2">Department</label>
+                                        <select
+                                             class="w-full p-3 border border-section-bor rounded-md outline-none cursor-pointer">
+                                             <option>Keloola Accounting</option>
+                                             <option>Keloola Absensi</option>
+                                             <option>Keloola Book</option>
+                                             <option>Keloola File</option>
+                                             <option>Keloola Chat</option>
+                                             <option>Keloola Exchange</option>
+                                        </select>
+                                   </div>
+
+                                   <div>
+                                        <label class="block text-sm font-medium mb-2">
+                                             Contact Name <span class="text-red-keloola">*</span>
+                                        </label>
+                                        <input type="text"
+                                             class="w-full p-2 border border-section-bor rounded-md outline-none"
+                                             required />
+                                   </div>
+
+                                   <div>
+                                        <label class="block text-sm font-medium mb-2">Keloola Service Name</label>
+                                        <select
+                                             class="w-full p-3 border border-section-bor rounded-md outline-none cursor-pointer">
+                                             <option>-None-</option>
+                                             <option>ACCOUNTS</option>
+                                             <option>App Creator</option>
+                                             <option>ASSIST</option>
+                                             <option>Accounting</option>
+                                             <option>Absensi</option>
+                                             <option>BOOK</option>
+                                             <option>Chat</option>
+                                             <option>Exchange</option>
+                                             <option>File</option>
+                                        </select>
+                                   </div>
+
+                                   <div>
+                                        <label class="block text-sm font-medium mb-2">Email</label>
+                                        <input type="email"
+                                             class="w-full p-2 border border-section-bor rounded-md outline-none" />
+                                   </div>
+
+                                   <div>
+                                        <label class="block text-sm font-medium mb-2">Phone</label>
+                                        <input type="tel"
+                                             class="w-full p-2 border border-section-bor rounded-md outline-none" />
+                                   </div>
+
+                                   <div>
+                                        <label class="block text-sm font-medium mb-2">
+                                             Subject <span class="text-red-keloola">*</span>
+                                        </label>
+                                        <input type="text"
+                                             class="w-full p-2 border border-section-bor rounded-md outline-none"
+                                             required />
+                                   </div>
+
+                                   <div>
+                                        <label class="block text-sm font-medium mb-2">Description</label>
+                                        <textarea
+                                             class="w-full p-2 border border-section-bor rounded-md min-h-[200px] outline-none"></textarea>
+                                   </div>
+
+                                   <div>
+                                        <label class="block text-sm font-medium mb-2">Customer Primary Email
+                                             Address</label>
+                                        <input type="email"
+                                             class="w-full p-2 border border-section-bor rounded-md outline-none" />
+                                   </div>
+
+                                   <div>
+                                        <label class="block text-sm font-medium mb-2">Inv ID</label>
+                                        <input type="text"
+                                             class="w-full p-2 border border-section-bor rounded-md outline-none" />
+                                   </div>
+
+                                   <div>
+                                        <div class="flex items-center gap-2">
+                                             <label for="file-upload"
+                                                  class="flex items-center gap-2 px-4 py-2 rounded cursor-pointer">
+                                                  <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6"
+                                                       viewBox="0 0 24 24" class="fill-current text-gray-700">
+                                                       <path d="M11 15h2V9h3l-4-5-4 5h3z"></path>
+                                                       <path
+                                                            d="M20 18H4v-7H2v7c0 1.103.897 2 2 2h16c1.103 0 2-.897 2-2v-7h-2v7z">
+                                                       </path>
+                                                  </svg>
+                                             </label>
+                                             <input type="file" id="file-upload" class="hidden" />
+                                        </div>
+                                        <label for="file-upload" class="block text-sm font-medium mb-2">
+                                             Attach a file
+                                        </label>
+                                        <small>(Up to 40 MB)</small>
+                                   </div>
+
+
+                                   <!-- <div>
+                                        <label class="block text-sm font-medium mb-2">
+                                             Word Verification <span class="text-red-keloola">*</span>
+                                        </label>
+                                        <input type="text"
+                                             class="w-1/2 p-2 border border-section-bor rounded-md mb-2 outline-none"
+                                             required />
+                                        <div class="border w-1/2 border-section-bor p-4 rounded-md text-center mb-2">
+                                             E3yX2X
+                                        </div>
+                                   </div> -->
+
+                                   <div class="flex gap-4">
+                                        <button type="submit" class="bg-red-keloola text-white-primary px-6 py-2">
+                                             SUBMIT
+                                        </button>
+                                        <button type="button" class="bg-primary text-white-primary px-6 py-2">
+                                             DISCARD
+                                        </button>
+                                   </div>
+                              </form>
+                         </div>
+                    </div>
+
+                    <div class="lg:w-1/4">
+                         <div class="mt-2">
+                              <h2 class="text-xl font-semibold mb-4">Popular Articles</h2>
+                              <ul class="space-y-4">
+                                   <li>
+                                        <a href="#"
+                                             class="flex items-start gap-2 text-black-keloola hover:text-blue-primary">
+                                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mb-1 flex-shrink-0"
+                                                  fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                                                       d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9.5a2.5 2.5 0 00-2.5-2.5H15" />
+                                             </svg>
+                                             I want to choose a fixed format for...
+                                        </a>
+                                   </li>
+                                   <li>
+                                        <a href="#"
+                                             class="flex items-start gap-2 text-black-keloola hover:text-blue-primary">
+                                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mb-1 flex-shrink-0"
+                                                  fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                                                       d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9.5a2.5 2.5 0 00-2.5-2.5H15" />
+                                             </svg>
+                                             How can I set the default encoding?
+                                        </a>
+                                   </li>
+                                   <li>
+                                        <a href="#"
+                                             class="flex items-start gap-2 text-black-keloola hover:text-blue-primary">
+                                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mb-1 flex-shrink-0"
+                                                  fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                                                       d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9.5a2.5 2.5 0 00-2.5-2.5H15" />
+                                             </svg>
+                                             What is Outbox?
+                                        </a>
+                                   </li>
+                                   <li>
+                                        <a href="#"
+                                             class="flex items-start gap-2 text-black-keloola hover:text-blue-primary">
+                                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mb-1 flex-shrink-0"
+                                                  fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                                                       d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9.5a2.5 2.5 0 00-2.5-2.5H15" />
+                                             </svg>
+                                             How do I skip Outbox, when I have e...
+                                        </a>
+                                   </li>
+                                   <li>
+                                        <a href="#"
+                                             class="flex items-start gap-2 text-black-keloola hover:text-blue-primary">
+                                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mb-1 flex-shrink-0"
+                                                  fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                                                       d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9.5a2.5 2.5 0 00-2.5-2.5H15" />
+                                             </svg>
+                                             What is Vacation-Response?
+                                        </a>
+                                   </li>
+                              </ul>
+                         </div>
+                    </div>
+               </div>
+          </div>
+          <div class="lg:w-1/2  grid grid-flow-col-dense lg:mx-40">
+               <div class="flex flex-wrap justify-center items-center font-semibold mt-10">
+                    <p class="text-sm text-center p-4 text-black-keloola bg-search-section">
+                         By submitting this form, you agree to the processing of personal data
+                         according to our
+                         <a href="#" class="text-primary hover:underline">
+                              Privacy Policy.
+                         </a>
+                    </p>
+               </div>
+          </div>
+     </section>
+
+     <!-- Footer -->
+     <div class="grid lg:grid-cols-4 md:grid-cols-2 grid-cols-1 p-2 bg-white-primary">
+          <div class="flex items-center justify-center">
+               <span class="text-sm font-medium">Follow us on :</span>
+               <div class="flex">
+                    <a href="https://www.linkedin.com" target="_blank">
+                         <img src="https://www.keloola.com/app/assets/icon-linkedin.svg"
+                              class="w-16 h-16 cursor-pointer" alt="Linkedin">
+                    </a>
+                    <a href="https://www.youtube.com" target="_blank">
+                         <img src="https://www.keloola.com/app/assets/icon-youtube.svg" class="w-16 h-16 cursor-pointer"
+                              alt="Youtube">
+                    </a>
+                    <a href="https://twitter.com" target="_blank">
+                         <img src="https://www.keloola.com/app/assets/icon-x.svg" class="w-16 h-16 cursor-pointer"
+                              alt="Twitter">
+                    </a>
+               </div>
+          </div>
+     </div>
+     <footer class="bg-section-footer text-txt-footer pt-8 pb-4">
+          <div class="container mx-auto px-4">
+               <div class="grid grid-cols-1 md:grid-cols-5 gap-8">
+                    <div>
+                         <h3 class="text-lg font-semibold mb-4">Apps</h3>
+                         <ul class="space-y-2">
+                              <li><a href="#" class="hover:text-white-primary">Mobile Apps</a></li>
+                              <li><a href="#" class="hover:text-white-primary">G Suite Integration</a></li>
+                              <li><a href="#" class="hover:text-white-primary">Microsoft Office 365 Integration</a></li>
+                              <li><a href="#" class="hover:text-white-primary">Apps for Apple Watch</a></li>
+                         </ul>
+                    </div>
+                    <div>
+                         <h3 class="text-lg font-semibold mb-4">Partners</h3>
+                         <ul class="space-y-2">
+                              <li><a href="#" class="hover:text-white-primary">Hosting Providers</a></li>
+                              <li><a href="#" class="hover:text-white-primary">Partners</a></li>
+                              <li><a href="#" class="hover:text-white-primary">Consulting Partners</a></li>
+                              <li><a href="#" class="hover:text-white-primary">Platform Partners</a></li>
+                              <li><a href="#" class="hover:text-white-primary">Technology Partners</a></li>
+                         </ul>
+                    </div>
+                    <div>
+                         <h3 class="text-lg font-semibold mb-4">Resources</h3>
+                         <ul class="space-y-2">
+                              <li><a href="#" class="hover:text-white-primary">Zia</a></li>
+                              <li><a href="#" class="hover:text-white-primary">Support</a></li>
+                              <li><a href="#" class="hover:text-white-primary">Community</a></li>
+                              <li><a href="#" class="hover:text-white-primary">Forums</a></li>
+                              <li><a href="#" class="hover:text-white-primary">Blogs</a></li>
+                              <li><a href="#" class="hover:text-white-primary">Academy</a></li>
+                         </ul>
+                    </div>
+                    <div>
+                         <h3 class="text-lg font-semibold mb-4">About</h3>
+                         <ul class="space-y-2">
+                              <li><a href="#" class="hover:text-white-primary">About Keloola</a></li>
+                              <li><a href="#" class="hover:text-white-primary">Perspectives</a></li>
+                              <li><a href="#" class="hover:text-white-primary">Events</a></li>
+                              <li><a href="#" class="hover:text-white-primary">Press</a></li>
+                              <li><a href="#" class="hover:text-white-primary">Keloola in the News</a></li>
+                              <li><a href="#" class="hover:text-white-primary">Keloola Opinions</a></li>
+                              <li><a href="#" class="hover:text-white-primary">Contact Us</a></li>
+                              <li><a href="#" class="hover:text-white-primary">Keloola Schools</a></li>
+                              <li><a href="#" class="hover:text-white-primary">Keloola Merchandise</a></li>
+                         </ul>
+                    </div>
+                    <div>
+                         <h3 class="text-lg font-semibold mb-4">Contact - Indonesia</h3>
+                         <div class="space-y-4">
+                              <div>
+                                   <h4 class="font-medium mb-2">GST Helpline</h4>
+                                   <!-- <p>1800 123 7711</p>
+                                             <p class="text-sm">gstindia@zohofinance.com</p> -->
+                                   <p>(+62) 822-9998-8870</p>
+                                   <p class="text-sm">hello@keloola.com</p>
+                              </div>
+                              <div>
+                                   <h4 class="font-medium mb-2">Sales</h4>
+                                   <!-- <p>1800 103 1123</p> -->
+                                   <p>(+62) 822-9998-8870</p>
+                                   <p class="text-sm">hello@keloola.com</p>
+                              </div>
+                         </div>
+                    </div>
+               </div>
+               <div class="mt-8 pt-4 border-t border-gray-700">
+                    <div class="flex flex-wrap justify-center gap-4 text-sm">
+                         <a href="#" class="hover:text-white-primary">Keloola Home</a>
+                         <span>|</span>
+                         <a href="#" class="hover:text-white-primary">Contact</a>
+                         <span>|</span>
+                         <a href="#" class="hover:text-white-primary">Security</a>
+                         <span>|</span>
+                         <a href="#" class="hover:text-white-primary">IPR Complaints</a>
+                         <span>|</span>
+                         <a href="#" class="hover:text-white-primary">Anti-spam Policy</a>
+                         <span>|</span>
+                         <a href="#" class="hover:text-white-primary">Terms of Service</a>
+                         <span>|</span>
+                         <a href="#" class="hover:text-white-primary">Privacy Policy</a>
+                         <span>|</span>
+                         <a href="#" class="hover:text-white-primary">Cookie Policy</a>
+                         <span>|</span>
+                         <a href="#" class="hover:text-white-primary">GDPR Compliance</a>
+                         <span>|</span>
+                         <a href="#" class="hover:text-white-primary">Abuse Policy</a>
+                    </div>
+                    <p class="text-center mt-4 text-sm">© 2025, Keloola. All Rights Reserved</p>
+               </div>
+          </div>
+     </footer>
+     <script src="./dist/js/app.js"></script>
+</body>
+
+</html>

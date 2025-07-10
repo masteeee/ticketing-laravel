@@ -32,5 +32,10 @@
             @yield('content')
             </main>
         </div>
+        <form method="POST" action="{{ route('logout') }}">
+    @csrf
+    <button type="submit" class="text-red-500 hover:underline">Logout</button>
+</form>
+
     </body>
 </html>

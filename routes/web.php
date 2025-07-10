@@ -14,31 +14,27 @@ use App\Http\Controllers\ProfileController;
 
 // ✅ PUBLIC ROUTES (no login required)
 Route::get('/', [PublicController::class, 'index'])->name('public.home');
-Route::get('/knowledge-base', [PublicController::class, 'knowledgeBase'])->name('public.knowledgeBase');
-Route::get('/submit-ticket', [PublicController::class, 'submitTicket'])->name('public.submitTicket');
+Route::get('/knowledge-base', [PublicController::class, 'knowledgeBase'])->name('public.knowledge-base');
+Route::get('/submit-ticket', [PublicController::class, 'submitTicket'])->name('public.submit-ticket');
 
+// ✅ AUTH ROUTES (Breeze)
+require __DIR__.'/auth.php';
 
-// ✅ ADMIN ROUTES (login required, role=admin)
-Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
+// ✅ ADMIN ROUTES (login required, role = admin)
+Route::middleware(['auth',])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
-    // Tambahkan route admin lain di sini
+    // Tambahkan route admin lainnya di sini
 });
 
-
-// ✅ STAFF ROUTES (login required, role=staff)
-Route::middleware(['auth', 'role:staff'])->prefix('staff')->name('staff.')->group(function () {
+// ✅ STAFF ROUTES (login required, role = staff)
+Route::middleware(['auth',])->prefix('staff')->name('staff.')->group(function () {
     Route::get('/dashboard', [StaffController::class, 'dashboard'])->name('dashboard');
-    // Tambahkan route staff lain di sini
+    // Tambahkan route staff lainnya di sini
 });
 
-
-// ✅ USER PROFILE (login required)
+// ✅ USER PROFILE ROUTES (login required)
 Route::middleware(['auth'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
-
-
-// ✅ AUTH ROUTES (Breeze)
-require __DIR__.'/auth.php';

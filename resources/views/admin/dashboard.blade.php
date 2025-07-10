@@ -1,7 +1,6 @@
-@extends('layouts.app')
+@extends('layouts.admin')
 
 @section('content')
-<div class="container">
-    <h1>Admin Dashboard</h1>
-</div>
+    <h1 class="h3 mb-4 text-gray-800">Dashboard Admin</h1>
+    <p>Selamat datang, {{ Auth::user()->name }}!</p>
 @endsection
