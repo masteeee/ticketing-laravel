@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 use App\Models\Department;
 use Illuminate\Support\Str; 
+use Illuminate\Support\Facades\Log;
 
 class DepartmentController extends Controller
 {
@@ -89,9 +90,20 @@ class DepartmentController extends Controller
             $response = Http::get('https://accounts.keloola.xyz/api/applications');
     
             if ($response->successful()) {
-                $data = $response->json();
+                $data = $response->json('data'); // ambil hanya array di dalam "data"
+    
+                if (!is_array($data)) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Format data tidak sesuai (bukan array).',
+                    ]);
+                }
     
                 foreach ($data as $item) {
+                    if (!isset($item['id'], $item['name'])) {
+                        continue;
+                    }
+    
                     Department::updateOrCreate(
                         ['external_id' => $item['id']],
                         [
@@ -101,13 +113,23 @@ class DepartmentController extends Controller
                     );
                 }
     
-                return response()->json(['success' => true, 'message' => 'Data department berhasil diperbarui!']);
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Data department berhasil diperbarui!',
+                ]);
             }
     
-            return response()->json(['success' => false, 'message' => 'Gagal mengambil data dari API.']);
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal mengambil data dari API. Status: ' . $response->status(),
+            ]);
         } catch (\Exception $e) {
-            return response()->json(['success' => false, 'message' => 'Terjadi kesalahan: ' . $e->getMessage()]);
+            return response()->json([
+                'success' => false,
+                'message' => 'Terjadi kesalahan: ' . $e->getMessage(),
+            ]);
         }
     }
+    
     
     }
