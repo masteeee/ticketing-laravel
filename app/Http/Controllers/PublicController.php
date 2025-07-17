@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Department; 
+
 class PublicController extends Controller
 {
     public function index()
     {
-        return view('public.home');
+        $departments = Department::all();
+        return view('public.home', compact('departments'));
     }
 
     public function knowledgeBase()

@@ -5,6 +5,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\StaffController;
 use App\Http\Controllers\PublicController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Admin\DepartmentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,6 +24,7 @@ require __DIR__.'/auth.php';
 // ✅ ADMIN ROUTES (login required, role = admin)
 Route::middleware(['auth',])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
+    Route::resource('departments', DepartmentController::class)->except(['show']);
     // Tambahkan route admin lainnya di sini
 });
 
