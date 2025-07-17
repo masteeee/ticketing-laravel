@@ -6,17 +6,21 @@ use App\Http\Controllers\StaffController;
 use App\Http\Controllers\PublicController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Admin\DepartmentController;
-
+use App\Http\Controllers\TicketingController; 
+use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\ArticleController;
+use App\Http\Controllers\KnowledgeBaseController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
 |--------------------------------------------------------------------------
 */
 
-// ✅ PUBLIC ROUTES (no login required)
+// PUBLIC ROUTES (no login required)
 Route::get('/', [PublicController::class, 'index'])->name('public.home');
-Route::get('/knowledge-base', [PublicController::class, 'knowledgeBase'])->name('public.knowledge-base');
+Route::get('/knowledge', [KnowledgeBaseController::class, 'index'])->name('knowledge.base');
 Route::get('/submit-ticket', [PublicController::class, 'submitTicket'])->name('public.submit-ticket');
+// Route::get('/ticket/create', [TicketingController::class, 'create'])->name('ticket.create');
 
 // ✅ AUTH ROUTES (Breeze)
 require __DIR__.'/auth.php';
@@ -25,6 +29,10 @@ require __DIR__.'/auth.php';
 Route::middleware(['auth',])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
     Route::resource('departments', DepartmentController::class)->except(['show']);
+    Route::get('/departments/refresh', [DepartmentController::class, 'refresh'])->name('departments.refresh');
+
+    Route::resource('categories', CategoryController::class);
+    Route::resource('articles', ArticleController::class);
     // Tambahkan route admin lainnya di sini
 });
 

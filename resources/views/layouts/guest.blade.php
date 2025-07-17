@@ -20,10 +20,29 @@
                 <img src="{{ asset('assets/keloola-logo.png') }}" alt="Logo" class="w-20 h-20 object-contain">
             </div>
             <ul class="hidden md:flex items-center space-x-6 font-medium" id="nav-menu">
-                <li><a href="/" class="active text-black-keloola hover:text-red-keloola">Home</a></li>
-                <li><a href="/knowledge" target="_blank" class="text-black-keloola hover:text-red-keloola">Knowledge Base</a></li>
-                <li><a href="#" class="text-black-keloola hover:text-red-keloola">Community</a></li>
-                <li><a href="{{ route('login') }}" class="text-black-keloola hover:text-red-keloola">Sign In</a></li>
+                <li>
+                    <a href="{{ url('/') }}"
+                       class="{{ request()->is('/') ? 'text-red-keloola' : 'text-black-keloola hover:text-red-keloola' }}">
+                       Home
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url('/knowledge') }}"
+                       class="{{ request()->is('knowledge') ? 'text-red-keloola' : 'text-black-keloola hover:text-red-keloola' }}">
+                       Knowledge Base
+                    </a>
+                </li>
+                <li>
+                    <a href="#"
+                       class="{{ request()->is('community') ? 'text-red-keloola' : 'text-black-keloola hover:text-red-keloola' }}">
+                       Community
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('login') }}"
+                       class="{{ request()->is('login') ? 'text-red-keloola' : 'text-black-keloola hover:text-red-keloola' }}">
+                       Sign In
+                    </a>
                 <li class="relative ml-2">
                     <button id="font-button" class="text-black-keloola hover:text-red-keloola">A<sup>+</sup></button>
                     <div id="font-menu" class="absolute hidden mt-2 bg-white-primary shadow-md rounded-md p-2 z-50 right-0 w-max">

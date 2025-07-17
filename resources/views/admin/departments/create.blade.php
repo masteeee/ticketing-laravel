@@ -16,24 +16,19 @@
 
     <form action="{{ route('admin.departments.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
-
-        {{-- Nama Department --}}
         <div class="mb-3">
             <label for="name" class="form-label">Nama Department</label>
             <input type="text" name="name" class="form-control" id="name" required>
         </div>
 
-        {{-- Deskripsi --}}
         <div class="mb-3">
             <label for="description" class="form-label">Deskripsi</label>
-            <textarea name="description" class="form-control" id="description" rows="4"></textarea>
+            <textarea name="description" class="form-control" id="description"></textarea>
         </div>
 
-        {{-- Upload Logo --}}
         <div class="mb-3">
-            <label for="logo_url" class="form-label">Upload Logo</label>
-            <input type="file" name="logo_url" class="form-control" id="logo" accept="image/*">
-            <small class="form-text text-muted">Format gambar: JPG, PNG, dll. Max: 2MB.</small>
+            <label for="logo" class="form-label">Logo (opsional)</label>
+            <input type="file" name="logo" class="form-control" id="logo">
         </div>
 
         <a href="{{ route('admin.departments.index') }}" class="btn btn-secondary">Kembali</a>

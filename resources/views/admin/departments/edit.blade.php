@@ -17,32 +17,22 @@
     <form action="{{ route('admin.departments.update', $department) }}" method="POST" enctype="multipart/form-data">
         @csrf
         @method('PUT')
-
-        {{-- Nama Department --}}
         <div class="mb-3">
             <label for="name" class="form-label">Nama Department</label>
             <input type="text" name="name" class="form-control" id="name" value="{{ $department->name }}" required>
         </div>
 
-        {{-- Deskripsi --}}
         <div class="mb-3">
             <label for="description" class="form-label">Deskripsi</label>
-            <textarea name="description" class="form-control" id="description" rows="4">{{ $department->description }}</textarea>
+            <textarea name="description" class="form-control" id="description">{{ $department->description }}</textarea>
         </div>
 
-        {{-- Logo Lama --}}
-        @if ($department->logo)
         <div class="mb-3">
-            <label class="form-label">Logo Saat Ini:</label><br>
-            <img src="{{ asset('storage/' . $department->logo) }}" alt="Logo Department" width="120">
-        </div>
-        @endif
-
-        {{-- Upload Logo Baru --}}
-        <div class="mb-3">
-            <label for="logo" class="form-label">Ganti Logo</label>
-            <input type="file" name="logo" class="form-control" id="logo" accept="image/*">
-            <small class="text-muted">Kosongkan jika tidak ingin mengganti.</small>
+            <label for="logo" class="form-label">Logo (opsional)</label>
+            <input type="file" name="logo" class="form-control" id="logo">
+            @if($department->logo_url)
+                <img src="{{ asset('storage/' . $department->logo_url) }}" alt="Logo" width="120" class="mt-2">
+            @endif
         </div>
 
         <a href="{{ route('admin.departments.index') }}" class="btn btn-secondary">Kembali</a>

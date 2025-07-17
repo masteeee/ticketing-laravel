@@ -10,5 +10,6 @@ class Department extends Model
         'name',
         'description',
         'logo_url',
+        'external_id',
     ]; 
 }

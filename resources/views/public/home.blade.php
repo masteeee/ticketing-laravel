@@ -149,18 +149,19 @@
                       <div class="bg-white-primary shadow rounded-lg p-6">
                           <div class="flex flex-wrap border-b border-card-bor-keloola mb-4 pb-2">
                               @if($department->logo_url)
-                                  <img src="{{ asset($department->logo_url) }}" alt="icon-{{ Str::slug($department->name) }}" class="w-6 h-6 mr-2">
-                              @endif
+                              <img src="{{ asset('storage/' . $department->logo_url) }}" alt="icon-{{ Str::slug($department->name) }}" class="w-20 h-20 mr-2 rounded-full object-cover">
+                              @endif 
+                                <h3 class="text-lg font-semibold flex items-center">{{ $department->name }}</h3>
                               {{-- <a href="{{ route('ticket.create', ['department' => $department->id]) }}" target="_blank" class="hover:text-primary cursor-pointer">
-                                  <h3 class="text-lg font-semibold flex items-center">{{ $department->name }}</h3>
+                               
                               </a> --}}
                           </div>
                           <p class="text-black-keloola my-4">{{ $department->description }}</p>
                           <div class="mt-8">
-                              {{-- <a href="{{ route('ticket.create', ['department' => $department->id]) }}" target="_blank">
+                              {{-- <a href="{{ route('ticket.create', ['department' => $department->id]) }}" target="_blank"> --}}
                                   <button class="border border-red-keloola text-red-keloola px-4 py-2 rounded font-medium hover:bg-red-keloola hover:text-white-primary transition">
                                       Submit Request
-                                  </button> --}}
+                                  </button>
                               </a>
                           </div>
                       </div>

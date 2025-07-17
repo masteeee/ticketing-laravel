@@ -1,10 +1,12 @@
 <?php
 
 namespace App\Http\Controllers\Admin;
-
+use Illuminate\Support\Facades\Http;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 use App\Models\Department;
+use Illuminate\Support\Str; 
 
 class DepartmentController extends Controller
 {
@@ -24,19 +26,20 @@ class DepartmentController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'logo' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'logo' => 'nullable|image|mimes:jpg,jpeg,png,svg|max:2048',
         ]);
     
-        $logoPath = null;
-        if ($request->hasFile('logo')) {
-            $logoPath = $request->file('logo')->store('departments', 'public');
-        }
-    
-        Department::create([
+        $data = [
             'name' => $request->name,
             'description' => $request->description,
-            'logo_url' => $logoPath,
-        ]);
+        ];
+    
+        if ($request->hasFile('logo')) {
+            $logoPath = $request->file('logo')->store('logos', 'public');
+            $data['logo_url'] = $logoPath;
+        }
+    
+        Department::create($data);
     
         return redirect()->route('admin.departments.index')->with('success', 'Department berhasil ditambahkan.');
     }
@@ -52,17 +55,26 @@ class DepartmentController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'logo' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'logo' => 'nullable|image|mimes:jpg,jpeg,png,svg|max:2048',
         ]);
     
+        $data = [
+            'name' => $request->name,
+            'description' => $request->description,
+        ];
+    
         if ($request->hasFile('logo')) {
-            $logoPath = $request->file('logo')->store('departments', 'public');
-            $department->logo_url = $logoPath;
+            // Hapus logo lama jika ada
+            if ($department->logo_url && Storage::disk('public')->exists($department->logo_url)) {
+                Storage::disk('public')->delete($department->logo_url);
+            }
+    
+            // Simpan logo baru
+            $logoPath = $request->file('logo')->store('logos', 'public');
+            $data['logo_url'] = $logoPath;
         }
     
-        $department->name = $request->name;
-        $department->description = $request->description;
-        $department->save();
+        $department->update($data);
         return redirect()->route('admin.departments.index')->with('success', 'Department updated!');
     }
 
@@ -71,4 +83,31 @@ class DepartmentController extends Controller
         $department->delete();
         return redirect()->route('admin.departments.index')->with('success', 'Department deleted!');
     }
-}
+    public function refresh()
+    {
+        try {
+            $response = Http::get('https://accounts.keloola.xyz/api/applications');
+    
+            if ($response->successful()) {
+                $data = $response->json();
+    
+                foreach ($data as $item) {
+                    Department::updateOrCreate(
+                        ['external_id' => $item['id']],
+                        [
+                            'name' => $item['name'],
+                            'slug' => \Str::slug($item['name']),
+                        ]
+                    );
+                }
+    
+                return response()->json(['success' => true, 'message' => 'Data department berhasil diperbarui!']);
+            }
+    
+            return response()->json(['success' => false, 'message' => 'Gagal mengambil data dari API.']);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => 'Terjadi kesalahan: ' . $e->getMessage()]);
+        }
+    }
+    
+    }
