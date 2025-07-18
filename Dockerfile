@@ -18,9 +18,12 @@ RUN apt-get update && apt-get install -y \
     libzip-dev \
     libmcrypt-dev \
     nano \
-    libmagickwand-dev --no-install-recommends
+    libmagickwand-dev \
+    libicu-dev \
+    libpq-dev --no-install-recommends
 
-RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd zip
+# Install PHP extensions
+RUN docker-php-ext-install pdo_pgsql pdo_mysql mbstring exif pcntl bcmath gd zip intl
 COPY --from=composer:2.5 /usr/bin/composer /usr/bin/composer
 
 # Copy entrypoint script
