@@ -38,6 +38,12 @@
             </ul>
         </div>
     </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{{ route('admin.tickets.index') }}">
+            <i class="fas fa-fw fa-building"></i>
+            <span>Manajemen Tickting</span>
+        </a>
+    </li>
     <hr class="sidebar-divider d-none d-md-block">
 
     {{-- Sidebar Toggle --}}

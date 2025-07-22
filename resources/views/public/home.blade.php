@@ -158,7 +158,7 @@
                           </div>
                           <p class="text-black-keloola my-4">{{ $department->description }}</p>
                           <div class="mt-8">
-                              {{-- <a href="{{ route('ticket.create', ['department' => $department->id]) }}" target="_blank"> --}}
+                              <a href="{{ route('ticket.create', ['department' => $department->id]) }}" target="_blank">
                                   <button class="border border-red-keloola text-red-keloola px-4 py-2 rounded font-medium hover:bg-red-keloola hover:text-white-primary transition">
                                       Submit Request
                                   </button>
