@@ -23,7 +23,7 @@ return new class extends Migration
             $table->string('customer_email')->nullable();
             $table->string('invoice_id')->nullable();
             $table->string('attachment')->nullable();
-            $table->enum('status', ['open', 'in_progress', 'resolved'])->default('open');
+            $table->enum('status', ['Dalam Antrean','Dalam Pengerjaan','Solved'])->default('Dalam Antrean');
             $table->timestamps();
         });
     }

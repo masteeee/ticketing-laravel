@@ -5,10 +5,11 @@
     <meta charset="UTF-8">
     <title>@yield('title', 'Keloola')</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    {{-- Tambahkan link ke CSS Tailwind atau file lainnya jika perlu --}}
+
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
     <script src="{{ asset('js/app.js') }}"></script>
-</head>
+</head>    
+   
 <body class="bg-white-primary text-black-keloola">
 
     {{-- Navbar --}}
@@ -104,6 +105,6 @@
     <main class="mt-6 container mx-auto px-4">
         @yield('content')
     </main>
-
+ @yield('scripts')
 </body>
 </html>

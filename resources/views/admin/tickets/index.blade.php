@@ -1,60 +1,57 @@
-@extends('layouts.admin') {{-- Gunakan layout admin milikmu --}}
-
+@extends('layouts.admin')
+@section('title', 'Daftar Tiket')
 @section('content')
-<div class="container mx-auto p-4">
-    <h1 class="text-2xl font-bold mb-4">Daftar Ticket</h1>
-
-    <div class="overflow-auto rounded shadow">
-        <table class="min-w-full bg-white border">
-            <thead class="bg-gray-100">
+<div class="container py-4">
+    <h2>Daftar Tiket</h2>
+    @if(session('success')) <div class="alert alert-success">{{ session('success') }}</div> @endif
+    <div class="table-responsive">
+        <table class="table table-bordered">
+            <thead>
                 <tr>
-                    <th class="px-4 py-2 border">#</th>
-                    <th class="px-4 py-2 border">Nama</th>
-                    <th class="px-4 py-2 border">Email</th>
-                    <th class="px-4 py-2 border">Subjek</th>
-                    <th class="px-4 py-2 border">Layanan</th>
-                    <th class="px-4 py-2 border">Status</th>
-                    <th class="px-4 py-2 border">Aksi</th>
+                    <th>No</th>
+                    <th>Departemen</th>
+                    <th>Nama Kontak</th>
+                    <th>Layanan</th>
+                    <th>Email</th>
+                    <th>Telepon</th>
+                    <th>Detail</th>
+                    <th>Status</th>
+                    <th>Ubah Status</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach ($tickets as $ticket)
-                    <tr>
-                        <td class="px-4 py-2 border">{{ $loop->iteration }}</td>
-                        <td class="px-4 py-2 border">{{ $ticket->contact_name }}</td>
-                        <td class="px-4 py-2 border">{{ $ticket->email }}</td>
-                        <td class="px-4 py-2 border">{{ $ticket->subject }}</td>
-                        <td class="px-4 py-2 border">{{ $ticket->service_name }}</td>
-                        <td class="px-4 py-2 border">
-                            <span class="px-2 py-1 text-sm rounded 
-                                @if($ticket->status == 'Dalam Antrean') bg-yellow-100 text-yellow-800
-                                @elseif($ticket->status == 'Sedang Dikerjakan') bg-blue-100 text-blue-800
-                                @elseif($ticket->status == 'Selesai') bg-green-100 text-green-800
-                                @endif
-                            ">
-                                {{ $ticket->status }}
-                            </span>
-                        </td>
-                        <td class="px-4 py-2 border">
-                            <form action="{{ route('admin.tickets.update-status', $ticket->id) }}" method="POST">
-                                @csrf
-                                @method('PATCH')
-                                <select name="status" class="text-sm rounded border-gray-300" onchange="this.form.submit()">
-                                    <option disabled selected>Ubah Status</option>
-                                    <option value="Dalam Antrean">Dalam Antrean</option>
-                                    <option value="Sedang Dikerjakan">Sedang Dikerjakan</option>
-                                    <option value="Selesai">Selesai</option>
-                                </select>
-                            </form>
-                        </td>
-                    </tr>
+                @foreach($tickets as $ticket)
+                <tr>
+                    <td>{{ $loop->iteration }}</td>
+                    <td>{{ $ticket->department->name ?? '-' }}</td>
+                    <td>{{ $ticket->contact_name }}</td>
+                    <td>{{ $ticket->service_name }}</td>
+                    <td>{{ $ticket->email }}</td>
+                    <td>{{ $ticket->phone }}</td>
+                    <td><a href="{{ route('admin.tickets.show', $ticket->id) }}" class="btn btn-sm btn-primary">Lihat</a></td>
+                    <td>
+                        <span class="badge
+                            {{ $ticket->status == 'Dalam Antrean' ? 'bg-warning' : '' }}
+                            {{ $ticket->status == 'Dalam Pengerjaan' ? 'bg-info' : '' }}
+                            {{ $ticket->status == 'Solved' ? 'bg-success' : '' }}">
+                            {{ $ticket->status ?? 'Dalam Antrean' }}
+                        </span>
+                    </td>
+                    <td>
+                        <form action="{{ route('admin.tickets.updateStatus', $ticket->id) }}" method="POST">
+                            @csrf
+                            <select name="status" class="form-select form-select-sm" onchange="this.form.submit()">
+                                <option value="Dalam Antrean" {{ $ticket->status == 'Dalam Antrean' ? 'selected' : '' }}>Dalam Antrean</option>
+                                <option value="Dalam Pengerjaan" {{ $ticket->status == 'Dalam Pengerjaan' ? 'selected' : '' }}>Dalam Pengerjaan</option>
+                                <option value="Solved" {{ $ticket->status == 'Solved' ? 'selected' : '' }}>Solved/Done</option>
+                            </select>
+                        </form>
+                    </td>
+                </tr>
                 @endforeach
             </tbody>
         </table>
     </div>
-
-    <div class="mt-4">
-        {{ $tickets->links() }} {{-- Pagination --}}
-    </div>
+    {{ $tickets->links() }}
 </div>
 @endsection

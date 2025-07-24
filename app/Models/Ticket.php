@@ -19,5 +19,15 @@ class Ticket extends Model
         'customer_email',
         'invoice_id',
         'attachment',
+        'status',
     ];
+
+    public function department()
+        {
+            return $this->belongsTo(Department::class);
+        }
+    public function conversations()
+        {
+            return $this->hasMany(TicketConversation::class);
+        }
 }

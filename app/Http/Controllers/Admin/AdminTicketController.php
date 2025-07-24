@@ -5,11 +5,13 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Ticket;
 use Illuminate\Http\Request;
+use App\Models\TicketConversation;
 
 class AdminTicketController extends Controller
 {
     public function index()
     {
+        $tickets = Ticket::with('department')->latest()->paginate(10);
         $tickets = Ticket::latest()->paginate(10);
         return view('admin.tickets.index', compact('tickets'));
     }
@@ -17,7 +19,7 @@ class AdminTicketController extends Controller
     public function updateStatus(Request $request, $id)
     {
         $request->validate([
-            'status' => 'required|in:Dalam Antrean,Sedang Dikerjakan,Selesai',
+            'status' => 'required|in:Dalam Antrean,Dalam Pengerjaan,Solved',
         ]);
 
         $ticket = Ticket::findOrFail($id);
@@ -26,4 +28,23 @@ class AdminTicketController extends Controller
 
         return redirect()->route('admin.tickets.index')->with('success', 'Status tiket berhasil diperbarui.');
     }
+    public function show($id)
+    {
+        $ticket = Ticket::with('department')->findOrFail($id);
+        $conversations = []; // nanti bisa isi dengan model percakapan kalau sudah dibuat
+
+        return view('admin.tickets.show', compact('ticket', 'conversations'));
+    }
+    
+    public function reply(Request $request, Ticket $ticket)
+{
+    $request->validate(['message' => 'required|string']);
+
+    $ticket->conversations()->create([
+        'user_id' => auth()->id(),
+        'message' => $request->message,
+    ]);
+
+    return back()->with('success', 'Balasan berhasil dikirim.');
+}
 }

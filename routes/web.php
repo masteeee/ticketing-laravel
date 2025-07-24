@@ -22,8 +22,7 @@ Route::get('/', [PublicController::class, 'index'])->name('public.home');
 Route::get('/knowledge', [KnowledgeBaseController::class, 'index'])->name('knowledge.base');
 Route::get('/ticket/create', [TicketController::class, 'create'])->name('ticket.create');
 Route::post('/ticket/submit', [TicketController::class, 'store'])->name('ticket.public.store');
-// Route::post('/ticket/store', [TicketController::class, 'store'])->name('ticket.store');
-// Route::get('/ticket/create', [TicketingController::class, 'create'])->name('ticket.create');
+Route::get('/articles/{article}', [ArticleController::class, 'show'])->name('articles.show');
 
 // AUTH ROUTES (Breeze)
 require __DIR__.'/auth.php';
@@ -34,19 +33,20 @@ Route::middleware(['auth',])->prefix('admin')->name('admin.')->group(function ()
     Route::resource('departments', DepartmentController::class)->except(['show']);
     Route::get('/departments/refresh', [DepartmentController::class, 'refresh'])->name('departments.refresh');
     Route::get('/tickets', [AdminTicketController::class, 'index'])->name('tickets.index');
-    Route::patch('/admin/tickets/{id}/update-status', [AdminTicketController::class, 'updateStatus'])
-    ->name('admin.tickets.update-status');
-    // Route::get('tickets/data', [TicketingController::class, 'data'])->name('admin.tickets.data');
+    Route::get('/tickets/{ticket}', [AdminTicketController::class, 'show'])->name('tickets.show');
+    Route::post('/tickets/{id}/update-status', [AdminTicketController::class, 'updateStatus'])->name('tickets.updateStatus');
+    Route::post('/tickets/{ticket}/reply', [AdminTicketController::class, 'reply'])->name('tickets.reply');
+   
 
     Route::resource('categories', CategoryController::class);
     Route::resource('articles', ArticleController::class);
-    // Tambahkan route admin lainnya di sini
+   
 });
 
 // STAFF ROUTES (login required, role = staff)
 Route::middleware(['auth',])->prefix('staff')->name('staff.')->group(function () {
     Route::get('/dashboard', [StaffController::class, 'dashboard'])->name('dashboard');
-    // Tambahkan route staff lainnya di sini
+    
 });
 
 // USER PROFILE ROUTES (login required)

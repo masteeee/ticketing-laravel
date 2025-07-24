@@ -4,100 +4,138 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Landing Page</title>
+    <title>Keloola</title>
     <link rel="stylesheet" href="{{ asset('dist/css/output.css') }}">
 </head>
+@section('scripts')
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    @if(session('success'))
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Berhasil!',
+                    text: '{{ session('success') }}',
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'OK'
+                });
+            });
+        </script>
+    @endif
+@endsection
 @section('content')
-<div class="grid grid-cols-1 md:grid-cols-3 gap-6 px-4 md:px-10 py-10">
-    <!-- Form Submit a Request -->
-    <div class="md:col-span-2 bg-white rounded shadow p-6">
-        <h2 class="text-xl font-bold mb-4">Submit a Request</h2>
+<section class="bg-form-section py-5">
+    <div class="departments-container container mx-auto px-4">
+        <div class="bg-section-text-form p-4 border border-section-bor-form rounded-md my-4 flex lg:w-[73.5%] md:w-full">
+            <h2 class="lg:text-xl sm:text-sm font-semibold">Keloola Corporation's Help Center is hosted in our US data center</h2>
+        </div>
 
-        <form enctype="multipart/form-data">
-            <!-- Department -->
-            <div class="mb-4">
-                <label class="block font-medium mb-1">Department</label>
-                <select class="w-full border rounded p-2">
-                    <option>Keloola Accounting</option>
-                    <!-- Tambahkan opsi lainnya -->
-                </select>
+        <div class="flex flex-col lg:flex-row gap-8">
+            <!-- Form kiri -->
+            <div class="lg:w-3/4 bg-white-primary border border-section-bor rounded-md">
+                <div class="p-6">
+                    <h1 class="text-3xl font-semibold mb-6">Submit a request</h1>
+                    <h4 class="text-xl font-semibold my-10">Request Information</h4>
+
+                    <form class="space-y-6" action="{{ route('ticket.public.store') }}" method="POST" enctype="multipart/form-data">
+                        @csrf
+                        <div>
+                            <label class="block text-sm font-medium mb-2">Department</label>
+                            <select name="department_id" class="w-full p-3 border border-section-bor rounded-md">
+                                @foreach($departments as $dept)
+                                    <option value="{{ $dept->id }}">{{ $dept->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium mb-2">Contact Name <span class="text-red-keloola">*</span></label>
+                            <input name="contact_name" type="text" class="w-full p-2 border border-section-bor rounded-md" required />
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium mb-2">Keloola Service Name</label>
+                            <select name="service_name" class="w-full p-3 border border-section-bor rounded-md">
+                                <option value="">-None-</option>
+                                <option value="ACCOUNTS">ACCOUNTS</option>
+                                <option value="Accounting">Accounting</option>
+                                <option value="Absensi">Absensi</option>
+                                <option value="App Creator">App Creator</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium mb-2">Email</label>
+                            <input name="email" type="email" class="w-full p-2 border border-section-bor rounded-md" />
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium mb-2">Phone</label>
+                            <input name="phone" type="text" class="w-full p-2 border border-section-bor rounded-md" />
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium mb-2">Subject <span class="text-red-keloola">*</span></label>
+                            <input name="subject" type="text" class="w-full p-2 border border-section-bor rounded-md" required />
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium mb-2">Description</label>
+                            <textarea name="description" class="w-full p-2 border border-section-bor rounded-md min-h-[200px]"></textarea>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium mb-2">Customer Primary Email</label>
+                            <input name="customer_email" type="email" class="w-full p-2 border border-section-bor rounded-md" />
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium mb-2">Inv ID</label>
+                            <input name="invoice_id" type="text" class="w-full p-2 border border-section-bor rounded-md" />
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium mb-2">Attach a file</label>
+                            <input name="attachment" type="file" class="w-full p-2 border rounded-md" />
+                            <small>(Up to 40 MB)</small>
+                        </div>
+
+                        <div class="flex gap-4">
+                            <button type="submit" class="bg-red-keloola text-white-primary px-6 py-2">SUBMIT</button>
+                            <a href="/" class="bg-primary text-white-primary px-6 py-2">DISCARD</a>
+                        </div>
+                    </form>
+                </div>
             </div>
 
-            <!-- Contact Name -->
-            <div class="mb-4">
-                <label class="block font-medium mb-1">Contact Name *</label>
-                <input type="text" class="w-full border rounded p-2" required>
+            <!-- Sidebar kanan -->
+            <div class="lg:w-1/4">
+                <div class="lg:w-1/4">
+                    <div class="mt-2">
+                        <h2 class="text-xl font-semibold mb-4">Popular Articles</h2>
+                        <ul class="space-y-4">
+                            @forelse ($popularArticles as $article)
+                                <li>
+                                    <a href="{{ route('articles.show', $article->id) }}"
+                                       class="flex items-start gap-2 text-black-keloola hover:text-blue-primary">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mb-1 flex-shrink-0"
+                                             fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                  d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9.5a2.5 2.5 0 00-2.5-2.5H15" />
+                                        </svg>
+                                        {{ $article->title }}
+                                    </a>
+                                </li>
+                            @empty
+                                <li><span class="text-gray-500">Tidak ada artikel populer</span></li>
+                            @endforelse
+                        </ul>
+                    </div>
+                </div>
             </div>
-
-            <!-- Service Name -->
-            <div class="mb-4">
-                <label class="block font-medium mb-1">Keloola Service Name</label>
-                <select class="w-full border rounded p-2">
-                    <option>-None-</option>
-                    <!-- Tambahkan opsi -->
-                </select>
-            </div>
-
-            <!-- Email -->
-            <div class="mb-4">
-                <label class="block font-medium mb-1">Email</label>
-                <input type="email" class="w-full border rounded p-2">
-            </div>
-
-            <!-- Phone -->
-            <div class="mb-4">
-                <label class="block font-medium mb-1">Phone</label>
-                <input type="text" class="w-full border rounded p-2">
-            </div>
-
-            <!-- Subject -->
-            <div class="mb-4">
-                <label class="block font-medium mb-1">Subject *</label>
-                <input type="text" class="w-full border rounded p-2" required>
-            </div>
-
-            <!-- Description -->
-            <div class="mb-4">
-                <label class="block font-medium mb-1">Description</label>
-                <textarea class="w-full border rounded p-2" rows="4"></textarea>
-            </div>
-
-            <!-- Email Primary -->
-            <div class="mb-4">
-                <label class="block font-medium mb-1">Customer Primary Email Address</label>
-                <input type="email" class="w-full border rounded p-2">
-            </div>
-
-            <!-- Inv ID -->
-            <div class="mb-4">
-                <label class="block font-medium mb-1">Inv ID</label>
-                <input type="text" class="w-full border rounded p-2">
-            </div>
-
-            <!-- File Upload -->
-            <div class="mb-4">
-                <label class="block font-medium mb-1">Attach a file (up to 40 MB)</label>
-                <input type="file" class="w-full">
-            </div>
-
-            <!-- Buttons -->
-            <div class="flex justify-between">
-                <button type="submit" class="border border-red-keloola text-red-keloola px-4 py-2 rounded font-medium hover:bg-red-keloola hover:text-white-primary transition">SUBMIT</button>
-                <button type="reset" class="text-red-500">DISCARD</button>
-            </div>
-        </form>
+        </div>
     </div>
-
-    <!-- Artikel Populer -->
-    <div class="bg-white rounded shadow p-6">
-        <h2 class="text-xl font-bold mb-4">Artikel Populer</h2>
-        <ul class="list-disc list-inside space-y-2">
-            <li><a href="#" class="text-blue-600 hover:underline">Cara menggunakan sistem ticketing</a></li>
-            <li><a href="#" class="text-blue-600 hover:underline">FAQ Sistem Keloola</a></li>
-            <li><a href="#" class="text-blue-600 hover:underline">Tips Menulis Deskripsi Masalah</a></li>
-        </ul>
-    </div>
-</div>
-
+</section>
+@include('layouts.footer')
 @endsection
 <script src="{{ asset('dist/js/app.js') }}"></script>
