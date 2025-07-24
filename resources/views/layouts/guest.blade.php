@@ -7,14 +7,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+    <link rel="stylesheet" href="{{ asset('dist/css/output.css') }}">
     <script src="{{ asset('js/app.js') }}"></script>
 </head>    
    
 <body class="bg-white-primary text-black-keloola">
-
-    {{-- Navbar --}}
-
-        <nav class="bg-white-primary shadow">
     <nav class="bg-white-primary shadow">
         <div class="container mx-auto px-4 py-4 flex justify-between items-center">
             <div class="flex items-center space-x-4">
@@ -78,19 +75,10 @@
                                         </label>
                                    </div>
                               </div>
-                </div>
+                     </div>
                 </li>
-                <li class="relative">
-                    <button id="desktop-language-button" class="text-black-keloola text-sm hover:text-red-keloola flex items-center">
-                        English <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                        </svg>
-                    </button>
-                    <ul id="desktop-language-menu" class="absolute hidden mt-2 p-2 bg-white-primary shadow rounded-md text-sm z-50 right-0">
-                        <li><a href="#" class="block px-4 py-2 hover:text-primary">English</a></li>
-                        <li><a href="#" class="block px-4 py-2 hover:text-primary">Spanish</a></li>
-                        <li><a href="#" class="block px-4 py-2 hover:text-primary">French</a></li>
-                    </ul>
+                <li>
+                    <a href="{{ route('ticket.view.form') }}" class="bg-red-keloola text-white-primary px-4 py-2 rounded hover:bg-red-700 transition">View Ticket</a>
                 </li>
             </ul>
             <button class="md:hidden text-black-keloola" id="mobile-menu-button">
@@ -100,11 +88,7 @@
             </button>
         </div>
     </nav>
-
-    {{-- Konten Halaman --}}
-    <main class="mt-6 container mx-auto px-4">
-        @yield('content')
-    </main>
+    @yield('content')
  @yield('scripts')
 </body>
 </html>

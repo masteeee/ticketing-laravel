@@ -14,12 +14,16 @@ class CategoryController extends Controller
     }
 
     public function create() {
-        return view('admin.categories.create');
+        $categories = Category::all();
+        return view('admin.categories.create', compact('categories'));
     }
 
     public function store(Request $request) {
         $request->validate(['name' => 'required']);
-        Category::create($request->all());
+        Category::create([
+            'name' => $request->name,
+            'parent_id' => $request->parent_id
+        ]);
         return redirect()->route('admin.categories.index')->with('success', 'Kategori ditambahkan');
     }
 

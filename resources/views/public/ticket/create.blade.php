@@ -1,12 +1,6 @@
 @extends('layouts.guest')
 
 @section('title', 'Submit a Request')
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Keloola</title>
-    <link rel="stylesheet" href="{{ asset('dist/css/output.css') }}">
-</head>
 @section('scripts')
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     @if(session('success'))
@@ -29,30 +23,26 @@
         <div class="bg-section-text-form p-4 border border-section-bor-form rounded-md my-4 flex lg:w-[73.5%] md:w-full">
             <h2 class="lg:text-xl sm:text-sm font-semibold">Keloola Corporation's Help Center is hosted in our US data center</h2>
         </div>
-
         <div class="flex flex-col lg:flex-row gap-8">
             <!-- Form kiri -->
             <div class="lg:w-3/4 bg-white-primary border border-section-bor rounded-md">
                 <div class="p-6">
                     <h1 class="text-3xl font-semibold mb-6">Submit a request</h1>
                     <h4 class="text-xl font-semibold my-10">Request Information</h4>
-
                     <form class="space-y-6" action="{{ route('ticket.public.store') }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         <div>
                             <label class="block text-sm font-medium mb-2">Department</label>
                             <select name="department_id" class="w-full p-3 border border-section-bor rounded-md">
                                 @foreach($departments as $dept)
-                                    <option value="{{ $dept->id }}">{{ $dept->name }}</option>
+                                    <option value="{{ $dept->id }}" {{ (isset($selectedDepartment) && $selectedDepartment == $dept->id) ? 'selected' : '' }}>{{ $dept->name }}</option>
                                 @endforeach
                             </select>
                         </div>
-
                         <div>
                             <label class="block text-sm font-medium mb-2">Contact Name <span class="text-red-keloola">*</span></label>
                             <input name="contact_name" type="text" class="w-full p-2 border border-section-bor rounded-md" required />
                         </div>
-
                         <div>
                             <label class="block text-sm font-medium mb-2">Keloola Service Name</label>
                             <select name="service_name" class="w-full p-3 border border-section-bor rounded-md">
@@ -63,43 +53,35 @@
                                 <option value="App Creator">App Creator</option>
                             </select>
                         </div>
-
                         <div>
                             <label class="block text-sm font-medium mb-2">Email</label>
                             <input name="email" type="email" class="w-full p-2 border border-section-bor rounded-md" />
                         </div>
-
                         <div>
                             <label class="block text-sm font-medium mb-2">Phone</label>
                             <input name="phone" type="text" class="w-full p-2 border border-section-bor rounded-md" />
                         </div>
-
                         <div>
                             <label class="block text-sm font-medium mb-2">Subject <span class="text-red-keloola">*</span></label>
                             <input name="subject" type="text" class="w-full p-2 border border-section-bor rounded-md" required />
                         </div>
-
                         <div>
                             <label class="block text-sm font-medium mb-2">Description</label>
                             <textarea name="description" class="w-full p-2 border border-section-bor rounded-md min-h-[200px]"></textarea>
                         </div>
-
                         <div>
                             <label class="block text-sm font-medium mb-2">Customer Primary Email</label>
                             <input name="customer_email" type="email" class="w-full p-2 border border-section-bor rounded-md" />
                         </div>
-
                         <div>
                             <label class="block text-sm font-medium mb-2">Inv ID</label>
-                            <input name="invoice_id" type="text" class="w-full p-2 border border-section-bor rounded-md" />
+                            <input name="invoice_id" type="text" class="w-full p-2 border border-section-bor rounded-md" disabled />
                         </div>
-
                         <div>
                             <label class="block text-sm font-medium mb-2">Attach a file</label>
                             <input name="attachment" type="file" class="w-full p-2 border rounded-md" />
                             <small>(Up to 40 MB)</small>
                         </div>
-
                         <div class="flex gap-4">
                             <button type="submit" class="bg-red-keloola text-white-primary px-6 py-2">SUBMIT</button>
                             <a href="/" class="bg-primary text-white-primary px-6 py-2">DISCARD</a>
@@ -107,7 +89,6 @@
                     </form>
                 </div>
             </div>
-
             <!-- Sidebar kanan -->
             <div class="lg:w-1/4">
                 <div class="lg:w-1/4">

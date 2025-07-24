@@ -24,6 +24,11 @@ Route::get('/ticket/create', [TicketController::class, 'create'])->name('ticket.
 Route::post('/ticket/submit', [TicketController::class, 'store'])->name('ticket.public.store');
 Route::get('/articles/{article}', [ArticleController::class, 'show'])->name('articles.show');
 
+// PUBLIC TICKET VIEW
+Route::get('/ticket/view', [App\Http\Controllers\TicketController::class, 'viewForm'])->name('ticket.view.form');
+Route::get('/ticket/detail', [App\Http\Controllers\TicketController::class, 'publicDetail'])->name('ticket.public.detail');
+Route::post('/ticket/reply', [App\Http\Controllers\TicketController::class, 'publicReply'])->name('ticket.public.reply');
+
 // AUTH ROUTES (Breeze)
 require __DIR__.'/auth.php';
 

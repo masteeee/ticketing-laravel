@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Ticket;
 use Illuminate\Http\Request;
 use App\Models\TicketConversation;
+use App\Notifications\TicketUserReplied;
 
 class AdminTicketController extends Controller
 {
@@ -37,14 +38,19 @@ class AdminTicketController extends Controller
     }
     
     public function reply(Request $request, Ticket $ticket)
-{
-    $request->validate(['message' => 'required|string']);
+    {
+        $request->validate(['message' => 'required|string']);
 
-    $ticket->conversations()->create([
-        'user_id' => auth()->id(),
-        'message' => $request->message,
-    ]);
+        $ticket->conversations()->create([
+            'user_id' => auth()->id(),
+            'message' => $request->message,
+        ]);
 
-    return back()->with('success', 'Balasan berhasil dikirim.');
-}
+        // Kirim notifikasi ke user
+        if ($ticket->email) {
+            \Notification::route('mail', $ticket->email)->notify(new TicketUserReplied($ticket, $request->message));
+        }
+
+        return back()->with('success', 'Balasan berhasil dikirim.');
+    }
 }

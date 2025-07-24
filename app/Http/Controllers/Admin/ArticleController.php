@@ -54,4 +54,8 @@ class ArticleController extends Controller
         $article->delete();
         return back()->with('success', 'Artikel dihapus');
     }
+
+    public function show(\App\Models\Article $article) {
+        return view('articles.show', compact('article'));
+    }
 }

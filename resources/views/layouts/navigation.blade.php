@@ -40,6 +40,7 @@
 
             <!-- Settings Dropdown -->
             <div class="hidden sm:flex sm:items-center sm:ms-6">
+                <a href="{{ route('ticket.view.form') }}" class="btn btn-danger mr-4" style="background:#e3342f;color:white;padding:0.5rem 1rem;border-radius:0.375rem;">View Ticket</a>
                 @auth
                     <x-dropdown align="right" width="48">
                         <x-slot name="trigger">
