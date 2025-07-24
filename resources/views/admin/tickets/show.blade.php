@@ -29,7 +29,13 @@
             @if($ticket->conversations && $ticket->conversations->count())
                 @foreach($ticket->conversations as $conv)
                     <div class="mb-2">
-                        <strong>{{ $conv->user->name }}</strong>
+                        <strong>
+                            @if($conv->user)
+                                {{ $conv->user->name }}
+                            @else
+                                {{ $ticket->email }}
+                            @endif
+                        </strong>
                         <small class="text-muted">({{ $conv->created_at->diffForHumans() }})</small>
                         <p>{{ $conv->message }}</p>
                     </div>
