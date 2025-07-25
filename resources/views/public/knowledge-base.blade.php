@@ -1,103 +1,80 @@
 @extends('layouts.guest')
 
 @section('content')
-<div class="bg-gray-900 min-h-screen py-10" style="padding: 50px;">
+<div class="bg-gray-900 min-h-screen py-10 px-4">
     <div class="max-w-6xl mx-auto">
         <div class="text-center mb-8">
-            <h1 class="text-2xl font-semibold text-gray-100 mb-4">Knowledge Base</h1>
+            <h1 class="display-4 fw-bold text-center mb-4" style="color: #dc3545; font-size: 2rem;">Knowledge Base</h1>   
             <div class="flex justify-center mb-4">
                 <form method="GET" action="" class="w-full max-w-xl">
                     <input type="text" name="search" id="search-input" value="{{ $keyword ?? '' }}" placeholder="Search articles" class="w-full border border-gray-700 bg-gray-800 text-gray-100 rounded-md px-4 py-2 focus:outline-none focus:ring" autocomplete="off" />
                 </form>
             </div>
-            <div class="relative inline-block text-left mb-6">
-                <div id="dropdownMenu" class="origin-top-left absolute left-0 mt-2 w-72 rounded-md shadow-lg bg-gray-800 ring-1 ring-black ring-opacity-5 focus:outline-none z-50 hidden max-h-96 overflow-auto">
-                    <ul class="py-1 text-gray-100 text-sm">
-                        @php
-                        function renderDropdownTreeWithArticles($categories, $level = 0) {
-                            foreach($categories as $cat) {
-                                $hasChildren = $cat->children && $cat->children->count();
-                                $hasArticles = $cat->articles && $cat->articles->count();
-                                echo '<li class="pl-'.($level*16).'">';
-                                if($hasChildren) {
-                                    echo '<button type="button" class="dropdown-toggle w-full flex items-center py-1 px-2 hover:bg-gray-700 rounded focus:outline-none" data-target="dropdown-cat-'.$cat->id.'">▸ <span class=\'ml-2\'>'.$cat->name.'</span></button>';
-                                    echo '<ul class="ml-4 hidden" id="dropdown-cat-'.$cat->id.'">';
-                                    renderDropdownTreeWithArticles($cat->children, $level+1);
-                                    echo '</ul>';
-                                } else {
-                                    echo '<a href="#cat-'.$cat->id.'" class="block py-1 px-2 hover:bg-gray-700 rounded">'.$cat->name.'</a>';
-                                }
-                                // Artikel di bawah kategori
-                                if($hasArticles) {
-                                    echo '<ul class="ml-4">';
-                                    foreach($cat->articles as $art) {
-                                        echo '<li class="flex items-center px-2 py-1 hover:bg-gray-700 rounded transition">';
-                                        echo '<span class="mr-2">📝</span>';
-                                        echo '<a href="'.route('articles.show', $art->id).'" class="text-gray-200 hover:text-blue-400">'.$art->title.'</a>';
-                                        echo '</li>';
-                                    }
-                                    echo '</ul>';
-                                }
-                                echo '</li>';
-                            }
-                        }
-                        @endphp
-                        @if($categories->count())
-                            @php renderDropdownTreeWithArticles($categories->where('parent_id', null)); @endphp
-                        @else
-                            <li class="px-4 py-2 text-gray-400">Tidak ada kategori</li>
-                        @endif
-                    </ul>
-                </div>
-            </div>
         </div>
-        <div class="bg-gray-800 rounded-lg p-6 shadow p-4 mt-4">
+
+        <div class="bg-gray-800 rounded-lg p-6 shadow">
             @php
-                function renderCategoryTreeDark($categories, $level = 0) {
-                    foreach($categories as $cat) {
-                        $hasChildren = $cat->children && $cat->children->count();
-                        $catId = 'cat-'.$cat->id;
-                        echo '<div class="ml-'.($level*16).'">';
-                        echo '<div class="flex items-center w-full px-2 py-1 rounded group '.($level==0?'mt-2':'').'">';
-                        if($hasChildren) {
-                            echo '<button type="button" class="toggle-tree bg-gray-700 text-gray-300 rounded w-6 h-6 flex items-center justify-center mr-2 focus:outline-none" data-target="'.$catId.'">▸</button>';
-                        } else {
-                            echo '<span class="w-6 h-6 mr-2 flex items-center justify-center">📁</span>';
-                        }
-                        echo '<span class="font-medium text-gray-100">'.$cat->name.'</span>';
-                        echo '</div>';
-                        echo '<div class="pl-8">';
-                        if($cat->articles->count()) {
-                            echo '<ul class="mb-2">';
-                            foreach($cat->articles as $art) {
-                                echo '<li class="flex items-center px-2 py-1 hover:bg-gray-700 rounded transition">';
+            function renderCategoryTreeDark($categories, $level = 0)
+            {
+                foreach ($categories as $cat) {
+                    $hasChildren = $cat->children && $cat->children->count();
+                    $hasArticles = $cat->articles && $cat->articles->count();
+                    $hasContent = $hasChildren || $hasArticles;
+                    $catId = 'cat-' . $cat->id;
+
+                    echo '<div class="ml-'.($level * 4).' mb-3">';
+                    echo '<div class="bg-gray-700 rounded-lg shadow px-4 py-3">';
+
+                    // Header bar
+                    echo '<div class="flex items-center">';
+                    if ($hasContent) {
+                        echo '<button type="button" class="toggle-tree text-white font-semibold mr-2 focus:outline-none" data-target="'.$catId.'">▸</button>';
+                    } else {
+                        echo '<span class="mr-2"></span>';
+                    }
+                    echo '<span class="text-white font-medium">'.$cat->name.'</span>';
+                    echo '</div>';
+
+                    // Content toggle (artikel + children)
+                    if ($hasContent) {
+                        echo '<div class="tree-children mt-3 pl-6 hidden" id="'.$catId.'">';
+
+                        if ($hasArticles) {
+                            echo '<div class="space-y-2 mb-2">';
+                            foreach ($cat->articles as $art) {
+                                echo '<div class="bg-gray-800 text-gray-100 rounded px-3 py-2 shadow flex items-center hover:bg-gray-700 transition">';
                                 echo '<span class="mr-2">📝</span>';
-                                echo '<a href="'.route('articles.show', $art->id).'" class="text-gray-200 hover:text-blue-400">'.$art->title.'</a>';
-                                echo '</li>';
+                                echo '<a href="'.route('articles.show', $art->id).'" class="hover:text-blue-400">'.$art->title.'</a>';
+                                echo '</div>';
                             }
-                            echo '</ul>';
-                        }
-                        if($hasChildren) {
-                            echo '<div class="tree-children" id="'.$catId.'" style="display:none;">';
-                            renderCategoryTreeDark($cat->children, $level+1);
                             echo '</div>';
                         }
-                        echo '</div>';
+
+                        if ($hasChildren) {
+                            renderCategoryTreeDark($cat->children, $level + 1);
+                        }
+
                         echo '</div>';
                     }
+
+                    echo '</div>'; // card bg
+                    echo '</div>'; // ml-...
                 }
+            }
             @endphp
+
             <div class="space-y-2">
                 @if($categories->count())
-                    @php renderCategoryTreeDark($categories->where('parent_id', null)); @endphp
-                @else
-                    <p class="text-gray-400">Tidak ada kategori tersedia.</p>
-                @endif
+                @php renderCategoryTreeDark($categories->where('parent_id', null)); @endphp
+            @else
+                <p class="text-gray-400">Tidak ada kategori tersedia.</p>
+            @endif
             </div>
         </div>
     </div>
 </div>
-<!-- Artikel Terbaru & Populer tetap di bawah -->
+
+<!-- Artikel Terbaru & Populer -->
 <div class="bg-gray-100 py-10">
     <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-10">
         <!-- Artikel Terbaru -->
@@ -127,65 +104,16 @@
 @endsection
 
 @push('scripts')
-<script src="{{ asset('dist/js/app.js') }}"></script>
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    // Debounce search
-    let timer;
-    document.getElementById('search-input').addEventListener('input', function() {
-        clearTimeout(timer);
-        timer = setTimeout(() => {
-            this.form.submit();
-        }, 400);
-    });
-    // Tree-view expand/collapse
-    document.querySelectorAll('.toggle-tree').forEach(btn => {
-        btn.addEventListener('click', function() {
-            const target = document.getElementById(this.dataset.target);
-            if(target.style.display === 'none' || target.style.display === '') {
-                target.style.display = 'block';
-                this.textContent = '▾';
-            } else {
-                target.style.display = 'none';
-                this.textContent = '▸';
+document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.toggle-tree').forEach(button => {
+        button.addEventListener('click', function () {
+            const targetId = this.getAttribute('data-target');
+            const target = document.getElementById(targetId);
+            if (target) {
+                target.classList.toggle('hidden');
+                this.textContent = target.classList.contains('hidden') ? '▸' : '▾';
             }
-        });
-    });
-    // Dropdown multi-level
-    const dropdownBtn = document.getElementById('dropdownButton');
-    const dropdownMenu = document.getElementById('dropdownMenu');
-    dropdownBtn.addEventListener('click', function(e) {
-        e.stopPropagation();
-        dropdownMenu.classList.toggle('hidden');
-    });
-    document.addEventListener('click', function(e) {
-        if (!dropdownMenu.contains(e.target) && e.target !== dropdownBtn) {
-            dropdownMenu.classList.add('hidden');
-        }
-    });
-    document.querySelectorAll('.dropdown-toggle').forEach(btn => {
-        btn.addEventListener('click', function(e) {
-            e.stopPropagation();
-            const target = document.getElementById(this.dataset.target);
-            if(target.classList.contains('hidden')) {
-                target.classList.remove('hidden');
-                this.textContent = this.textContent.replace('▸', '▾');
-            } else {
-                target.classList.add('hidden');
-                this.textContent = this.textContent.replace('▾', '▸');
-            }
-        });
-    });
-    // Scroll to tree-view category on click
-    document.querySelectorAll('#dropdownMenu a[href^="#cat-"]').forEach(link => {
-        link.addEventListener('click', function(e) {
-            e.preventDefault();
-            const id = this.getAttribute('href').substring(1);
-            const el = document.getElementById(id);
-            if(el) {
-                el.scrollIntoView({behavior: 'smooth', block: 'center'});
-            }
-            dropdownMenu.classList.add('hidden');
         });
     });
 });

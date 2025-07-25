@@ -7,7 +7,7 @@ use App\Models\Article;
 
 class Category extends Model
 {
-    protected $fillable = ['name'];
+    protected $fillable = ['name' , 'parent_id'];
 
     public function articles()
     {
@@ -21,6 +21,7 @@ class Category extends Model
 
     public function children()
     {
-        return $this->hasMany(Category::class, 'parent_id');
+        return $this->hasMany(Category::class, 'parent_id')
+                    ->with(['children', 'articles']);;
     }
 }

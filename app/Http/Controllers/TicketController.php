@@ -67,15 +67,18 @@ class TicketController extends Controller
         ]);
 
         // Kirim notifikasi ke admin dan staff
-        $admins = User::whereIn('role', ['admin', 'staff'])->get();
-        Notification::send($admins, new TicketSubmitted($ticket));
+        // $admins = User::whereIn('role', ['admin', 'staff'])->get();
+        // Notification::send($admins, new TicketSubmitted($ticket));
 
         // Kirim notifikasi ke user
-        if ($ticket->email) {
-            \Notification::route('mail', $ticket->email)->notify(new TicketUserSubmitted($ticket));
-        }
+        // if ($ticket->email) {
+        //     \Notification::route('mail', $ticket->email)->notify(new TicketUserSubmitted($ticket));
+        // }
 
-        return redirect()->back()->with('success', 'Ticket berhasil dikirim!');
+        return redirect()->route('ticket.success', [
+            'inv' => $invoiceId,
+            'email' => $request->email,
+        ]);
     }
 
     // Form input INV & email

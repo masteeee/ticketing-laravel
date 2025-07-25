@@ -14,7 +14,7 @@ use App\Http\Controllers\Admin\AdminTicketController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
-|--------------------------------------------------------------------------
+|-------------------------------------------------------submitpost-------------------
 */
 
 // PUBLIC ROUTES (no login required)
@@ -22,12 +22,24 @@ Route::get('/', [PublicController::class, 'index'])->name('public.home');
 Route::get('/knowledge', [KnowledgeBaseController::class, 'index'])->name('knowledge.base');
 Route::get('/ticket/create', [TicketController::class, 'create'])->name('ticket.create');
 Route::post('/ticket/submit', [TicketController::class, 'store'])->name('ticket.public.store');
+Route::get('/ticket/success', function () {
+    $invoice = request('inv');
+    $email = request('email');
+
+    if (!$invoice || !$email) {
+        return redirect('/');
+    }
+
+    return view('public.ticket.success', compact('invoice', 'email'));
+})->name('ticket.success');
 Route::get('/articles/{article}', [ArticleController::class, 'show'])->name('articles.show');
 
 // PUBLIC TICKET VIEW
 Route::get('/ticket/view', [App\Http\Controllers\TicketController::class, 'viewForm'])->name('ticket.view.form');
 Route::get('/ticket/detail', [App\Http\Controllers\TicketController::class, 'publicDetail'])->name('ticket.public.detail');
 Route::post('/ticket/reply', [App\Http\Controllers\TicketController::class, 'publicReply'])->name('ticket.public.reply');
+
+
 
 // AUTH ROUTES (Breeze)
 require __DIR__.'/auth.php';
@@ -41,8 +53,6 @@ Route::middleware(['auth',])->prefix('admin')->name('admin.')->group(function ()
     Route::get('/tickets/{ticket}', [AdminTicketController::class, 'show'])->name('tickets.show');
     Route::post('/tickets/{id}/update-status', [AdminTicketController::class, 'updateStatus'])->name('tickets.updateStatus');
     Route::post('/tickets/{ticket}/reply', [AdminTicketController::class, 'reply'])->name('tickets.reply');
-   
-
     Route::resource('categories', CategoryController::class);
     Route::resource('articles', ArticleController::class);
    
@@ -51,6 +61,13 @@ Route::middleware(['auth',])->prefix('admin')->name('admin.')->group(function ()
 // STAFF ROUTES (login required, role = staff)
 Route::middleware(['auth',])->prefix('staff')->name('staff.')->group(function () {
     Route::get('/dashboard', [StaffController::class, 'dashboard'])->name('dashboard');
+      Route::resource('articles', ArticleController::class);
+
+      Route::get('/tickets', [AdminTicketController::class, 'index'])->name('tickets.index');
+      Route::get('/tickets/{ticket}', [AdminTicketController::class, 'show'])->name('tickets.show');
+      Route::post('/tickets/{id}/update-status', [AdminTicketController::class, 'updateStatus'])->name('tickets.updateStatus');
+      Route::post('/tickets/{ticket}/reply', [AdminTicketController::class, 'reply'])->name('tickets.reply');
+     
     
 });
 

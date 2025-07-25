@@ -10,14 +10,17 @@ class KnowledgeBaseController extends Controller
     public function index()
     {
         $keyword = request('search');
-        $categories = Category::with(['articles' => function($q) use ($keyword) {
-            if ($keyword) {
-                $q->where(function($q2) use ($keyword) {
-                    $q2->where('title', 'like', "%$keyword%")
-                        ->orWhere('content', 'like', "%$keyword%") ;
-                });
-            }
-        }, 'children'])->get();
+        $categories = Category::with([
+            'articles' => function($q) use ($keyword) {
+                if ($keyword) {
+                    $q->where(function($q2) use ($keyword) {
+                        $q2->where('title', 'like', "%$keyword%")
+                           ->orWhere('content', 'like', "%$keyword%");
+                    });
+                }
+            },
+            'children.children.children.articles' // load nested recursively
+        ])->get();
 
         // Filter categories: hanya tampilkan kategori yang punya artikel hasil search atau punya child yang punya artikel hasil search
         if ($keyword) {

@@ -2,7 +2,12 @@
 @section('title', 'Daftar Tiket')
 @section('content')
 <div class="container py-4">
-    <h2>Daftar Tiket</h2>
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2>Daftar Tiket</h2>
+        <a href="{{ url()->current() }}" class="btn btn-sm btn-primary" title="Refresh">
+            <i class="fas fa-sync-alt"></i>
+        </a>
+    </div>
     @if(session('success')) <div class="alert alert-success">{{ session('success') }}</div> @endif
     <div class="table-responsive">
         <table class="table table-bordered">
