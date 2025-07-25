@@ -2,7 +2,7 @@
     {{-- Brand --}}
     <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{ route('admin.dashboard') }}">
         <div class="sidebar-brand-icon">
-            <img src="{{ asset('assets/keloola-logo.png') }}" alt="Keloola Logo" style="height: 30px;">
+            <img src="{{ asset('assets/keloola-logo.png') }}" alt="Keloola Logo" class="keloola-logo">
         </div>
     </a>
 
@@ -24,7 +24,7 @@
         }
     @endphp
 
-    {{-- Departments (Hanya untuk admin) --}}
+    {{-- Departments --}}
     @if(canSidebar('view departments', $userPermissions))
     <li class="nav-item">
         <a class="nav-link" href="{{ route('admin.departments.index') }}">
@@ -34,7 +34,7 @@
     </li>
     @endif
 
-    {{-- Role & Permission (Hanya untuk admin) --}}
+    {{-- Role & Permission --}}
     @if(canSidebar('view roles', $userPermissions) || canSidebar('view permissions', $userPermissions))
     <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#rolePermissionSub" aria-expanded="false" aria-controls="rolePermissionSub">
@@ -84,11 +84,25 @@
 
     <hr class="sidebar-divider d-none d-md-block">
 
-    {{-- Sidebar Toggle (Collapse Button) --}}
+    {{-- Sidebar Toggle --}}
     <div class="text-center d-none d-md-inline">
         <button class="rounded-circle border-0" id="sidebarToggle"></button>
     </div>
 </ul>
+
+{{-- Script --}}
 <script src="{{ asset('vendor/jquery/jquery.min.js') }}"></script>
 <script src="{{ asset('vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
 <script src="{{ asset('js/sb-admin-2.min.js') }}"></script>
+
+{{-- Tambahkan Style Logo --}}
+<style>
+    .keloola-logo {
+        height: 30px;
+        transition: all 0.2s ease;
+    }
+
+    .sidebar.toggled .keloola-logo {
+        height: 15px;
+    }
+</style>
