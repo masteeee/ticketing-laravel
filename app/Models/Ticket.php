@@ -20,6 +20,7 @@ class Ticket extends Model
         'invoice_id',
         'attachment',
         'status',
+        'handled_by'
     ];
 
     public function department()
@@ -30,4 +31,8 @@ class Ticket extends Model
         {
             return $this->hasMany(TicketConversation::class);
         }
+        public function handler()
+{
+    return $this->belongsTo(User::class, 'handled_by');
+}
 }

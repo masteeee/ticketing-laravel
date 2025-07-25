@@ -22,6 +22,7 @@
                     <th>Detail</th>
                     <th>Status</th>
                     <th>Ubah Status</th>
+                    <th>Staff</th>
                 </tr>
             </thead>
             <tbody>
@@ -52,6 +53,7 @@
                             </select>
                         </form>
                     </td>
+                    <td>{{ $ticket->handler->name ?? '-' }}</td>
                 </tr>
                 @endforeach
             </tbody>

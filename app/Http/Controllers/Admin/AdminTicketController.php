@@ -7,6 +7,7 @@ use App\Models\Ticket;
 use Illuminate\Http\Request;
 use App\Models\TicketConversation;
 use App\Notifications\TicketUserReplied;
+use Illuminate\Support\Facades\Auth;
 
 class AdminTicketController extends Controller
 {
@@ -17,17 +18,18 @@ class AdminTicketController extends Controller
     }
 
     public function updateStatus(Request $request, $id)
-    {
-        $request->validate([
-            'status' => 'required|in:Dalam Antrean,Dalam Pengerjaan,Solved',
-        ]);
+{
+    $ticket = Ticket::findOrFail($id);
+    $ticket->status = $request->status;
 
-        $ticket = Ticket::findOrFail($id);
-        $ticket->status = $request->status;
-        $ticket->save();
-
-        return redirect()->route('admin.tickets.index')->with('success', 'Status tiket berhasil diperbarui.');
+    if ($ticket->handled_by === null && Auth::check()) {
+        $ticket->handled_by = Auth::id(); // Assign staff yang login
     }
+
+    $ticket->save();
+
+    return back()->with('success', 'Status tiket berhasil diperbarui.');
+}
     public function show($id)
     {
         $ticket = Ticket::with('department')->findOrFail($id);

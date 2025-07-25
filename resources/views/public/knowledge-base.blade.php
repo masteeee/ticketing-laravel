@@ -24,32 +24,31 @@
                     $hasContent = $hasChildren || $hasArticles;
                     $catId = 'cat-' . $cat->id;
 
-                    echo '<div class="ml-'.($level * 4).' mb-3">';
-                    echo '<div class="bg-gray-700 rounded-lg shadow px-4 py-3 cursor-pointer flex items-center justify-between category-header transition-colors duration-200 hover:bg-gray-600" data-target="'.$catId.'">';
+                    echo '<div class="ml-'.($level * 4).' mb-2">';
 
+                    // Header item
+                    echo '<div class="flex items-center justify-between cursor-pointer px-4 py-2 rounded bg-gray-700 hover:bg-gray-600 transition" data-target="'.$catId.'">';
                     echo '<div class="flex items-center gap-2">';
                     if ($hasContent) {
-                        echo '<span class="text-white toggle-icon" data-icon="'.$catId.'">›</span>';
+                        echo '<i class="fas fa-chevron-right toggle-icon text-white text-sm" data-icon="'.$catId.'"></i>';
                     }
-                    echo '<span class="text-white font-medium">'.$cat->name.'</span>';
+                    echo '<span class="font-semibold text-red-500">'.$cat->name.'</span>';
+                    echo '</div>';
                     echo '</div>';
 
-                    echo '</div>';
-
+                    // Children
                     if ($hasContent) {
-                        echo '<div class="tree-children mt-3 pl-6 hidden" id="'.$catId.'">';
+                        echo '<div class="tree-children pl-6 mt-2 hidden" id="'.$catId.'">';
 
                         if ($hasArticles) {
-                            echo '<div class="space-y-2 mb-2">';
                             foreach ($cat->articles as $art) {
-                                echo '<a href="'.route('articles.show', $art->id).'" class="flex items-center gap-3 bg-gray-800 text-gray-100 rounded px-3 py-2 shadow hover:bg-gray-700 transition">';
+                                echo '<a href="'.route('articles.show', $art->id).'" class="flex items-center gap-3 bg-gray-800 text-gray-100 rounded px-3 py-2 my-1 shadow hover:bg-gray-700 transition">';
                                 if ($art->thumbnail) {
                                     echo '<img src="'.asset("storage/".$art->thumbnail).'" alt="'.$art->title.'" class="w-10 h-10 rounded object-cover"/>';
                                 }
                                 echo '<div class="text-sm font-medium">'.$art->title.'</div>';
                                 echo '</a>';
                             }
-                            echo '</div>';
                         }
 
                         if ($hasChildren) {
@@ -63,6 +62,7 @@
                 }
             }
             @endphp
+
 
             <div class="space-y-2">
                 @if($categories->count())
@@ -107,23 +107,21 @@
 @push('scripts')
 <script>
 document.addEventListener('DOMContentLoaded', function () {
-    document.querySelectorAll('.category-header').forEach(header => {
+    document.querySelectorAll('[data-target]').forEach(header => {
         header.addEventListener('click', function () {
             const targetId = this.getAttribute('data-target');
             const target = document.getElementById(targetId);
             const icon = this.querySelector('.toggle-icon');
 
-            if (target) {
+            if (target && icon) {
                 const isOpen = !target.classList.contains('hidden');
                 target.classList.toggle('hidden');
-
-                // Ubah ikon dari › ke ˅ dan sebaliknya
-                if (icon) {
-                    icon.textContent = isOpen ? '›' : '˅';
-                }
+                icon.classList.toggle('fa-chevron-right');
+                icon.classList.toggle('fa-chevron-down');
             }
         });
     });
 });
 </script>
 @endpush
+
