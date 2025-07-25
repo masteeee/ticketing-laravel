@@ -11,6 +11,7 @@ use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ArticleController;
 use App\Http\Controllers\KnowledgeBaseController;
 use App\Http\Controllers\Admin\AdminTicketController;
+use App\Http\Controllers\UserController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -57,6 +58,9 @@ Route::middleware(['auth',])->prefix('admin')->name('admin.')->group(function ()
     Route::resource('articles', ArticleController::class);
     Route::resource('roles', \App\Http\Controllers\Admin\RoleController::class);
     Route::resource('permissions', \App\Http\Controllers\Admin\PermissionController::class);
+    Route::resource('users', UserController::class)->except(['show']);
+    Route::get('/users/create', [UserController::class, 'create'])->name('users.create');
+    Route::post('/users', [UserController::class, 'store'])->name('users.store');
     
    
 });

@@ -34,25 +34,33 @@
     </li>
     @endif
 
-    {{-- Role & Permission --}}
-    @if(canSidebar('view roles', $userPermissions) || canSidebar('view permissions', $userPermissions))
-    <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#rolePermissionSub" aria-expanded="false" aria-controls="rolePermissionSub">
-            <i class="fas fa-fw fa-user-shield"></i>
-            <span>Role & Permission</span>
-        </a>
-        <div id="rolePermissionSub" class="collapse" data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded">
-                @if(canSidebar('view roles', $userPermissions))
-                <a class="collapse-item" href="{{ route('admin.roles.index') }}">Roles</a>
-                @endif
-                @if(canSidebar('view permissions', $userPermissions))
-                <a class="collapse-item" href="{{ route('admin.permissions.index') }}">Permissions</a>
-                @endif
-            </div>
+    {{-- Role & Permission + Add User (Hanya untuk admin) --}}
+@if(
+    canSidebar('view roles', $userPermissions) ||
+    canSidebar('view permissions', $userPermissions) ||
+    canSidebar('create users', $userPermissions)
+)
+<li class="nav-item">
+    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#rolePermissionSub" aria-expanded="false" aria-controls="rolePermissionSub">
+        <i class="fas fa-fw fa-user-shield"></i>
+        <span>Role & Permission</span>
+    </a>
+    <div id="rolePermissionSub" class="collapse" data-parent="#accordionSidebar">
+        <div class="bg-white py-2 collapse-inner rounded">
+            @if(canSidebar('view roles', $userPermissions))
+            <a class="collapse-item" href="{{ route('admin.roles.index') }}">Roles</a>
+            @endif
+            @if(canSidebar('view permissions', $userPermissions))
+            <a class="collapse-item" href="{{ route('admin.permissions.index') }}">Permissions</a>
+            @endif
+            @if(canSidebar('create users', $userPermissions))
+            <a class="collapse-item" href="{{ route('admin.users.index') }}">User</a>
+            @endif
         </div>
-    </li>
-    @endif
+    </div>
+</li>
+@endif
+
 
     {{-- Knowledge Base --}}
     <li class="nav-item">

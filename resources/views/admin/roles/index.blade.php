@@ -10,7 +10,7 @@
     <table class="table table-bordered">
         <thead>
             <tr>
-                <th>Nama</th>
+                <th>Role</th>
                 <th>Permissions</th>
                 <th>Aksi</th>
             </tr>
