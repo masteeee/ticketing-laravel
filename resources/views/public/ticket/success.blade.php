@@ -24,7 +24,7 @@
             <p class="text-sm text-gray-800">Kode INV Anda:</p>
             <div class="flex items-center justify-center gap-2 mt-1">
                 <p id="invCode" class="text-xl font-mono font-bold text-blue-600 tracking-wide">{{ $invoice }}</p>
-                <button onclick="copyInvoice()" class="text-xs text-blue-500 hover:underline">Copy</button>
+                <button onclick="copyInvoice()" class="text-xs bg-blue-100 border border-blue-500 p-2 rounded-full text-blue-500">Copy</button>
             </div>
         </div>
 
@@ -34,14 +34,11 @@
         </div>
 
         {{-- TOMBOL --}}
-        <div class="flex flex-col sm:flex-row justify-center gap-3 mt-6">
-            <a href="{{ url('/') }}" class="bg-blue-100 text-blue-700 text-sm px-5 py-2 rounded-full shadow-md hover:bg-blue-200 transition font-semibold">
-                🏠 Kembali ke Beranda
+        <div class="flex sm:flex-row justify-center gap-3 mt-6">
+            <a href="{{ url('/') }}" class="bg-orange-400 w-87 mb-4 text-black border border-orange-400 hover:bg-orange-500 text-sm px-5 py-2 rounded-full shadow-md hover:bg-blue-200 transition font-semibold">
+                Kembali ke Beranda
             </a>
-            <a href="{{ route('ticket.public.detail', ['inv' => $invoice, 'email' => $email]) }}"
-                class="bg-green-100 text-green-700 text-sm px-5 py-2 rounded-full shadow-md hover:bg-green-200 transition font-semibold">
-                 🎫 Lihat Tiket
-             </a>
+            <br>
         </div>
     </div>
 </div>

@@ -16,6 +16,19 @@
             });
         </script>
     @endif
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.querySelector('form[action="{{ route('ticket.public.store') }}"]');
+            if(form) {
+                form.addEventListener('submit', function() {
+                    const btn = document.getElementById('submit-ticket-btn');
+                    btn.disabled = true;
+                    document.getElementById('submit-ticket-text').classList.add('hidden');
+                    document.getElementById('submit-ticket-spinner').classList.remove('hidden');
+                });
+            }
+        });
+    </script>
 @endsection
 @section('content')
 <section class="bg-form-section py-5">
@@ -83,7 +96,10 @@
                             <small>(Up to 40 MB)</small>
                         </div>
                         <div class="flex gap-4">
-                            <button type="submit" class="bg-red-keloola text-white-primary px-6 py-2">SUBMIT</button>
+                            <button type="submit" id="submit-ticket-btn" class="bg-red-keloola text-white-primary px-6 py-2 flex items-center justify-center gap-2">
+                                <span id="submit-ticket-text">SUBMIT</span>
+                                <span id="submit-ticket-spinner" class="hidden animate-spin"><svg class="w-5 h-5" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path></svg></span>
+                            </button>
                             <a href="/" class="bg-primary text-white-primary px-6 py-2">DISCARD</a>
                         </div>
                     </form>

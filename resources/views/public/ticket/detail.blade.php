@@ -33,10 +33,29 @@
             <h3 class="font-semibold mb-3">Kirim Balasan</h3>
             <form method="POST" action="{{ route('ticket.public.reply', ['inv' => $ticket->invoice_id, 'email' => $ticket->email]) }}">
                 @csrf
-                <textarea name="message" class="form-control w-full border border-gray-300 rounded mb-3" rows="3" required placeholder="Tulis balasan..."></textarea>
-                <button class="bg-red-600 text-white px-6 py-2 rounded hover:bg-red-700 transition">Kirim</button>
+                <textarea name="message" class="form-control w-full border border-gray-300 rounded mb-3 p-4" rows="3" required placeholder="Tulis balasan..."></textarea>
+                <button type="submit" id="reply-ticket-btn" class="bg-red-600 text-white px-6 py-2 rounded hover:bg-red-700 transition flex items-center gap-2" style="background-color: #FF0000; color: white; border: none; ">
+                    <span id="reply-ticket-text">Kirim</span>
+                    <span id="reply-ticket-spinner" class="hidden animate-spin"><svg class="w-5 h-5" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path></svg></span>
+                </button>
             </form>
         </div>
     </div>
 </div>
+@endsection
+
+@section('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.querySelector('form[action*="ticket.public.reply"]');
+    if(form) {
+        form.addEventListener('submit', function() {
+            const btn = document.getElementById('reply-ticket-btn');
+            btn.disabled = true;
+            document.getElementById('reply-ticket-text').classList.add('hidden');
+            document.getElementById('reply-ticket-spinner').classList.remove('hidden');
+        });
+    }
+});
+</script>
 @endsection 

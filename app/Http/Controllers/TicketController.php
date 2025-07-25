@@ -67,13 +67,13 @@ class TicketController extends Controller
         ]);
 
         // Kirim notifikasi ke admin dan staff
-        // $admins = User::whereIn('role', ['admin', 'staff'])->get();
-        // Notification::send($admins, new TicketSubmitted($ticket));
+        $admins = User::whereIn('role', ['admin', 'staff'])->get();
+        Notification::send($admins, new TicketSubmitted($ticket));
 
         // Kirim notifikasi ke user
-        // if ($ticket->email) {
-        //     \Notification::route('mail', $ticket->email)->notify(new TicketUserSubmitted($ticket));
-        // }
+        if ($ticket->email) {
+            \Notification::route('mail', $ticket->email)->notify(new TicketUserSubmitted($ticket));
+        }
 
         return redirect()->route('ticket.success', [
             'inv' => $invoiceId,
@@ -121,6 +121,9 @@ class TicketController extends Controller
             'user_id' => null, // public user
             'message' => $request->message,
         ]);
+        // Kirim notifikasi ke admin/staff
+        $admins = User::whereIn('role', ['admin', 'staff'])->get();
+        \Notification::send($admins, new TicketSubmitted($ticket));
         return redirect()->route('ticket.public.detail', ['inv' => $ticket->invoice_id, 'email' => $ticket->email]);
     }
 }
