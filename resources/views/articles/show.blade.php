@@ -8,8 +8,10 @@
             <div class="mb-4 text-sm text-gray-500">
                 Kategori: {{ $article->category->name ?? '-' }}
             </div>
-            <div class="prose max-w-none mb-6">
-                {!! $article->content !!}
+            <div class="article-content prose max-w-none mb-6">
+                <div class="[&>img]:mx-auto [&>img]:max-w-[600px] [&>img]:rounded-lg">
+                    {!! $article->content !!}
+                </div>
             </div>
             @if($article->creator)
                 <div class="text-xs text-gray-400">Ditulis oleh: {{ $article->creator->name }}</div>

@@ -4,7 +4,9 @@
 <div class="bg-gray-900 min-h-screen py-10 px-4">
     <div class="max-w-6xl mx-auto">
         <div class="text-center mb-8">
-            <h1 class="display-4 fw-bold text-center mb-4" style="color: #dc3545; font-size: 2rem;">Knowledge Base</h1>   
+            <h1 class="text-center mb-4" style="color: #dc3545; font-size: 2.5rem; font-weight: 900; font-family: Segoe UI, Tahoma, 'Geneva', Verdana, sans-serif;">
+                Knowledge Base
+            </h1>
             <div class="flex justify-center mb-4">
                 <form method="GET" action="" class="w-full max-w-xl">
                     <input type="text" name="search" id="search-input" value="{{ $keyword ?? '' }}" placeholder="Search articles" class="w-full border border-gray-700 bg-gray-800 text-gray-100 rounded-md px-4 py-2 focus:outline-none focus:ring" autocomplete="off" />
@@ -23,29 +25,29 @@
                     $catId = 'cat-' . $cat->id;
 
                     echo '<div class="ml-'.($level * 4).' mb-3">';
-                    echo '<div class="bg-gray-700 rounded-lg shadow px-4 py-3">';
+                    echo '<div class="bg-gray-700 rounded-lg shadow px-4 py-3 cursor-pointer flex items-center justify-between category-header transition-colors duration-200 hover:bg-gray-600" data-target="'.$catId.'">';
 
-                    // Header bar
-                    echo '<div class="flex items-center">';
+                    echo '<div class="flex items-center gap-2">';
                     if ($hasContent) {
-                        echo '<button type="button" class="toggle-tree text-white font-semibold mr-2 focus:outline-none" data-target="'.$catId.'">▸</button>';
-                    } else {
-                        echo '<span class="mr-2"></span>';
+                        echo '<span class="text-white toggle-icon" data-icon="'.$catId.'">›</span>';
                     }
                     echo '<span class="text-white font-medium">'.$cat->name.'</span>';
                     echo '</div>';
 
-                    // Content toggle (artikel + children)
+                    echo '</div>';
+
                     if ($hasContent) {
                         echo '<div class="tree-children mt-3 pl-6 hidden" id="'.$catId.'">';
 
                         if ($hasArticles) {
                             echo '<div class="space-y-2 mb-2">';
                             foreach ($cat->articles as $art) {
-                                echo '<div class="bg-gray-800 text-gray-100 rounded px-3 py-2 shadow flex items-center hover:bg-gray-700 transition">';
-                                echo '<span class="mr-2">📝</span>';
-                                echo '<a href="'.route('articles.show', $art->id).'" class="hover:text-blue-400">'.$art->title.'</a>';
-                                echo '</div>';
+                                echo '<a href="'.route('articles.show', $art->id).'" class="flex items-center gap-3 bg-gray-800 text-gray-100 rounded px-3 py-2 shadow hover:bg-gray-700 transition">';
+                                if ($art->thumbnail) {
+                                    echo '<img src="'.asset("storage/".$art->thumbnail).'" alt="'.$art->title.'" class="w-10 h-10 rounded object-cover"/>';
+                                }
+                                echo '<div class="text-sm font-medium">'.$art->title.'</div>';
+                                echo '</a>';
                             }
                             echo '</div>';
                         }
@@ -57,18 +59,17 @@
                         echo '</div>';
                     }
 
-                    echo '</div>'; // card bg
-                    echo '</div>'; // ml-...
+                    echo '</div>';
                 }
             }
             @endphp
 
             <div class="space-y-2">
                 @if($categories->count())
-                @php renderCategoryTreeDark($categories->where('parent_id', null)); @endphp
-            @else
-                <p class="text-gray-400">Tidak ada kategori tersedia.</p>
-            @endif
+                    @php renderCategoryTreeDark($categories->where('parent_id', null)); @endphp
+                @else
+                    <p class="text-gray-400">Tidak ada kategori tersedia.</p>
+                @endif
             </div>
         </div>
     </div>
@@ -106,13 +107,20 @@
 @push('scripts')
 <script>
 document.addEventListener('DOMContentLoaded', function () {
-    document.querySelectorAll('.toggle-tree').forEach(button => {
-        button.addEventListener('click', function () {
+    document.querySelectorAll('.category-header').forEach(header => {
+        header.addEventListener('click', function () {
             const targetId = this.getAttribute('data-target');
             const target = document.getElementById(targetId);
+            const icon = this.querySelector('.toggle-icon');
+
             if (target) {
+                const isOpen = !target.classList.contains('hidden');
                 target.classList.toggle('hidden');
-                this.textContent = target.classList.contains('hidden') ? '▸' : '▾';
+
+                // Ubah ikon dari › ke ˅ dan sebaliknya
+                if (icon) {
+                    icon.textContent = isOpen ? '›' : '˅';
+                }
             }
         });
     });
