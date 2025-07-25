@@ -67,7 +67,9 @@ class TicketController extends Controller
         ]);
 
         // Kirim notifikasi ke admin dan staff
-        $admins = User::whereIn('role', ['admin', 'staff'])->get();
+        $admins = User::whereHas('role', function($q) {
+            $q->whereIn('name', ['admin', 'staff']);
+        })->get();
         Notification::send($admins, new TicketSubmitted($ticket));
 
         // Kirim notifikasi ke user
@@ -122,7 +124,9 @@ class TicketController extends Controller
             'message' => $request->message,
         ]);
         // Kirim notifikasi ke admin/staff
-        $admins = User::whereIn('role', ['admin', 'staff'])->get();
+        $admins = User::whereHas('role', function($q) {
+            $q->whereIn('name', ['admin', 'staff']);
+        })->get();
         \Notification::send($admins, new TicketSubmitted($ticket));
         return redirect()->route('ticket.public.detail', ['inv' => $ticket->invoice_id, 'email' => $ticket->email]);
     }

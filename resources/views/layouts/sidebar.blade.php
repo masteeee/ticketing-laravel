@@ -16,13 +16,41 @@
         </a>
     </li>
 
+    @php
+        $user = Auth::user();
+        $userPermissions = $user && $user->role ? $user->role->permissions->pluck('name')->toArray() : [];
+        function canSidebar($perm, $userPermissions) {
+            return in_array($perm, $userPermissions);
+        }
+    @endphp
+
     {{-- Departments (Hanya untuk admin) --}}
-    @if(Auth::user()->role === 'admin')
+    @if(canSidebar('view departments', $userPermissions))
     <li class="nav-item">
         <a class="nav-link" href="{{ route('admin.departments.index') }}">
             <i class="fas fa-fw fa-building"></i>
             <span>Departments</span>
         </a>
+    </li>
+    @endif
+
+    {{-- Role & Permission (Hanya untuk admin) --}}
+    @if(canSidebar('view roles', $userPermissions) || canSidebar('view permissions', $userPermissions))
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#rolePermissionSub" aria-expanded="false" aria-controls="rolePermissionSub">
+            <i class="fas fa-fw fa-user-shield"></i>
+            <span>Role & Permission</span>
+        </a>
+        <div id="rolePermissionSub" class="collapse" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                @if(canSidebar('view roles', $userPermissions))
+                <a class="collapse-item" href="{{ route('admin.roles.index') }}">Roles</a>
+                @endif
+                @if(canSidebar('view permissions', $userPermissions))
+                <a class="collapse-item" href="{{ route('admin.permissions.index') }}">Permissions</a>
+                @endif
+            </div>
+        </div>
     </li>
     @endif
 
@@ -34,21 +62,25 @@
         </a>
         <div id="knowledgeBaseSub" class="collapse" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
-                @if(Auth::user()->role === 'admin')
+                @if(canSidebar('view categories', $userPermissions))
                 <a class="collapse-item" href="{{ route('admin.categories.index') }}">Categories</a>
                 @endif
+                @if(canSidebar('view articles', $userPermissions))
                 <a class="collapse-item" href="{{ route('admin.articles.index') }}">Articles</a>
+                @endif
             </div>
         </div>
     </li>
 
     {{-- Ticketing --}}
+    @if(canSidebar('view tickets', $userPermissions))
     <li class="nav-item">
         <a class="nav-link" href="{{ route('admin.tickets.index') }}">
             <i class="fas fa-fw fa-ticket-alt"></i>
             <span>Manajemen Ticketing</span>
         </a>
     </li>
+    @endif
 
     <hr class="sidebar-divider d-none d-md-block">
 

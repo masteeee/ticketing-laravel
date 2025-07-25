@@ -55,6 +55,8 @@ Route::middleware(['auth',])->prefix('admin')->name('admin.')->group(function ()
     Route::post('/tickets/{ticket}/reply', [AdminTicketController::class, 'reply'])->name('tickets.reply');
     Route::resource('categories', CategoryController::class);
     Route::resource('articles', ArticleController::class);
+    Route::resource('roles', \App\Http\Controllers\Admin\RoleController::class);
+    Route::resource('permissions', \App\Http\Controllers\Admin\PermissionController::class);
    
 });
 

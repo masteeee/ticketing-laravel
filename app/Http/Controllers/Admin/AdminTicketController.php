@@ -12,8 +12,7 @@ class AdminTicketController extends Controller
 {
     public function index()
     {
-        $tickets = Ticket::with('department')->latest()->paginate(10);
-        $tickets = Ticket::latest()->paginate(10);
+        $tickets = Ticket::paginate(10);
         return view('admin.tickets.index', compact('tickets'));
     }
 

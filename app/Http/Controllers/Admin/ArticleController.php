@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Auth;
 class ArticleController extends Controller
 {
     public function index() {
-        $articles = Article::with('category')->get();
+        $articles = Article::paginate(10);
         return view('admin.articles.index', compact('articles'));
     }
 
