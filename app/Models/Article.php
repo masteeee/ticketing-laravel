@@ -10,6 +10,7 @@ class Article extends Model
         'content',
         'category_id',
         'created_by',
+        'thumbnail',
     ];
 
     // relasi ke kategori

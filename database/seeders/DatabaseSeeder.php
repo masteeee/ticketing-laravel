@@ -17,39 +17,37 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // Seed Roles
+        $this->call(PermissionSeeder::class);
+    
         $adminRole = Role::create(['name' => 'admin']);
         $staffRole = Role::create(['name' => 'staff']);
-
-        // Seed Permissions
-        $permissions = [
-            'manage_users',
-            'manage_tickets',
-            'view_reports',
-            'manage_articles',
-            'manage_departments',
-        ];
-        foreach ($permissions as $perm) {
-            Permission::create(['name' => $perm]);
-        }
-
-        // Assign all permissions to admin, some to staff
+    
+        // Assign all permissions to admin
         $adminRole->permissions()->sync(Permission::all()->pluck('id'));
-        $staffRole->permissions()->sync(Permission::whereIn('name', ['manage_tickets', 'manage_articles'])->pluck('id'));
-
+    
+        // Staff hanya beberapa
+        $staffRole->permissions()->sync(
+            Permission::whereIn('name', [
+                'manage_tickets',
+                'manage_articles'
+            ])->pluck('id')
+        );
+    
         // Create users
-        $admin = User::create([
+        User::create([
             'name' => 'Admin Keloola',
             'email' => 'admin@keloola.com',
             'password' => Hash::make('password'),
             'role_id' => $adminRole->id
         ]);
-        $staff = User::create([
+    
+        User::create([
             'name' => 'Staff Keloola',
             'email' => 'staff@keloola.com',
             'password' => Hash::make('password'),
             'role_id' => $staffRole->id
         ]);
     }
+    
     
 }

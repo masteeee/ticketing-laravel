@@ -16,6 +16,7 @@
                 <th>Judul</th>
                 <th>Kategori</th>
                 <th>Aksi</th>
+                <th>Thumbnail</th>
             </tr>
         </thead>
         <tbody>
@@ -29,6 +30,13 @@
                         @csrf @method('DELETE')
                         <button class="btn btn-danger btn-sm">Hapus</button>
                     </form>
+                </td>
+                <td>
+                    @if($article->thumbnail)
+                        <img src="{{ asset('storage/' . $article->thumbnail) }}" alt="" style="max-height: 50px;">
+                    @else
+                        Tidak ada
+                    @endif
                 </td>
             </tr>
             @endforeach
