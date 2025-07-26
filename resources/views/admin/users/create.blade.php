@@ -52,7 +52,7 @@
             </select>
         </div>
 
-        <button type="submit" class="btn btn-primary">Simpan</button>
+        <button type="submit" class="btn btn-danger">Simpan</button>
         <a href="{{ route('admin.users.index') }}" class="btn btn-secondary">Kembali</a>
     </form>
 </div>
