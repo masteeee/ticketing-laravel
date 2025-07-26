@@ -3,46 +3,36 @@
 @section('title', 'Login - Keloola')
 
 @section('content')
-<h2 class="text-center text-xl font-semibold text-gray-800 mb-4">Sign in to your account</h2>
-
-<form method="POST" action="{{ route('login') }}" class="space-y-4 mx-auto max-w-xs">
+<form method="POST" action="{{ route('login') }}">
     @csrf
 
-    <div>
-        <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email address</label>
-        <input id="email" name="email" type="email" required
-               class="block w-full rounded-md border-gray-300 px-3 py-2 shadow-sm focus:border-red-500 focus:ring-red-500"
-               placeholder="you@example.com">
+    <div class="mb-4">
+        <label for="email" class="block text-sm font-medium text-gray-700">Email address</label>
+        <input id="email" name="email" type="email" required autofocus
+               class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-red-300">
     </div>
 
-    <div>
-        <label for="password" class="block text-sm font-medium text-gray-700 mb-1">Password</label>
+    <div class="mb-4">
+        <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
         <input id="password" name="password" type="password" required
-               class="block w-full rounded-md border-gray-300 px-3 py-2 shadow-sm focus:border-red-500 focus:ring-red-500"
-               placeholder="••••••••">
+               class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-red-300">
     </div>
 
-    <div class="flex items-center justify-between text-sm">
-        <div class="flex items-center">
-            <input id="remember_me" name="remember" type="checkbox"
-                   class="h-4 w-4 text-red-600 border-gray-300 rounded focus:ring-red-500">
-            <label for="remember_me" class="ml-2 text-gray-700">Remember me</label>
-        </div>
-        @if (Route::has('password.request'))
-            <a href="{{ route('password.request') }}" class="text-red-600 hover:underline">Forgot your password?</a>
-        @endif
+    <div class="flex items-center justify-between mb-4">
+        <label class="inline-flex items-center">
+            <input type="checkbox" name="remember" class="form-checkbox text-red-500">
+            <span class="ml-2 text-sm text-gray-600">Remember me</span>
+        </label>
+        <a href="{{ route('password.request') }}" class="text-sm text-red-500 hover:underline">Forgot your password?</a>
     </div>
 
-    <div class="flex justify-center">
-        <button type="submit"
-                class="px-6 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
-            Sign in
-        </button>
-    </div>
+    <button type="submit" class="w-full bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded-md">
+        Sign in
+    </button>
 
-    <div class="text-center text-sm mt-4">
-        <span class="text-gray-600">Don't have an account?</span>
-        <a href="{{ route('register') }}" class="text-red-600 hover:underline">Register here</a>
-    </div>
+    <p class="mt-4 text-sm text-center text-gray-600">
+        Don’t have an account?
+        <a href="{{ route('register') }}" class="text-red-500 hover:underline">Register here</a>
+    </p>
 </form>
 @endsection
