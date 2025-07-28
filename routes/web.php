@@ -61,6 +61,15 @@ Route::middleware(['auth',])->prefix('admin')->name('admin.')->group(function ()
     Route::resource('users', UserController::class)->except(['show']);
     Route::get('/users/create', [UserController::class, 'create'])->name('users.create');
     Route::post('/users', [UserController::class, 'store'])->name('users.store');
+    Route::get('/users/{user}/edit', [UserController::class, 'edit'])->name('users.edit');
+    Route::put('/users/{user}', [UserController::class, 'update'])->name('users.update');
+    Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
+    
+    // Debug route to check roles
+    Route::get('/debug/roles', function() {
+        $roles = \App\Models\Role::all();
+        dd($roles->toArray());
+    });
     
    
 });

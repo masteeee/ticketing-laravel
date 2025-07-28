@@ -34,11 +34,13 @@
     </li>
     @endif
 
-    {{-- Role & Permission + Add User (Hanya untuk admin) --}}
 @if(
     canSidebar('view roles', $userPermissions) ||
     canSidebar('view permissions', $userPermissions) ||
-    canSidebar('create users', $userPermissions)
+    canSidebar('view users', $userPermissions) ||
+    canSidebar('create users', $userPermissions) ||
+    canSidebar('edit users', $userPermissions) ||
+    canSidebar('delete users', $userPermissions)
 )
 <li class="nav-item">
     <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#rolePermissionSub" aria-expanded="false" aria-controls="rolePermissionSub">
@@ -53,8 +55,8 @@
             @if(canSidebar('view permissions', $userPermissions))
             <a class="collapse-item" href="{{ route('admin.permissions.index') }}">Permissions</a>
             @endif
-            @if(canSidebar('create users', $userPermissions))
-            <a class="collapse-item" href="{{ route('admin.users.index') }}">User</a>
+            @if(canSidebar('view users', $userPermissions) || canSidebar('create users', $userPermissions) || canSidebar('edit users', $userPermissions) || canSidebar('delete users', $userPermissions))
+            <a class="collapse-item" href="{{ route('admin.users.index') }}">Users</a>
             @endif
         </div>
     </div>

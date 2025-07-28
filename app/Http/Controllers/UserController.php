@@ -39,4 +39,52 @@ public function index()
     
         return redirect()->route('admin.users.index')->with('success', 'User berhasil ditambahkan');
     }
+
+    public function edit($id)
+    {
+        $user = User::findOrFail($id);
+        $roles = Role::all();
+        return view('admin.users.edit', compact('user', 'roles'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $user = User::findOrFail($id);
+        
+        $validationRules = [
+            'name' => 'required|string',
+            'email' => 'required|email|unique:users,email,' . $id,
+            'role_id' => 'required|exists:roles,id',
+        ];
+
+        // Add password validation if password is provided
+        if ($request->filled('password')) {
+            $validationRules['password'] = 'required|string|min:6|confirmed';
+        }
+
+        $request->validate($validationRules);
+
+        $updateData = [
+            'name' => $request->name,
+            'email' => $request->email,
+            'role_id' => $request->role_id,
+        ];
+
+        // Update password only if provided
+        if ($request->filled('password')) {
+            $updateData['password'] = Hash::make($request->password);
+        }
+
+        $user->update($updateData);
+
+        return redirect()->route('admin.users.index')->with('success', 'User berhasil diperbarui');
+    }
+
+    public function destroy($id)
+    {
+        $user = User::findOrFail($id);
+        $user->delete();
+
+        return redirect()->route('admin.users.index')->with('success', 'User berhasil dihapus');
+    }
 }

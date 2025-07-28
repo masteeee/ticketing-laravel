@@ -42,7 +42,7 @@
 
         <div class="mb-3">
             <label for="role_id" class="form-label">Role</label>
-            <select name="role_id" class="form-select" required>
+            <select name="role_id" class="form-control" required>
                 <option value="">-- Pilih Role --</option>
                 @foreach ($roles as $role)
                     <option value="{{ $role->id }}" {{ old('role_id') == $role->id ? 'selected' : '' }}>
@@ -56,4 +56,6 @@
         <a href="{{ route('admin.users.index') }}" class="btn btn-secondary">Kembali</a>
     </form>
 </div>
+
+
 @endsection
