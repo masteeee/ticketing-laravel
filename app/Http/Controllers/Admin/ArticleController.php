@@ -26,7 +26,7 @@ class ArticleController extends Controller
             'title' => 'required|string|max:255',
             'content' => 'required',
             'category_id' => 'required|exists:categories,id',
-            'thumbnail' => 'nullable|image|max:2048',
+            'thumbnail' => 'nullable|image|max:10240', // Increased to 10MB
         ]);
 
         if ($request->hasFile('thumbnail')) {
@@ -50,7 +50,7 @@ class ArticleController extends Controller
             'title' => 'required|string|max:255',
             'content' => 'required',
             'category_id' => 'required|exists:categories,id',
-            'thumbnail' => 'nullable|image|max:2048',
+            'thumbnail' => 'nullable|image|max:10240', // Increased to 10MB
         ]);
 
         if ($request->hasFile('thumbnail')) {

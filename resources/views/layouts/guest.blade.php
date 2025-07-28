@@ -20,7 +20,9 @@
     <nav class="bg-white-primary shadow">
         <div class="container mx-auto px-4 py-4 flex justify-between items-center">
             <div class="flex items-center space-x-4">
-                <img src="{{ asset('assets/keloola-logo.png') }}" alt="Logo" class="w-20 h-20 object-contain">
+                <a href="{{ route('public.home') }}">
+                    <img src="{{ asset('assets/keloola-logo.png') }}" alt="Logo" class="w-20 h-20 object-contain">
+                </a>
             </div>
             <ul class="hidden md:flex items-center space-x-6 font-medium" id="nav-menu">
                 <li>
