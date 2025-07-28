@@ -19,13 +19,13 @@
     @php
         $user = Auth::user();
         $userPermissions = $user && $user->role ? $user->role->permissions->pluck('name')->toArray() : [];
-        function canSidebar($perm, $userPermissions) {
+        function canView($perm, $userPermissions) {
             return in_array($perm, $userPermissions);
         }
     @endphp
 
     {{-- Departments --}}
-    @if(canSidebar('view departments', $userPermissions))
+    @if(canView('view departments', $userPermissions))
     <li class="nav-item">
         <a class="nav-link" href="{{ route('admin.departments.index') }}">
             <i class="fas fa-fw fa-building"></i>
@@ -35,12 +35,12 @@
     @endif
 
 @if(
-    canSidebar('view roles', $userPermissions) ||
-    canSidebar('view permissions', $userPermissions) ||
-    canSidebar('view users', $userPermissions) ||
-    canSidebar('create users', $userPermissions) ||
-    canSidebar('edit users', $userPermissions) ||
-    canSidebar('delete users', $userPermissions)
+    canView('view roles', $userPermissions) ||
+    canView('view permissions', $userPermissions) ||
+    canView('view users', $userPermissions) ||
+    canView('create users', $userPermissions) ||
+    canView('edit users', $userPermissions) ||
+    canView('delete users', $userPermissions)
 )
 <li class="nav-item">
     <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#rolePermissionSub" aria-expanded="false" aria-controls="rolePermissionSub">
@@ -49,13 +49,13 @@
     </a>
     <div id="rolePermissionSub" class="collapse" data-parent="#accordionSidebar">
         <div class="bg-white py-2 collapse-inner rounded">
-            @if(canSidebar('view roles', $userPermissions))
+            @if(canView('view roles', $userPermissions))
             <a class="collapse-item" href="{{ route('admin.roles.index') }}">Roles</a>
             @endif
-            @if(canSidebar('view permissions', $userPermissions))
+            @if(canView('view permissions', $userPermissions))
             <a class="collapse-item" href="{{ route('admin.permissions.index') }}">Permissions</a>
             @endif
-            @if(canSidebar('view users', $userPermissions) || canSidebar('create users', $userPermissions) || canSidebar('edit users', $userPermissions) || canSidebar('delete users', $userPermissions))
+            @if(canView('view users', $userPermissions) || canView('create users', $userPermissions) || canView('edit users', $userPermissions) || canView('delete users', $userPermissions))
             <a class="collapse-item" href="{{ route('admin.users.index') }}">Users</a>
             @endif
         </div>
@@ -72,10 +72,10 @@
         </a>
         <div id="knowledgeBaseSub" class="collapse" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
-                @if(canSidebar('view categories', $userPermissions))
+                @if(canView('view categories', $userPermissions))
                 <a class="collapse-item" href="{{ route('admin.categories.index') }}">Categories</a>
                 @endif
-                @if(canSidebar('view articles', $userPermissions))
+                @if(canView('view articles', $userPermissions))
                 <a class="collapse-item" href="{{ route('admin.articles.index') }}">Articles</a>
                 @endif
             </div>
@@ -83,7 +83,7 @@
     </li>
 
     {{-- Ticketing --}}
-    @if(canSidebar('view tickets', $userPermissions))
+    @if(canView('view tickets', $userPermissions))
     <li class="nav-item">
         <a class="nav-link" href="{{ route('admin.tickets.index') }}">
             <i class="fas fa-fw fa-ticket-alt"></i>
