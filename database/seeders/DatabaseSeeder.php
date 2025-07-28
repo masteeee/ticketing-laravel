@@ -3,6 +3,9 @@
 namespace Database\Seeders;
 
 use App\Models\User;
+use App\Models\Role;
+use App\Models\Permission;
+use App\Models\RolePermission;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
@@ -14,21 +17,37 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
-
+        $this->call(PermissionSeeder::class);
+    
+        $adminRole = Role::create(['name' => 'admin']);
+        $staffRole = Role::create(['name' => 'staff']);
+    
+        // Assign all permissions to admin
+        $adminRole->permissions()->sync(Permission::all()->pluck('id'));
+    
+        // Staff hanya beberapa
+        $staffRole->permissions()->sync(
+            Permission::whereIn('name', [
+                'manage_tickets',
+                'manage_articles'
+            ])->pluck('id')
+        );
+    
+        // Create users
         User::create([
             'name' => 'Admin Keloola',
             'email' => 'admin@keloola.com',
             'password' => Hash::make('password'),
-            'role' => 'admin'
+            'role_id' => $adminRole->id
         ]);
-        
+    
         User::create([
             'name' => 'Staff Keloola',
             'email' => 'staff@keloola.com',
             'password' => Hash::make('password'),
-            'role' => 'staff'
+            'role_id' => $staffRole->id
         ]);
     }
+    
     
 }

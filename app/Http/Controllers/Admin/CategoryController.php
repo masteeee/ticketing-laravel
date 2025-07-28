@@ -9,17 +9,21 @@ use App\Http\Controllers\Controller;
 class CategoryController extends Controller
 {
     public function index() {
-        $categories = Category::all();
+        $categories = Category::paginate(10);
         return view('admin.categories.index', compact('categories'));
     }
 
     public function create() {
-        return view('admin.categories.create');
+        $categories = Category::all();
+        return view('admin.categories.create', compact('categories'));
     }
 
     public function store(Request $request) {
         $request->validate(['name' => 'required']);
-        Category::create($request->all());
+        Category::create([
+            'name' => $request->name,
+            'parent_id' => $request->parent_id
+        ]);
         return redirect()->route('admin.categories.index')->with('success', 'Kategori ditambahkan');
     }
 

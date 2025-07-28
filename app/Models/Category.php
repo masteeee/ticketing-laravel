@@ -7,10 +7,21 @@ use App\Models\Article;
 
 class Category extends Model
 {
-    protected $fillable = ['name'];
+    protected $fillable = ['name' , 'parent_id'];
 
     public function articles()
     {
         return $this->hasMany(Article::class);
+    }
+
+    public function parent()
+    {
+        return $this->belongsTo(Category::class, 'parent_id');
+    }
+
+    public function children()
+    {
+        return $this->hasMany(Category::class, 'parent_id')
+                    ->with(['children', 'articles']);;
     }
 }

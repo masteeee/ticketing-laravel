@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers\Admin;
 
 use App\Models\Article;
@@ -6,11 +7,12 @@ use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class ArticleController extends Controller
 {
     public function index() {
-        $articles = Article::with('category')->get();
+        $articles = Article::with('category')->paginate(10);
         return view('admin.articles.index', compact('articles'));
     }
 
@@ -20,19 +22,22 @@ class ArticleController extends Controller
     }
 
     public function store(Request $request) {
-        $request->validate([
-            'title' => 'required',
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
             'content' => 'required',
             'category_id' => 'required|exists:categories,id',
+            'thumbnail' => 'nullable|image|max:2048',
         ]);
-        Article::create([
-            'title' => $request->title,
-            'content' => $request->content,
-            'category_id' => $request->category_id,
-            'created_by' => Auth::id(), 
-        ]);
-    
-        return redirect()->route('admin.articles.index')->with('success', 'Artikel ditambahkan');
+
+        if ($request->hasFile('thumbnail')) {
+            $validated['thumbnail'] = $request->file('thumbnail')->store('thumbnails', 'public');
+        }
+
+        $validated['created_by'] = Auth::id();
+
+        Article::create($validated);
+
+        return redirect()->route('admin.articles.index')->with('success', 'Artikel berhasil ditambahkan.');
     }
 
     public function edit(Article $article) {
@@ -41,17 +46,39 @@ class ArticleController extends Controller
     }
 
     public function update(Request $request, Article $article) {
-        $request->validate([
-            'title' => 'required',
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
             'content' => 'required',
             'category_id' => 'required|exists:categories,id',
+            'thumbnail' => 'nullable|image|max:2048',
         ]);
-        $article->update($request->all());
-        return redirect()->route('admin.articles.index')->with('success', 'Artikel diupdate');
+
+        if ($request->hasFile('thumbnail')) {
+            // Hapus file lama jika ada
+            if ($article->thumbnail) {
+                Storage::disk('public')->delete($article->thumbnail);
+            }
+
+            $validated['thumbnail'] = $request->file('thumbnail')->store('thumbnails', 'public');
+        }
+
+        $article->update($validated);
+
+        return redirect()->route('admin.articles.index')->with('success', 'Artikel berhasil diperbarui.');
     }
 
     public function destroy(Article $article) {
+        if ($article->thumbnail) {
+            Storage::disk('public')->delete($article->thumbnail);
+        }
+
         $article->delete();
-        return back()->with('success', 'Artikel dihapus');
+        return back()->with('success', 'Artikel berhasil dihapus.');
     }
+
+    public function show(Article $article) {
+        return view('articles.show', compact('article'));
+    }
+
+    
 }

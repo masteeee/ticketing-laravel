@@ -6,9 +6,9 @@
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
                     @auth
-                        @if(Auth::user()->role === 'admin')
+                        @if(Auth::user()->role && Auth::user()->role->name === 'admin')
                             <a href="{{ route('admin.dashboard') }}">
-                        @elseif(Auth::user()->role === 'staff')
+                        @elseif(Auth::user()->role && Auth::user()->role->name === 'staff')
                             <a href="{{ route('staff.dashboard') }}">
                         @else
                             <a href="{{ route('public.home') }}">
@@ -25,11 +25,11 @@
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     @auth
-                        @if(Auth::user()->role === 'admin')
+                        @if(Auth::user()->role && Auth::user()->role->name === 'admin')
                             <x-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.dashboard')">
                                 {{ __('Dashboard') }}
                             </x-nav-link>
-                        @elseif(Auth::user()->role === 'staff')
+                        @elseif(Auth::user()->role && Auth::user()->role->name === 'staff')
                             <x-nav-link :href="route('staff.dashboard')" :active="request()->routeIs('staff.dashboard')">
                                 {{ __('Dashboard') }}
                             </x-nav-link>
@@ -40,6 +40,7 @@
 
             <!-- Settings Dropdown -->
             <div class="hidden sm:flex sm:items-center sm:ms-6">
+                <a href="{{ route('ticket.view.form') }}" class="btn btn-danger mr-4" style="background:#e3342f;color:white;padding:0.5rem 1rem;border-radius:0.375rem;">View Ticket</a>
                 @auth
                     <x-dropdown align="right" width="48">
                         <x-slot name="trigger">
@@ -90,11 +91,11 @@
     <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
         @auth
             <div class="pt-2 pb-3 space-y-1">
-                @if(Auth::user()->role === 'admin')
+                @if(Auth::user()->role && Auth::user()->role->name === 'admin')
                     <x-responsive-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.dashboard')">
                         {{ __('Dashboard') }}
                     </x-responsive-nav-link>
-                @elseif(Auth::user()->role === 'staff')
+                @elseif(Auth::user()->role && Auth::user()->role->name === 'staff')
                     <x-responsive-nav-link :href="route('staff.dashboard')" :active="request()->routeIs('staff.dashboard')">
                         {{ __('Dashboard') }}
                     </x-responsive-nav-link>

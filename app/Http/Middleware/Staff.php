@@ -9,7 +9,7 @@ class Staff
 {
     public function handle($request, Closure $next)
     {
-        if (Auth::check() && Auth::user()->role === 'staff') {
+        if (Auth::check() && Auth::user()->role && Auth::user()->role->name === 'staff') {
             return $next($request);
         }
 
