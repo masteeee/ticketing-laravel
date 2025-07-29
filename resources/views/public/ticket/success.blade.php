@@ -30,7 +30,7 @@
 
         {{-- QR CODE --}}
         <div class="flex justify-center my-4">
-            <img src="https://api.qrserver.com/v1/create-qr-code/?data={{ urlencode($invoice) }}&size=100x100" alt="QR Code">
+            <img src="https://api.qrserver.com/v1/create-qr-code/?data={{ urlencode(url('/ticket/detail?inv=' . $invoice . '&email=' . $email)) }}&size=100x100" alt="QR Code">
         </div>
 
         {{-- TOMBOL --}}
