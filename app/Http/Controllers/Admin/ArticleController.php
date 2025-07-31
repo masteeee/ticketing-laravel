@@ -77,21 +77,27 @@ class ArticleController extends Controller
     }
 
     public function show(Article $article)
-{
-    // ambil category parent dan breadcrumb
-    $category = $article->category;
-    $breadcrumbs = collect([]);
-
-    if ($category) {
-        while ($category) {
-            $breadcrumbs->prepend($category);
-            $category = $category->parent;
+    {
+        // Breadcrumb berdasarkan kategori
+        $breadcrumbs = collect([]);
+        $cat = $article->category;
+        while ($cat) {
+            $breadcrumbs->prepend($cat);
+            $cat = $cat->parent;
         }
-    }
-
-    return view('public.articles.show', compact('article', 'breadcrumbs'));
-}
-
-
     
+        // Related Articles (kategori yang sama)
+        $relatedArticles = Article::where('category_id', $article->category_id)
+            ->where('id', '!=', $article->id)
+            ->limit(5)
+            ->get();
+    
+        // Ambil heading H2 / H3 dari konten untuk sidebar
+        preg_match_all('/<h[23].*?>(.*?)<\/h[23]>/', $article->content, $matches);
+        $headings = collect($matches[1] ?? [])->map(function ($text, $i) {
+            return ['id' => 'heading-'.$i, 'text' => strip_tags($text)];
+        });
+    
+        return view('public.articles.show', compact('article', 'breadcrumbs', 'relatedArticles', 'headings'));
+    }
 }

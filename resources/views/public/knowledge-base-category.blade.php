@@ -1,43 +1,57 @@
 @extends('layouts.guest')
 
 @section('content')
-<div class="container mx-auto px-4 py-4">
-    {{-- Search (paling atas) --}}
-    <form method="GET" action="{{ route('knowledge.category') }}"
-          class="relative w-full max-w-md mb-2">
-        <input type="hidden" name="category" value="{{ $category->id }}">
-        <input
-            type="text"
-            name="search"
-            value="{{ request('search') }}"
-            placeholder="Search articles"
-            class="w-full p-2 pr-10 border border-gray-primary rounded-md outline-none focus:ring"
-        >
-        <button type="submit"
-                class="absolute right-0 top-0 h-full px-3 flex items-center rounded-r-md hover:shadow-md">
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none"
-                 viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                      d="M19 9l-7 7-7-7" />
-            </svg>
-        </button>
-    </form>
-
-    {{-- Breadcrumb (di bawah search) --}}
-    <div class="text-sm text-primary mb-4 flex gap-1">
-        <a href="{{ route('knowledge.base') }}" class="text-primary hover:underline">Knowledge Base</a>
-        @foreach($breadcrumbs as $crumb)
-            <span>/</span>
-            @if(!$loop->last)
-                <a href="{{ route('knowledge.category', ['category' => $crumb->id]) }}" class="text-primary hover:underline">
-                    {{ $crumb->name }}
-                </a>
-            @else
-                <span class="text-icon-breadcrumb">{{ $crumb->name }}</span>
-            @endif
-        @endforeach
+<section class="bg-search-section py-8">
+    <div class="container mx-auto px-4">
+        {{-- Search --}}
+        <div class="relative">
+            <div class="items-center space-x-4 hidden md:flex">
+                <div class="relative flex-1">
+                    <form method="GET" action="{{ route('knowledge.base') }}">
+                        <input id="desktop-search-input" 
+                               name="search"
+                               type="text"
+                               value="{{ request('search') }}"
+                               placeholder="Search articles"
+                               class="w-4/5 p-4 pr-32 border border-gray-primary outline-none">
+                        <button id="desktop-search-dropdown"
+                                class="absolute right-[20%] top-0 h-full px-4 rounded-r-lg flex items-center hover:shadow-md">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 ml-1" fill="none"
+                                viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M19 9l-7 7-7-7" />
+                            </svg>
+                        </button>
+                    </form>
+                    {{-- Dropdown search (opsional AJAX) --}}
+                    <ul id="desktop-search-menu"
+                        class="absolute hidden right-[15%] mt-1 w-48 bg-white-primary shadow-md rounded-md z-50"></ul>
+                </div>
+            </div>
+        </div>
     </div>
-</div>
+
+    {{-- Breadcrumb --}}
+    <div class="container mx-auto px-4 py-4">
+        <div class="text-sm text-primary">
+            <a href="{{ route('knowledge.base') }}" class="text-primary lg:inline hidden">Knowledge Base</a>
+            @if($category)
+            <span class="mx-2 text-icon-breadcrumb lg:inline hidden">/</span>
+            @foreach($breadcrumbs as $crumb)
+                @if(!$loop->last)
+                    <a href="{{ route('knowledge.category', ['category' => $crumb->id]) }}"
+                       class="text-primary hover:underline">
+                        {{ $crumb->name }}
+                    </a>
+                    <span class="mx-2 text-icon-breadcrumb">/</span>
+                @else
+                    <span class="text-icon-breadcrumb">{{ $crumb->name }}</span>
+                @endif
+            @endforeach
+        @endif
+        </div>
+    </div>
+</section>
 
 <section class="bg-form-section py-5">
     <div class="departments-container container mx-auto px-4">

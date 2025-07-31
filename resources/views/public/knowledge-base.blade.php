@@ -40,46 +40,46 @@
         $breadcrumbs = breadcrumbs($currentCategory);
     }
 @endphp
-
-<section class="bg-form-section py-10">
+<section class="bg-search-section py-8">
     <div class="container mx-auto px-4">
-
-        {{-- ====== Breadcrumbs dinamis ====== --}}
-        @if(!empty($breadcrumbs))
-            <div class="text-sm text-primary mb-4">
-                <a href="{{ route('knowledge.base') }}" class="text-primary hover:underline">Knowledge Base</a>
-                @foreach($breadcrumbs as $bc)
-                    <span class="mx-2 text-icon-breadcrumb">/</span>
-                    @if($loop->last)
-                        <span class="text-icon-breadcrumb">{{ $bc->name }}</span>
-                    @else
-                        <a href="{{ route('knowledge.category', ['category' => $bc->id]) }}" class="hover:underline">
-                            {{ $bc->name }}
-                        </a>
-                    @endif
-                @endforeach
-            </div>
-        @endif
-
-        {{-- Header + Search --}}
-        <div class="text-center mb-8">
-            <h1 class="text-center mb-4"
-                style="color:#dc3545; font-size:2.5rem; font-weight:900; font-family: Segoe UI, Tahoma, 'Geneva', Verdana, sans-serif;">
-                {{ $currentCategory->name ?? 'Knowledge Base' }}
-            </h1>
-
-            <div class="flex justify-center mb-4">
-                <form method="GET" action="" class="w-full max-w-xl">
-                    <input type="text" name="search" value="{{ $keyword ?? '' }}"
-                           placeholder="Search articles"
-                           class="w-full border border-card-bor-keloola bg-white-primary text-black-keloola rounded-md px-4 py-2 focus:outline-none focus:ring" />
-                    @if(isset($currentCategory) && $currentCategory)
-                        <input type="hidden" name="category" value="{{ $currentCategory->id }}">
-                    @endif
-                </form>
+        {{-- Search --}}
+        <div class="relative">
+            <div class="items-center space-x-4 hidden md:flex">
+                <div class="relative flex-1">
+                    <form method="GET" action="{{ route('knowledge.base') }}">
+                        <input id="desktop-search-input" 
+                               name="search"
+                               type="text"
+                               value="{{ request('search') }}"
+                               placeholder="Search articles"
+                               class="w-4/5 p-4 pr-32 border border-gray-primary outline-none">
+                        <button id="desktop-search-dropdown"
+                                class="absolute right-[20%] top-0 h-full px-4 rounded-r-lg flex items-center hover:shadow-md">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 ml-1" fill="none"
+                                viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M19 9l-7 7-7-7" />
+                            </svg>
+                        </button>
+                    </form>
+                    {{-- Dropdown search (opsional AJAX) --}}
+                    <ul id="desktop-search-menu"
+                        class="absolute hidden right-[15%] mt-1 w-48 bg-white-primary shadow-md rounded-md z-50"></ul>
+                </div>
             </div>
         </div>
+    </div>
 
+    {{-- Breadcrumb --}}
+    <div class="container mx-auto px-4 py-4">
+        <div class="text-sm text-primary">
+            <a href="{{ route('knowledge.base') }}" class="text-primary lg:inline hidden">Knowledge Base</a>
+
+        </div>
+    </div>
+</section>
+<section class="bg-form-section py-10">
+    <div class="container mx-auto px-4">
         {{-- SECTIONS jika kategori punya children --}}
         @if(isset($currentCategory) && $currentCategory && ($categories?->count() ?? 0) > 0)
             <h2 class="text-lg font-semibold mb-4">Sections</h2>
@@ -207,4 +207,5 @@
 
     </div>
 </section>
+@include('layouts.footer')
 @endsection
