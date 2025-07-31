@@ -12,7 +12,9 @@ class ServiceController extends Controller
     public function index()
     {
         $services = Service::with('department')->get();
-        return view('admin.services.index', compact('services'));
+        $departments = Department::all();
+    
+        return view('admin.services.index', compact('services', 'departments'));
     }
 
     public function create()
