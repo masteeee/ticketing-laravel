@@ -82,14 +82,14 @@
                             <label class="block text-sm font-medium mb-2">Description</label>
                             <textarea name="description" class="w-full p-2 border border-section-bor rounded-md min-h-[200px]"></textarea>
                         </div>
-                        <div>
+                        {{-- <div>
                             <label class="block text-sm font-medium mb-2">Customer Primary Email</label>
                             <input name="customer_email" type="email" class="w-full p-2 border border-section-bor rounded-md" />
                         </div>
                         <div>
                             <label class="block text-sm font-medium mb-2">Inv ID</label>
                             <input name="invoice_id" type="text" class="w-full p-2 border border-section-bor rounded-md" disabled />
-                        </div>
+                        </div> --}}
                         <div>
                             <label class="block text-sm font-medium mb-2">Attach a file</label>
                             <input name="attachment" type="file" class="w-full p-2 border rounded-md" />
@@ -106,14 +106,14 @@
                 </div>
             </div>
             <!-- Sidebar kanan -->
-            <div class="lg:w-1/4">
-                <div class="lg:w-1/4">
-                    <div class="mt-2">
+            <div class="lg:w-1/3">
+                <div class="lg:w-1/3">
+                    <div class="mt-3">
                         <h2 class="text-xl font-semibold mb-4">Popular Articles</h2>
                         <ul class="space-y-4">
                             @forelse ($popularArticles as $article)
                                 <li>
-                                    <a href="{{ route('articles.show', $article->id) }}"
+                                    <a href="{{ route('public.articles.show', $article->id) }}"
                                        class="flex items-start gap-2 text-black-keloola hover:text-blue-primary">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mb-1 flex-shrink-0"
                                              fill="none" viewBox="0 0 24 24" stroke="currentColor">

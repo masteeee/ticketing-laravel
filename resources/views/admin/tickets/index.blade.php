@@ -22,7 +22,7 @@
                     <th>Detail</th>
                     <th>Status</th>
                     <th>Ubah Status</th>
-                    <th>Ditangani Oleh</th>
+                    <th>Assignment To</th>
                 </tr>
             </thead>
             <tbody>
