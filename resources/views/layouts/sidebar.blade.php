@@ -34,38 +34,49 @@
     </li>
     @endif
 
-@if(
-    canView('view roles', $userPermissions) ||
-    canView('view permissions', $userPermissions) ||
-    canView('view users', $userPermissions) ||
-    canView('create users', $userPermissions) ||
-    canView('edit users', $userPermissions) ||
-    canView('delete users', $userPermissions)
-)
-<li class="nav-item">
-    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#rolePermissionSub" aria-expanded="false" aria-controls="rolePermissionSub">
-        <i class="fas fa-fw fa-user-shield"></i>
-        <span>Role & Permission</span>
-    </a>
-    <div id="rolePermissionSub" class="collapse" data-parent="#accordionSidebar">
-        <div class="bg-white py-2 collapse-inner rounded">
-            @if(canView('view roles', $userPermissions))
-            <a class="collapse-item" href="{{ route('admin.roles.index') }}">Roles</a>
-            @endif
-            @if(canView('view permissions', $userPermissions))
-            <a class="collapse-item" href="{{ route('admin.permissions.index') }}">Permissions</a>
-            @endif
-            @if(canView('view users', $userPermissions) || canView('create users', $userPermissions) || canView('edit users', $userPermissions) || canView('delete users', $userPermissions))
-            <a class="collapse-item" href="{{ route('admin.users.index') }}">Users</a>
-            @endif
-            
+      {{-- Services --}}
+    @if(canView('view services', $userPermissions))
+    <li class="nav-item">
+        <a class="nav-link" href="{{ route('admin.services.index') }}">
+            <i class="fas fa-fw fa-concierge-bell"></i>
+            <span>Services</span>
+        </a>
+    </li>
+    @endif
+
+    @if(
+        canView('view roles', $userPermissions) ||
+        canView('view permissions', $userPermissions) ||
+        canView('view users', $userPermissions) ||
+        canView('create users', $userPermissions) ||
+        canView('edit users', $userPermissions) ||
+        canView('delete users', $userPermissions)
+    )
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#rolePermissionSub" aria-expanded="false" aria-controls="rolePermissionSub">
+            <i class="fas fa-fw fa-user-shield"></i>
+            <span>Role & Permission</span>
+        </a>
+        <div id="rolePermissionSub" class="collapse" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                @if(canView('view roles', $userPermissions))
+                <a class="collapse-item" href="{{ route('admin.roles.index') }}">Roles</a>
+                @endif
+                @if(canView('view permissions', $userPermissions))
+                <a class="collapse-item" href="{{ route('admin.permissions.index') }}">Permissions</a>
+                @endif
+                @if(canView('view users', $userPermissions) || canView('create users', $userPermissions) || canView('edit users', $userPermissions) || canView('delete users', $userPermissions))
+                <a class="collapse-item" href="{{ route('admin.users.index') }}">Users</a>
+                @endif
+                
+            </div>
         </div>
-    </div>
-</li>
-@endif
+    </li>
+    @endif
 
 
     {{-- Knowledge Base --}}
+    @if(canView('view categories', $userPermissions) || canView('view articles', $userPermissions))
     <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#knowledgeBaseSub" aria-expanded="false" aria-controls="knowledgeBaseSub">
             <i class="fas fa-fw fa-book"></i>
@@ -82,15 +93,8 @@
             </div>
         </div>
     </li>
-    {{-- Services --}}
-    @if(canView('view services', $userPermissions))
-    <li class="nav-item">
-        <a class="nav-link" href="{{ route('admin.services.index') }}">
-            <i class="fas fa-fw fa-concierge-bell"></i>
-            <span>Services</span>
-        </a>
-    </li>
     @endif
+    
     {{-- Ticketing --}}
     @if(canView('view tickets', $userPermissions))
     <li class="nav-item">
