@@ -1,49 +1,59 @@
 @extends('layouts.admin')
 
 @section('content')
-<div class="container">
-    <h1 class="mb-4">Daftar Artikel</h1>
-
-    <a href="{{ route('admin.articles.create') }}" class="btn btn-danger mb-3">+ Tambah Artikel</a>
+<div class="container py-4">
+    <div class="d-flex justify-between items-center mb-4">
+        <h1 class="text-xl font-bold">Daftar Artikel</h1>
+        <a href="{{ route('admin.articles.create') }}" class="btn btn-danger">+ Tambah Artikel</a>
+    </div>
 
     @if(session('success'))
-        <div class="alert alert-success">{{ session('success') }}</div>
+        <div class="alert alert-success shadow-sm rounded">{{ session('success') }}</div>
     @endif
 
-    <table class="table table-bordered">
-        <thead>
-            <tr>
-                <th>Judul</th>
-                <th>Kategori</th>
-                <th>Thumbnail</th>
-                <th>Aksi</th>
-                
-            </tr>
-        </thead>
-        <tbody>
-            @foreach ($articles as $article)
-            <tr>
-                <td>{{ $article->title }}</td>
-                <td>{{ $article->category->name }}</td> 
-                <td>
-                    @if($article->thumbnail)
-                        <img src="{{ asset('storage/' . $article->thumbnail) }}" alt="" style="max-height: 50px;">
-                    @else
-                        Tidak ada
-                    @endif
-                </td>
-                <td>
-                    <a href="{{ route('admin.articles.edit', $article) }}" class="btn btn-warning btn-sm">Edit</a>
-                    <form action="{{ route('admin.articles.destroy', $article) }}" method="POST" class="d-inline" onsubmit="return confirm('Yakin hapus?')">
-                        @csrf @method('DELETE')
-                        <button class="btn btn-danger btn-sm">Hapus</button>
-                    </form>
-                </td>
-               
-            </tr>
-            @endforeach
-        </tbody>
-    </table>
-    {{ $articles->links() }}
+    <div class="card shadow-sm rounded overflow-hidden">
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover align-middle mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th class="border text-center">Judul</th>
+                        <th class="border text-center">Kategori</th>
+                        <th class="border text-center">Thumbnail</th>
+                        <th class="border text-center" style="width: 150px;">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse ($articles as $article)
+                    <tr class="transition hover:bg-gray-100">
+                        <td class="border fw-semibold align-middle">{{ $article->title }}</td>
+                        <td class="border align-middle text-center">{{ $article->category->name }}</td>
+                        <td class="border align-middle text-center">
+                            @if($article->thumbnail)
+                                <img src="{{ asset('storage/' . $article->thumbnail) }}" alt="thumb" class="rounded mx-auto" style="height: 40px;">
+                            @else
+                                <span class="text-muted">-</span>
+                            @endif
+                        </td>
+                        <td class="border text-center">
+                            <a href="{{ route('admin.articles.edit', $article->id) }}" class="btn btn-sm btn-warning me-1">Edit</a>
+                            <form action="{{ route('admin.articles.destroy', $article->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Yakin hapus artikel ini?')">
+                                @csrf @method('DELETE')
+                                <button class="btn btn-sm btn-danger">Hapus</button>
+                            </form>
+                        </td>
+                    </tr>
+                    @empty
+                    <tr>
+                        <td colspan="4" class="text-center text-muted border">Belum ada artikel.</td>
+                    </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="mt-4">
+        {{ $articles->links() }}
+    </div>
 </div>
 @endsection
