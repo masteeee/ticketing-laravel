@@ -21,6 +21,7 @@ use App\Http\Controllers\UserController;
 // PUBLIC ROUTES (no login required)
 Route::get('/', [PublicController::class, 'index'])->name('public.home');
 Route::get('/knowledge', [KnowledgeBaseController::class, 'index'])->name('knowledge.base');
+Route::get('/knowledge/category', [KnowledgeBaseController::class, 'showCategory'])->name('knowledge.category');
 Route::get('/ticket/create', [TicketController::class, 'create'])->name('ticket.create');
 Route::post('/ticket/submit', [TicketController::class, 'store'])->name('ticket.public.store');
 Route::get('/ticket/success', function () {
@@ -33,7 +34,7 @@ Route::get('/ticket/success', function () {
 
     return view('public.ticket.success', compact('invoice', 'email'));
 })->name('ticket.success');
-Route::get('/articles/{article}', [ArticleController::class, 'show'])->name('articles.show');
+Route::get('/articles/{article}', [ArticleController::class, 'show'])->name('public.articles.show');
 
 // PUBLIC TICKET VIEW
 Route::get('/ticket/view', [App\Http\Controllers\TicketController::class, 'viewForm'])->name('ticket.view.form');

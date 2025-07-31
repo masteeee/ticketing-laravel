@@ -76,9 +76,22 @@ class ArticleController extends Controller
         return back()->with('success', 'Artikel berhasil dihapus.');
     }
 
-    public function show(Article $article) {
-        return view('articles.show', compact('article'));
+    public function show(Article $article)
+{
+    // ambil category parent dan breadcrumb
+    $category = $article->category;
+    $breadcrumbs = collect([]);
+
+    if ($category) {
+        while ($category) {
+            $breadcrumbs->prepend($category);
+            $category = $category->parent;
+        }
     }
+
+    return view('public.articles.show', compact('article', 'breadcrumbs'));
+}
+
 
     
 }

@@ -1,6 +1,19 @@
 @extends('layouts.guest')
 
 @section('content')
+<div class="container mx-auto px-4 py-4">
+    <div class="text-sm text-primary mb-4 flex gap-1">
+        <a href="{{ route('knowledge.base') }}" class="text-primary hover:underline">Knowledge Base</a>
+        @foreach($breadcrumbs as $crumb)
+            <span>/</span>
+            <a href="{{ route('knowledge.category', ['category' => $crumb->id]) }}" class="text-primary hover:underline">
+                {{ $crumb->name }}
+            </a>
+        @endforeach
+        <span>/</span>
+        <span class="text-icon-breadcrumb">{{ $article->title }}</span>
+    </div>
+</div>
 <div class="min-h-screen bg-gray-100 py-10">
     <div class="max-w-3xl mx-auto px-4">
         <div class="bg-white p-8 rounded shadow p-4">
