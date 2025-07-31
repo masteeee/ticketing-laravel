@@ -17,6 +17,7 @@ class PermissionSeeder extends Seeder
             'view tickets', 'create tickets', 'edit tickets', 'delete tickets', 'reply tickets',
             'view roles', 'create roles', 'edit roles', 'delete roles',
             'view permissions', 'create permissions', 'edit permissions', 'delete permissions',
+            'view users', 'create users', 'edit users', 'delete users',
         ];
 
         foreach ($permissions as $perm) {

@@ -4,50 +4,79 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Ticket;
+use App\Models\Department;
+use App\Models\Service;
 use Illuminate\Http\Request;
-use App\Models\TicketConversation;
-use App\Notifications\TicketUserReplied;
 use Illuminate\Support\Facades\Auth;
+use App\Notifications\TicketUserReplied;
 
 class AdminTicketController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $tickets = Ticket::paginate(10);
-        return view('admin.tickets.index', compact('tickets'));
+        $departments = Department::all();
+        $services = Service::all();
+
+        $query = Ticket::with(['department', 'service', 'handler']);
+
+        // Filter by department
+        if ($request->filled('department_id')) {
+            $query->where('department_id', $request->department_id);
+        }
+
+        // Filter by service
+        if ($request->filled('service_id')) {
+            $query->where('service_id', $request->service_id);
+        }
+
+        // Filter by status
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+
+        // Filter by date range
+        if ($request->filled('start_date') && $request->filled('end_date')) {
+            $query->whereBetween('created_at', [$request->start_date, $request->end_date]);
+        }
+
+        $tickets = $query->latest()->paginate(10);
+
+        return view('admin.tickets.index', compact('tickets', 'departments', 'services'));
     }
 
     public function updateStatus(Request $request, $id)
-{
-    $ticket = Ticket::findOrFail($id);
-    $ticket->status = $request->status;
+    {
+        $ticket = Ticket::findOrFail($id);
+        $ticket->status = $request->status;
 
-    if ($ticket->handled_by === null && Auth::check()) {
-        $ticket->handled_by = Auth::id(); // Assign staff yang login
+        if ($ticket->handled_by === null && Auth::check()) {
+            $ticket->handled_by = Auth::id(); // Assign staff yang login
+        }
+
+        $ticket->save();
+
+        return back()->with('success', 'Status tiket berhasil diperbarui.');
     }
 
-    $ticket->save();
-
-    return back()->with('success', 'Status tiket berhasil diperbarui.');
-}
     public function show($id)
     {
         $ticket = Ticket::with('department')->findOrFail($id);
-        $conversations = []; // nanti bisa isi dengan model percakapan kalau sudah dibuat
+        $conversations = []; // Placeholder
 
         return view('admin.tickets.show', compact('ticket', 'conversations'));
     }
-    
+
     public function reply(Request $request, Ticket $ticket)
     {
-        $request->validate(['message' => 'required|string']);
+        $request->validate([
+            'message' => 'required|string',
+        ]);
 
         $ticket->conversations()->create([
             'user_id' => auth()->id(),
             'message' => $request->message,
         ]);
 
-        // Kirim notifikasi ke user
         if ($ticket->email) {
             \Notification::route('mail', $ticket->email)->notify(new TicketUserReplied($ticket, $request->message));
         }

@@ -14,6 +14,7 @@
                 <th>Name</th>
                 <th>Email</th>
                 <th>Role</th>
+                <th>Actions</th>
             </tr>
         </thead>
         <tbody class="text-dark">
@@ -22,10 +23,18 @@
                 <td>{{ $user->name }}</td>
                 <td>{{ $user->email }}</td>
                 <td>{{ $user->role ? $user->role->name : '-' }}</td>
+                <td>
+                    <a href="{{ route('admin.users.edit', $user->id) }}" class="btn btn-sm btn-warning">Edit</a>
+                    <form action="{{ route('admin.users.destroy', $user->id) }}" method="POST" style="display: inline;">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this user?')">Delete</button>
+                    </form>
+                </td>
             </tr>
             @empty
             <tr style="background-color: rgba(255, 255, 255, 0.3);">
-                <td colspan="3">No users found.</td>
+                <td colspan="4">No users found.</td>
             </tr>
             @endforelse
         </tbody>

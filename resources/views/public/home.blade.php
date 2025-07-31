@@ -1,38 +1,6 @@
 @extends('layouts.guest')
 
 @section('content')
-<!-- Mobile Menu -->
-<div id="mobile-menu" class="hidden md:hidden">
-       <div class="min-h-screen bg-white-primary">
-            <ul class="flex flex-col items-center justify-center space-y-4 py-8">
-                 <li><a href="home" class="active text-black-keloola text-lg">Home</a></li>
-                 <li><a href="knowledge" target="_blank" class="text-black-keloola text-lg">Knowledge
-                           Base</a></li>
-                 <li><a href="#" class="text-black-keloola text-lg">Community</a></li>
-                 <li><a href="#" class="text-black-keloola text-lg">Sign In</a></li>
-                 <li class="relative">
-                      <button id="mobile-language-button"
-                           class="text-black-keloola bg-gray-parent px-4 py-2 rounded text-lg hover:bg-gray-primary flex items-center">
-                           English <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 ml-1" fill="none"
-                                viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                     d="M19 9l-7 7-7-7" />
-                           </svg>
-                      </button>
-                      <ul id="mobile-language-menu"
-                           class="hidden absolute mt-2 bg-white shadow rounded-md text-lg w-full">
-                           <li><a href="#" class="block px-4 py-2 hover:bg-gray-parent text-center">English</a>
-                           </li>
-                           <li><a href="#" class="block px-4 py-2 hover:bg-gray-parent text-center">Spanish</a>
-                           </li>
-                           <li><a href="#" class="block px-4 py-2 hover:bg-gray-parent text-center">French</a>
-                           </li>
-                      </ul>
-                 </li>
-            </ul>
-       </div>
-  </div>
-</nav>
 
 <!-- Search Section -->
 <section class="bg-search-section py-8">
@@ -52,15 +20,7 @@
                                         d="M19 9l-7 7-7-7" />
                               </svg>
                          </button>
-                         <!-- Dropdown menu -->
-                         <ul id="desktop-search-menu"
-                              class="absolute hidden right-[15%] mt-1 w-48 bg-white-primary shadow-md rounded-md z-50">
-                              <li><a href="#" class="block px-4 py-2 hover:text-blue-primary text-gray-700"
-                                        data-placeholder="Search articles" data-value="kb">Knowledge Base</a></li>
-                              <li><a href="#" class="block px-4 py-2 hover:text-blue-primary"
-                                        data-placeholder="Search community" data-value="community">Community</a>
-                              </li>
-                         </ul>
+
                     </div>
 
                </div>
@@ -78,15 +38,7 @@
                                    d="M19 9l-7 7-7-7" />
                          </svg>
                     </button>
-                    <!-- Mobile dropdown menu -->
-                    <ul id="mobile-search-menu"
-                         class="absolute hidden w-full mt-1 bg-white-primary shadow-md rounded-md z-50">
-                         <li><a href="#" class="block px-4 py-2 hover:text-blue-primary text-gray-700"
-                                   data-placeholder="Search articles" data-value="kb">Knowledge Base</a></li>
-                         <li><a href="#" class="block px-4 py-2 hover:text-blue-primary"
-                                   data-placeholder="Search community" data-value="community">Community</a>
-                         </li>
-                    </ul>
+
                     <div class="fixed bottom-6 right-6 z-50">
                          <button id="mobile-fab"
                               class="w-14 h-14 bg-red-keloola text-white-primary rounded-full shadow-lg flex items-center justify-center">

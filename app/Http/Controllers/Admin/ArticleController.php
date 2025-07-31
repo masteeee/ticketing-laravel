@@ -26,7 +26,7 @@ class ArticleController extends Controller
             'title' => 'required|string|max:255',
             'content' => 'required',
             'category_id' => 'required|exists:categories,id',
-            'thumbnail' => 'nullable|image|max:2048',
+            'thumbnail' => 'nullable|image|max:10240', // Increased to 10MB
         ]);
 
         if ($request->hasFile('thumbnail')) {
@@ -50,7 +50,7 @@ class ArticleController extends Controller
             'title' => 'required|string|max:255',
             'content' => 'required',
             'category_id' => 'required|exists:categories,id',
-            'thumbnail' => 'nullable|image|max:2048',
+            'thumbnail' => 'nullable|image|max:10240', // Increased to 10MB
         ]);
 
         if ($request->hasFile('thumbnail')) {
@@ -76,9 +76,28 @@ class ArticleController extends Controller
         return back()->with('success', 'Artikel berhasil dihapus.');
     }
 
-    public function show(Article $article) {
-        return view('articles.show', compact('article'));
-    }
-
+    public function show(Article $article)
+    {
+        // Breadcrumb berdasarkan kategori
+        $breadcrumbs = collect([]);
+        $cat = $article->category;
+        while ($cat) {
+            $breadcrumbs->prepend($cat);
+            $cat = $cat->parent;
+        }
     
+        // Related Articles (kategori yang sama)
+        $relatedArticles = Article::where('category_id', $article->category_id)
+            ->where('id', '!=', $article->id)
+            ->limit(5)
+            ->get();
+    
+        // Ambil heading H2 / H3 dari konten untuk sidebar
+        preg_match_all('/<h[23].*?>(.*?)<\/h[23]>/', $article->content, $matches);
+        $headings = collect($matches[1] ?? [])->map(function ($text, $i) {
+            return ['id' => 'heading-'.$i, 'text' => strip_tags($text)];
+        });
+    
+        return view('public.articles.show', compact('article', 'breadcrumbs', 'relatedArticles', 'headings'));
+    }
 }

@@ -11,18 +11,48 @@ use Illuminate\Support\Facades\Storage;
 use App\Notifications\TicketSubmitted;
 use App\Models\Article;
 use App\Notifications\TicketUserSubmitted;
+use App\Models\Service;
+
 
 
 class TicketController extends Controller
-{
+{public function index(Request $request)
+    {
+        $query = Ticket::query();
+    
+        if ($request->filled('department_id')) {
+            $query->where('department_id', $request->department_id);
+        }
+    
+        if ($request->filled('service_id')) {
+            $query->where('service_name', $request->service_id);
+        }
+    
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+    
+        if ($request->filled('date')) {
+            $query->whereDate('created_at', $request->date);
+        }
+    
+        $tickets = $query->latest()->paginate(10);
+        $departments = Department::all();
+        $services = Service::all();
+    
+        return view('admin.tickets.index', compact('tickets', 'departments', 'services'));
+    }
+    
+
     // Halaman form publik untuk submit tiket
     public function create()
     {
         $departments = Department::all();
         $popularArticles = Article::orderBy('views', 'desc')->take(5)->get();
         $selectedDepartment = request('department');
+        $services = Service::all();
 
-        return view('public.ticket.create', compact('departments', 'popularArticles', 'selectedDepartment'));
+        return view('public.ticket.create', compact('departments', 'popularArticles', 'selectedDepartment','services'));
     }
 
     // Proses simpan tiket baru
@@ -31,7 +61,7 @@ class TicketController extends Controller
         $request->validate([
             'department_id' => 'required|exists:departments,id',
             'contact_name' => 'required|string',
-            'service_name' => 'nullable|string',
+            'service_id' => 'required|exists:services,id',
             'email' => 'required|email',
             'phone' => 'nullable|string',
             'subject' => 'required|string',
@@ -40,7 +70,7 @@ class TicketController extends Controller
             'invoice_id' => 'nullable|string',
             'attachment' => 'nullable|file|max:40960', // maks 40 MB
         ]);
-
+        
         $filePath = null;
         if ($request->hasFile('attachment')) {
             $filePath = $request->file('attachment')->store('attachments', 'public');
@@ -55,7 +85,7 @@ class TicketController extends Controller
         $ticket = Ticket::create([
             'department_id'   => $request->department_id,
             'contact_name'    => $request->contact_name,
-            'service_name'    => $request->service_name,
+            'service_id'      => $request->service_id,
             'email'           => $request->email,
             'phone'           => $request->phone,
             'subject'         => $request->subject,
@@ -129,6 +159,10 @@ class TicketController extends Controller
         })->get();
         \Notification::send($admins, new TicketSubmitted($ticket));
         return redirect()->route('ticket.public.detail', ['inv' => $ticket->invoice_id, 'email' => $ticket->email]);
-    }
+          }
+        public function getServices($department_id)
+        {
+            $services = \App\Models\Service::where('department_id', $department_id)->get();
+            return response()->json($services);
+        }
 }
-    
