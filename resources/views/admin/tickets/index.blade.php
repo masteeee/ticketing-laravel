@@ -14,68 +14,66 @@
     @endif
 
     <!-- Filter Section -->
-<div class="card mb-4">
-    <div class="card-header bg-light">
-        <h5 class="text-danger mb-0">Filter Tiket</h5>
+    <div class="card mb-4">
+        <div class="card-body">
+            <h5 class="text-danger mb-3">Filter Tiket</h5>
+            <form method="GET" action="{{ route('admin.tickets.index') }}">
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <label for="department_id" class="form-label">Departemen</label>
+                        <select name="department_id" id="department_id" class="form-select">
+                            <option value="">-- Semua --</option>
+                            @foreach($departments as $dept)
+                                <option value="{{ $dept->id }}" {{ request('department_id') == $dept->id ? 'selected' : '' }}>
+                                    {{ $dept->name }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+    
+                    <div class="col-md-4">
+                        <label for="service_id" class="form-label">Layanan</label>
+                        <select name="service_id" id="service_id" class="form-select">
+                            <option value="">-- Semua --</option>
+                            @foreach($services as $service)
+                                <option value="{{ $service->id }}" {{ request('service_id') == $service->id ? 'selected' : '' }}>
+                                    {{ $service->name }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+    
+                    <div class="col-md-4">
+                        <label for="status" class="form-label">Status</label>
+                        <select name="status" id="status" class="form-select">
+                            <option value="">-- Semua --</option>
+                            <option value="open" {{ request('status') == 'open' ? 'selected' : '' }}>Open</option>
+                            <option value="in_progress" {{ request('status') == 'in_progress' ? 'selected' : '' }}>Dalam Pengerjaan</option>
+                            <option value="solved" {{ request('status') == 'solved' ? 'selected' : '' }}>Selesai</option>
+                        </select>
+                    </div>
+                </div>
+    
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <label for="start_date" class="form-label">Dari Tanggal</label>
+                        <input type="date" name="start_date" id="start_date" class="form-control" value="{{ request('start_date') }}">
+                    </div>
+    
+                    <div class="col-md-4">
+                        <label for="end_date" class="form-label">Sampai Tanggal</label>
+                        <input type="date" name="end_date" id="end_date" class="form-control" value="{{ request('end_date') }}">
+                    </div>
+    
+                    <div class="col-md-4 d-flex align-items-end gap-2">
+                        <button type="submit" class="btn btn-danger">Terapkan</button>
+                        <a href="{{ route('admin.tickets.index') }}" class="btn btn-secondary">Reset</a>
+                    </div>
+                </div>
+            </form>
+        </div>
     </div>
-    <div class="card-body">
-        <form method="GET">
-            <div class="row g-3">
-                <div class="col-md-3">
-                    <label for="department" class="form-label">Departemen</label>
-                    <select name="department_id" id="department" class="form-select">
-                        <option value="">-- Semua Departemen --</option>
-                        @foreach($departments as $dept)
-                            <option value="{{ $dept->id }}" {{ request('department_id') == $dept->id ? 'selected' : '' }}>
-                                {{ $dept->name }}
-                            </option>
-                        @endforeach
-                    </select>
-                </div>
-
-                <div class="col-md-3">
-                    <label for="service" class="form-label">Layanan</label>
-                    <select name="service_id" id="service" class="form-select">
-                        <option value="">-- Semua Layanan --</option>
-                        @foreach($services as $srv)
-                            <option value="{{ $srv->id }}" {{ request('service_id') == $srv->id ? 'selected' : '' }}>
-                                {{ $srv->name }}
-                            </option>
-                        @endforeach
-                    </select>
-                </div>
-
-                <div class="col-md-3">
-                    <label for="status" class="form-label">Status</label>
-                    <select name="status" id="status" class="form-select">
-                        <option value="">-- Semua Status --</option>
-                        <option value="Dalam Antrean" {{ request('status') == 'Dalam Antrean' ? 'selected' : '' }}>Dalam Antrean</option>
-                        <option value="Dalam Pengerjaan" {{ request('status') == 'Dalam Pengerjaan' ? 'selected' : '' }}>Dalam Pengerjaan</option>
-                        <option value="Solved" {{ request('status') == 'Solved' ? 'selected' : '' }}>Solved</option>
-                    </select>
-                </div>
-
-                <div class="col-md-3">
-                    <label for="start_date" class="form-label">Dari Tanggal</label>
-                    <input type="date" name="start_date" id="start_date" class="form-control" value="{{ request('start_date') }}">
-                </div>
-
-                <div class="col-md-3">
-                    <label for="end_date" class="form-label">Sampai Tanggal</label>
-                    <input type="date" name="end_date" id="end_date" class="form-control" value="{{ request('end_date') }}">
-                </div>
-
-                <div class="col-md-3 align-self-end d-grid gap-2">
-                    <button type="submit" class="btn btn-danger">Terapkan Filter</button>
-                </div>
-
-                <div class="col-md-3 align-self-end d-grid gap-2">
-                    <a href="{{ route('admin.tickets.index') }}" class="btn btn-secondary">Reset</a>
-                </div>
-            </div>
-        </form>
-    </div>
-</div>
+    
     {{-- Table --}}
     <div class="table-responsive">
         <table class="table table-bordered">
