@@ -89,7 +89,7 @@
                         $total = totalArticlesView($cat);
                         $first = firstArticleView($cat);
                         $goUrl = ($total === 1 && $first)
-                            ? route('articles.show', $first->id)
+                            ? route('public.articles.show', $first->id)
                             : route('knowledge.category', ['category' => $cat->id]);
                         $icon = asset('assets/keloola-logo.png');
                     @endphp

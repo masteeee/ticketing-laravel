@@ -2,7 +2,28 @@
 
 @section('content')
 <div class="container mx-auto px-4 py-4">
-    {{-- Breadcrumb --}}
+    {{-- Search (paling atas) --}}
+    <form method="GET" action="{{ route('knowledge.category') }}"
+          class="relative w-full max-w-md mb-2">
+        <input type="hidden" name="category" value="{{ $category->id }}">
+        <input
+            type="text"
+            name="search"
+            value="{{ request('search') }}"
+            placeholder="Search articles"
+            class="w-full p-2 pr-10 border border-gray-primary rounded-md outline-none focus:ring"
+        >
+        <button type="submit"
+                class="absolute right-0 top-0 h-full px-3 flex items-center rounded-r-md hover:shadow-md">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none"
+                 viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M19 9l-7 7-7-7" />
+            </svg>
+        </button>
+    </form>
+
+    {{-- Breadcrumb (di bawah search) --}}
     <div class="text-sm text-primary mb-4 flex gap-1">
         <a href="{{ route('knowledge.base') }}" class="text-primary hover:underline">Knowledge Base</a>
         @foreach($breadcrumbs as $crumb)
@@ -22,14 +43,13 @@
     <div class="departments-container container mx-auto px-4">
         <div class="flex flex-col lg:flex-row gap-8">
 
-            {{-- Left: Articles First, then Sections --}}
+            {{-- LEFT: Card Artikel + Sections --}}
             <div class="lg:w-3/4 bg-white-primary border border-section-bor rounded-md">
                 <div class="p-4">
 
-                    {{-- Articles in this category only (not from sub-categories) --}}
+                    {{-- Articles --}}
                     @if($articles->count())
-                        
-                        <ul class="space-y-4 mb-6">
+                        <ul class="space-y-4 mb-8">
                             @foreach($articles as $article)
                                 <li>
                                     <a href="{{ route('public.articles.show', $article->id) }}"
@@ -42,7 +62,7 @@
                                         <div>
                                             <h3 class="text-lg font-semibold">{{ $article->title }}</h3>
                                             <p class="text-sm text-gray-600">
-                                                {{ Str::limit(strip_tags($article->excerpt ?? $article->content), 120) }}
+                                                {{ \Illuminate\Support\Str::limit(strip_tags($article->excerpt ?? $article->content), 120) }}
                                             </p>
                                         </div>
                                     </a>
@@ -51,9 +71,8 @@
                         </ul>
                     @endif
 
-                    {{-- Sections (sub categories) --}}
+                    {{-- Sub Categories --}}
                     @if($category->children->count())
-                     
                         <ul class="space-y-4">
                             @foreach($category->children as $child)
                                 @php
@@ -84,12 +103,13 @@
                     @elseif(!$articles->count())
                         <p class="text-gray-600">No articles or sections available in this category.</p>
                     @endif
+
                 </div>
             </div>
 
-            {{-- Right Sidebar --}}
+            {{-- RIGHT SIDEBAR --}}
             <div class="lg:w-1/4">
-                {{-- Category Info --}}
+                {{-- Info --}}
                 <div class="bg-white-primary border border-section-bor rounded-md p-4">
                     <h2 class="text-xl font-semibold">{{ $category->name }}</h2>
                     <p class="text-sm my-2 text-gray-600">
@@ -101,7 +121,7 @@
                     <p class="text-sm text-gray-500">Subscribe to receive notifications from this section.</p>
                 </div>
 
-                {{-- Popular Articles --}}
+                {{-- Popular --}}
                 <div class="mt-5">
                     <h2 class="text-xl font-semibold mb-4">Popular Articles</h2>
                     <ul class="space-y-3">
@@ -121,7 +141,7 @@
                     </ul>
                 </div>
 
-                {{-- Recent Articles --}}
+                {{-- Recent --}}
                 <div class="mt-5">
                     <h2 class="text-xl font-semibold mb-4">Recent Articles</h2>
                     <ul class="space-y-3">
@@ -145,5 +165,6 @@
         </div>
     </div>
 </section>
+
 @include('layouts.footer')
 @endsection
