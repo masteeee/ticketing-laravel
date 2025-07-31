@@ -31,7 +31,7 @@
                     <td>{{ $loop->iteration }}</td>
                     <td>{{ $ticket->department->name ?? '-' }}</td>
                     <td>{{ $ticket->contact_name }}</td>
-                    <td>{{ $ticket->service_name }}</td>
+                    <td>{{ $ticket->service->name ?? '-' }}</td>
                     <td>{{ $ticket->email }}</td>
                     <td>{{ $ticket->phone }}</td>
                     <td><a href="{{ route('admin.tickets.show', $ticket->id) }}" class="btn btn-sm btn-primary">Lihat</a></td>

@@ -1,36 +1,6 @@
 @extends('layouts.guest')
 
 @section('title', 'Submit a Request')
-@section('scripts')
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    @if(session('success'))
-        <script>
-            document.addEventListener('DOMContentLoaded', function () {
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Berhasil!',
-                    text: '{{ session('success') }}',
-                    confirmButtonColor: '#3085d6',
-                    confirmButtonText: 'OK'
-                });
-            });
-        </script>
-    @endif
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const form = document.querySelector('form[action="{{ route('ticket.public.store') }}"]');
-            if(form) {
-                form.addEventListener('submit', function() {
-                    const btn = document.getElementById('submit-ticket-btn');
-                    btn.disabled = true;
-                    document.getElementById('submit-ticket-text').classList.add('hidden');
-                    document.getElementById('submit-ticket-spinner').classList.remove('hidden');
-                });
-            }
-        });
-    </script>
-@endsection
 
 @section('content')
 <section class="bg-form-section py-5">
@@ -50,10 +20,12 @@
                         <!-- Department -->
                         <div>
                             <label class="block text-sm font-medium mb-2">Department</label>
-                            <select name="department_id" class="w-full p-3 border border-section-bor rounded-md" required>
+                            <select name="department_id" id="department_id" class="w-full p-3 border border-section-bor rounded-md" required>
                                 <option value="">-- Pilih Department --</option>
                                 @foreach($departments as $dept)
-                                    <option value="{{ $dept->id }}" {{ (old('department_id') == $dept->id) ? 'selected' : '' }}>{{ $dept->name }}</option>
+                                    <option value="{{ $dept->id }}" {{ old('department_id') == $dept->id ? 'selected' : '' }}>
+                                        {{ $dept->name }}
+                                    </option>
                                 @endforeach
                             </select>
                         </div>
@@ -67,11 +39,8 @@
                         <!-- Service -->
                         <div>
                             <label class="block text-sm font-medium mb-2">Service</label>
-                            <select id="service_id" name="service_id" class="w-full p-3 border border-section-bor rounded-md" required>
-                                <option value="">-- Pilih Service --</option>
-                                @foreach($services as $service)
-                                    <option value="{{ $service->id }}" {{ (old('service_id') == $service->id) ? 'selected' : '' }}>{{ $service->name }}</option>
-                                @endforeach
+                            <select name="service_id" id="service_id" class="w-full p-3 border border-section-bor rounded-md" required>
+                                <option value="">-- Pilih Department dulu --</option>
                             </select>
                         </div>
 
@@ -149,4 +118,32 @@
 @include('layouts.footer')
 @endsection
 
-<script src="{{ asset('dist/js/app.js') }}"></script>
+@section('scripts')
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#department_id').on('change', function() {
+            const deptId = $(this).val();
+            $('#service_id').empty().append('<option>Loading...</option>');
+            if (deptId) {
+                $.ajax({
+                    url: `/get-services/${deptId}`,
+                    method: 'GET',
+                    success: function(data) {
+                        $('#service_id').empty().append('<option value="">-- Pilih Layanan --</option>');
+                        data.forEach(function(service) {
+                            $('#service_id').append(`<option value="${service.id}">${service.name}</option>`);
+                        });
+                    },
+                    error: function() {
+                        $('#service_id').empty().append('<option value="">-- Tidak dapat memuat layanan --</option>');
+                    }
+                });
+            } else {
+                $('#service_id').empty().append('<option value="">-- Pilih Department dulu --</option>');
+            }
+        });
+    });
+</script>
+@endsection

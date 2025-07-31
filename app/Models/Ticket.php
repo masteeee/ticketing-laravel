@@ -11,7 +11,7 @@ class Ticket extends Model
     protected $fillable = [
         'department_id',
         'contact_name',
-        'service_name',
+        'service_id',
         'email',
         'phone',
         'subject',
@@ -23,16 +23,20 @@ class Ticket extends Model
         'handled_by'
     ];
 
-    public function department()
+        public function department()
         {
             return $this->belongsTo(Department::class);
         }
-    public function conversations()
+        public function conversations()
         {
             return $this->hasMany(TicketConversation::class);
         }
         public function handler()
 {
-    return $this->belongsTo(User::class, 'handled_by');
+         return $this->belongsTo(User::class, 'handled_by');
 }
+        public function service()
+        {
+            return $this->belongsTo(Service::class);
+        }
 }

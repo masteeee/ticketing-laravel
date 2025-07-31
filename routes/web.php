@@ -41,7 +41,7 @@ Route::get('/articles/{article}', [ArticleController::class, 'show'])->name('pub
 Route::get('/ticket/view', [App\Http\Controllers\TicketController::class, 'viewForm'])->name('ticket.view.form');
 Route::get('/ticket/detail', [App\Http\Controllers\TicketController::class, 'publicDetail'])->name('ticket.public.detail');
 Route::post('/ticket/reply', [App\Http\Controllers\TicketController::class, 'publicReply'])->name('ticket.public.reply');
-
+Route::get('/get-services/{department_id}', [TicketController::class, 'getServices'])->name('get.services');
 
 
 // AUTH ROUTES (Breeze)
