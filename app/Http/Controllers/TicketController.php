@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Storage;
 use App\Notifications\TicketSubmitted;
 use App\Models\Article;
 use App\Notifications\TicketUserSubmitted;
+use App\Models\Service;
 
 
 class TicketController extends Controller
@@ -21,7 +22,7 @@ class TicketController extends Controller
         $departments = Department::all();
         $popularArticles = Article::orderBy('views', 'desc')->take(5)->get();
         $selectedDepartment = request('department');
-        $services = [];
+        $services = Service::all();
 
         return view('public.ticket.create', compact('departments', 'popularArticles', 'selectedDepartment','services'));
     }

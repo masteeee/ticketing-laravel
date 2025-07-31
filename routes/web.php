@@ -53,6 +53,7 @@ Route::middleware(['auth',])->prefix('admin')->name('admin.')->group(function ()
     Route::resource('departments', DepartmentController::class)->except(['show']);
     Route::get('/departments/refresh', [DepartmentController::class, 'refresh'])->name('departments.refresh');
     Route::resource('services', ServiceController::class);
+    Route::get('/admin/services/by-department/{departmentId}', [ServiceController::class, 'getByDepartment']);
     Route::get('/tickets', [AdminTicketController::class, 'index'])->name('tickets.index');
     Route::get('/tickets/{ticket}', [AdminTicketController::class, 'show'])->name('tickets.show');
     Route::post('/tickets/{id}/update-status', [AdminTicketController::class, 'updateStatus'])->name('tickets.updateStatus');

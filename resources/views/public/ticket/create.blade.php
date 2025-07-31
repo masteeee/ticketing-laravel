@@ -16,6 +16,7 @@
             });
         </script>
     @endif
+
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const form = document.querySelector('form[action="{{ route('ticket.public.store') }}"]');
@@ -30,6 +31,7 @@
         });
     </script>
 @endsection
+
 @section('content')
 <section class="bg-form-section py-5">
     <div class="departments-container container mx-auto px-4">
@@ -44,89 +46,101 @@
                     <h4 class="text-xl font-semibold my-10">Request Information</h4>
                     <form class="space-y-6" action="{{ route('ticket.public.store') }}" method="POST" enctype="multipart/form-data">
                         @csrf
-                        <!-- Pilih Department -->
-                        <div class="mb-3">
-                            <label for="department_id" class="form-label">Department</label>
-                            <select id="department_id" name="department_id" class="form-select" required>
+
+                        <!-- Department -->
+                        <div>
+                            <label class="block text-sm font-medium mb-2">Department</label>
+                            <select name="department_id" class="w-full p-3 border border-section-bor rounded-md" required>
                                 <option value="">-- Pilih Department --</option>
                                 @foreach($departments as $dept)
-                                    <option value="{{ $dept->id }}">{{ $dept->name }}</option>
+                                    <option value="{{ $dept->id }}" {{ (old('department_id') == $dept->id) ? 'selected' : '' }}>{{ $dept->name }}</option>
                                 @endforeach
                             </select>
                         </div>
+
+                        <!-- Contact Name -->
                         <div>
                             <label class="block text-sm font-medium mb-2">Contact Name <span class="text-red-keloola">*</span></label>
-                            <input name="contact_name" type="text" class="w-full p-2 border border-section-bor rounded-md" required />
+                            <input name="contact_name" type="text" class="w-full p-2 border border-section-bor rounded-md" value="{{ old('contact_name') }}" required />
                         </div>
-                        <!-- Pilih Service -->
-                        <div class="mb-3">
-                            <label for="service_id" class="form-label">Service</label>
-                            <select id="service_id" name="service_id" class="form-select" required>
+
+                        <!-- Service -->
+                        <div>
+                            <label class="block text-sm font-medium mb-2">Service</label>
+                            <select id="service_id" name="service_id" class="w-full p-3 border border-section-bor rounded-md" required>
                                 <option value="">-- Pilih Service --</option>
+                                @foreach($services as $service)
+                                    <option value="{{ $service->id }}" {{ (old('service_id') == $service->id) ? 'selected' : '' }}>{{ $service->name }}</option>
+                                @endforeach
                             </select>
                         </div>
+
+                        <!-- Email -->
                         <div>
                             <label class="block text-sm font-medium mb-2">Email</label>
-                            <input name="email" type="email" class="w-full p-2 border border-section-bor rounded-md" />
+                            <input name="email" type="email" class="w-full p-2 border border-section-bor rounded-md" value="{{ old('email') }}" />
                         </div>
+
+                        <!-- Phone -->
                         <div>
                             <label class="block text-sm font-medium mb-2">Phone</label>
-                            <input name="phone" type="text" class="w-full p-2 border border-section-bor rounded-md" />
+                            <input name="phone" type="text" class="w-full p-2 border border-section-bor rounded-md" value="{{ old('phone') }}" />
                         </div>
+
+                        <!-- Subject -->
                         <div>
                             <label class="block text-sm font-medium mb-2">Subject <span class="text-red-keloola">*</span></label>
-                            <input name="subject" type="text" class="w-full p-2 border border-section-bor rounded-md" required />
+                            <input name="subject" type="text" class="w-full p-2 border border-section-bor rounded-md" value="{{ old('subject') }}" required />
                         </div>
+
+                        <!-- Description -->
                         <div>
                             <label class="block text-sm font-medium mb-2">Description</label>
-                            <textarea name="description" class="w-full p-2 border border-section-bor rounded-md min-h-[200px]"></textarea>
+                            <textarea name="description" class="w-full p-2 border border-section-bor rounded-md min-h-[200px]">{{ old('description') }}</textarea>
                         </div>
-                        {{-- <div>
-                            <label class="block text-sm font-medium mb-2">Customer Primary Email</label>
-                            <input name="customer_email" type="email" class="w-full p-2 border border-section-bor rounded-md" />
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium mb-2">Inv ID</label>
-                            <input name="invoice_id" type="text" class="w-full p-2 border border-section-bor rounded-md" disabled />
-                        </div> --}}
+
+                        <!-- Attachment -->
                         <div>
                             <label class="block text-sm font-medium mb-2">Attach a file</label>
                             <input name="attachment" type="file" class="w-full p-2 border rounded-md" />
                             <small>(Up to 40 MB)</small>
                         </div>
+
+                        <!-- Submit -->
                         <div class="flex gap-4">
                             <button type="submit" id="submit-ticket-btn" class="bg-red-keloola text-white-primary px-6 py-2 flex items-center justify-center gap-2">
                                 <span id="submit-ticket-text">SUBMIT</span>
-                                <span id="submit-ticket-spinner" class="hidden animate-spin"><svg class="w-5 h-5" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path></svg></span>
+                                <span id="submit-ticket-spinner" class="hidden animate-spin">
+                                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24">
+                                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path>
+                                    </svg>
+                                </span>
                             </button>
                             <a href="/" class="bg-primary text-white-primary px-6 py-2">DISCARD</a>
                         </div>
                     </form>
                 </div>
             </div>
+
             <!-- Sidebar kanan -->
             <div class="lg:w-1/3">
-                <div class="lg:w-1/3">
-                    <div class="mt-3">
-                        <h2 class="text-xl font-semibold mb-4">Popular Articles</h2>
-                        <ul class="space-y-4">
-                            @forelse ($popularArticles as $article)
-                                <li>
-                                    <a href="{{ route('public.articles.show', $article->id) }}"
-                                       class="flex items-start gap-2 text-black-keloola hover:text-blue-primary">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mb-1 flex-shrink-0"
-                                             fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                  d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9.5a2.5 2.5 0 00-2.5-2.5H15" />
-                                        </svg>
-                                        {{ $article->title }}
-                                    </a>
-                                </li>
-                            @empty
-                                <li><span class="text-gray-500">Tidak ada artikel populer</span></li>
-                            @endforelse
-                        </ul>
-                    </div>
+                <div class="mt-3">
+                    <h2 class="text-xl font-semibold mb-4">Popular Articles</h2>
+                    <ul class="space-y-4">
+                        @forelse ($popularArticles as $article)
+                            <li>
+                                <a href="{{ route('public.articles.show', $article->id) }}" class="flex items-start gap-2 text-black-keloola hover:text-blue-primary">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mb-1 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9.5a2.5 2.5 0 00-2.5-2.5H15" />
+                                    </svg>
+                                    {{ $article->title }}
+                                </a>
+                            </li>
+                        @empty
+                            <li><span class="text-gray-500">Tidak ada artikel populer</span></li>
+                        @endforelse
+                    </ul>
                 </div>
             </div>
         </div>
@@ -134,4 +148,5 @@
 </section>
 @include('layouts.footer')
 @endsection
+
 <script src="{{ asset('dist/js/app.js') }}"></script>

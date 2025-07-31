@@ -54,4 +54,9 @@ class ServiceController extends Controller
         $service->delete();
         return redirect()->route('admin.services.index')->with('success', 'Service deleted successfully.');
     }
+    public function getByDepartment($departmentId)
+{
+    $services = \App\Models\Service::where('department_id', $departmentId)->get(['id', 'name']);
+    return response()->json($services);
+}
 }
