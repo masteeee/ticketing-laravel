@@ -3,7 +3,9 @@
 @section('content')
 <div class="container py-4" style="font-family: 'Segoe UI', sans-serif;">
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="fs-4 fw-semibold">Daftar Tiket</h2>
+        <div class="card-header bg-light text-Black fw-semibold rounded-top">
+            DAFTAR TIKET
+        </div>
         <a href="{{ url()->current() }}" class="btn btn-sm btn-primary" title="Refresh">
             <i class="fas fa-sync-alt"></i>
         </a>
