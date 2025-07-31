@@ -28,8 +28,8 @@ class DatabaseSeeder extends Seeder
         // Staff hanya beberapa
         $staffRole->permissions()->sync(
             Permission::whereIn('name', [
-                'manage_tickets',
-                'manage_articles'
+                'view tickets',
+                'reply tickets',
             ])->pluck('id')
         );
     
