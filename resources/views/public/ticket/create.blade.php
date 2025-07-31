@@ -44,11 +44,13 @@
                     <h4 class="text-xl font-semibold my-10">Request Information</h4>
                     <form class="space-y-6" action="{{ route('ticket.public.store') }}" method="POST" enctype="multipart/form-data">
                         @csrf
-                        <div>
-                            <label class="block text-sm font-medium mb-2">Department</label>
-                            <select name="department_id" class="w-full p-3 border border-section-bor rounded-md">
+                        <!-- Pilih Department -->
+                        <div class="mb-3">
+                            <label for="department_id" class="form-label">Department</label>
+                            <select id="department_id" name="department_id" class="form-select" required>
+                                <option value="">-- Pilih Department --</option>
                                 @foreach($departments as $dept)
-                                    <option value="{{ $dept->id }}" {{ (isset($selectedDepartment) && $selectedDepartment == $dept->id) ? 'selected' : '' }}>{{ $dept->name }}</option>
+                                    <option value="{{ $dept->id }}">{{ $dept->name }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -56,14 +58,11 @@
                             <label class="block text-sm font-medium mb-2">Contact Name <span class="text-red-keloola">*</span></label>
                             <input name="contact_name" type="text" class="w-full p-2 border border-section-bor rounded-md" required />
                         </div>
-                        <div>
-                            <label class="block text-sm font-medium mb-2">Keloola Service Name</label>
-                            <select name="service_name" class="w-full p-3 border border-section-bor rounded-md">
-                                <option value="">-None-</option>
-                                <option value="ACCOUNTS">ACCOUNTS</option>
-                                <option value="Accounting">Accounting</option>
-                                <option value="Absensi">Absensi</option>
-                                <option value="App Creator">App Creator</option>
+                        <!-- Pilih Service -->
+                        <div class="mb-3">
+                            <label for="service_id" class="form-label">Service</label>
+                            <select id="service_id" name="service_id" class="form-select" required>
+                                <option value="">-- Pilih Service --</option>
                             </select>
                         </div>
                         <div>

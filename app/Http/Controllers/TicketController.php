@@ -21,8 +21,9 @@ class TicketController extends Controller
         $departments = Department::all();
         $popularArticles = Article::orderBy('views', 'desc')->take(5)->get();
         $selectedDepartment = request('department');
+        $services = [];
 
-        return view('public.ticket.create', compact('departments', 'popularArticles', 'selectedDepartment'));
+        return view('public.ticket.create', compact('departments', 'popularArticles', 'selectedDepartment','services'));
     }
 
     // Proses simpan tiket baru

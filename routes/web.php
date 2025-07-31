@@ -12,6 +12,7 @@ use App\Http\Controllers\Admin\ArticleController;
 use App\Http\Controllers\KnowledgeBaseController;
 use App\Http\Controllers\Admin\AdminTicketController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\ServiceController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -33,7 +34,7 @@ Route::get('/ticket/success', function () {
     }
 
     return view('public.ticket.success', compact('invoice', 'email'));
-})->name('ticket.success');
+        })->name('ticket.success');
 Route::get('/articles/{article}', [ArticleController::class, 'show'])->name('public.articles.show');
 
 // PUBLIC TICKET VIEW
@@ -51,6 +52,7 @@ Route::middleware(['auth',])->prefix('admin')->name('admin.')->group(function ()
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
     Route::resource('departments', DepartmentController::class)->except(['show']);
     Route::get('/departments/refresh', [DepartmentController::class, 'refresh'])->name('departments.refresh');
+    Route::resource('services', ServiceController::class);
     Route::get('/tickets', [AdminTicketController::class, 'index'])->name('tickets.index');
     Route::get('/tickets/{ticket}', [AdminTicketController::class, 'show'])->name('tickets.show');
     Route::post('/tickets/{id}/update-status', [AdminTicketController::class, 'updateStatus'])->name('tickets.updateStatus');
@@ -71,7 +73,9 @@ Route::middleware(['auth',])->prefix('admin')->name('admin.')->group(function ()
         $roles = \App\Models\Role::all();
         dd($roles->toArray());
     });
-    
+    Route::get('/services/by-department/{id}', function ($id) {
+        return \App\Models\Service::where('department_id', $id)->get();
+    });
    
 });
 

@@ -58,6 +58,7 @@
             @if(canView('view users', $userPermissions) || canView('create users', $userPermissions) || canView('edit users', $userPermissions) || canView('delete users', $userPermissions))
             <a class="collapse-item" href="{{ route('admin.users.index') }}">Users</a>
             @endif
+            
         </div>
     </div>
 </li>
@@ -81,7 +82,15 @@
             </div>
         </div>
     </li>
-
+    {{-- Services --}}
+    @if(canView('view services', $userPermissions))
+    <li class="nav-item">
+        <a class="nav-link" href="{{ route('admin.services.index') }}">
+            <i class="fas fa-fw fa-concierge-bell"></i>
+            <span>Services</span>
+        </a>
+    </li>
+    @endif
     {{-- Ticketing --}}
     @if(canView('view tickets', $userPermissions))
     <li class="nav-item">

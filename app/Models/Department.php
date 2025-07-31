@@ -12,4 +12,8 @@ class Department extends Model
         'logo_url',
         'external_id',
     ]; 
+    public function services()
+{
+    return $this->hasMany(Service::class);
+}
 }
