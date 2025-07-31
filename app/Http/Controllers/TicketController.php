@@ -39,8 +39,9 @@ class TicketController extends Controller
         $tickets = $query->latest()->paginate(10);
         $departments = Department::all();
         $services = Service::all();
+        $users = User::all();
     
-        return view('admin.tickets.index', compact('tickets', 'departments', 'services'));
+        return view('admin.tickets.index', compact('tickets', 'departments', 'services','users'));
     }
     
 
@@ -165,4 +166,16 @@ class TicketController extends Controller
             $services = \App\Models\Service::where('department_id', $department_id)->get();
             return response()->json($services);
         }
+        public function assignHandler(Request $request, Ticket $ticket)
+{
+    $request->validate([
+        'handler_id' => 'nullable|exists:users,id',
+    ]);
+
+    $ticket->handler_id = $request->handler_id;
+    $ticket->save();
+
+    return redirect()->back()->with('success', 'Tiket berhasil di-assign.');
+}
+
 }

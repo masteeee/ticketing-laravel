@@ -58,6 +58,7 @@ Route::middleware(['auth',])->prefix('admin')->name('admin.')->group(function ()
     Route::get('/tickets/{ticket}', [AdminTicketController::class, 'show'])->name('tickets.show');
     Route::post('/tickets/{id}/update-status', [AdminTicketController::class, 'updateStatus'])->name('tickets.updateStatus');
     Route::post('/tickets/{ticket}/reply', [AdminTicketController::class, 'reply'])->name('tickets.reply');
+    Route::post('/admin/tickets/{ticket}/assign', [AdminTicketController::class, 'assign'])->name('tickets.assign');
     Route::resource('categories', CategoryController::class);
     Route::resource('articles', ArticleController::class);
     Route::resource('roles', \App\Http\Controllers\Admin\RoleController::class);

@@ -13,7 +13,6 @@
 
     <style>
         body {
-            background: linear-gradient(to right, #ffffff, #e6e6e6);
             min-height: 100vh;
         }
     </style>

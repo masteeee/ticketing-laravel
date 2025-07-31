@@ -9,6 +9,7 @@ use App\Models\Service;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Notifications\TicketUserReplied;
+use App\Models\User;
 
 class AdminTicketController extends Controller
 {
@@ -17,8 +18,10 @@ class AdminTicketController extends Controller
         $departments = Department::all();
         $services = Service::all();
 
-        $query = Ticket::with(['department', 'service', 'handler']);
-
+        $query = Ticket::with(['department', 'service', 'handler',]);
+        $users = User::whereHas('role', function ($query) {
+            $query->where('name', 'staff');
+        })->get();
         // Filter by department
         if ($request->filled('department_id')) {
             $query->where('department_id', $request->department_id);
@@ -41,7 +44,7 @@ class AdminTicketController extends Controller
 
         $tickets = $query->latest()->paginate(10);
 
-        return view('admin.tickets.index', compact('tickets', 'departments', 'services'));
+        return view('admin.tickets.index', compact('tickets', 'departments', 'services','users'));
     }
 
     public function updateStatus(Request $request, $id)
@@ -63,13 +66,14 @@ class AdminTicketController extends Controller
         $ticket = Ticket::with('department')->findOrFail($id);
         $conversations = []; // Placeholder
 
-        return view('admin.tickets.show', compact('ticket', 'conversations'));
+        return view('admin.tickets.show', compact('ticket', 'conversations',));
     }
 
     public function reply(Request $request, Ticket $ticket)
     {
         $request->validate([
             'message' => 'required|string',
+            'assigned_to' => 'nullable|exists:users,id',
         ]);
 
         $ticket->conversations()->create([
@@ -83,4 +87,13 @@ class AdminTicketController extends Controller
 
         return back()->with('success', 'Balasan berhasil dikirim.');
     }
+    public function assign(Request $request, Ticket $ticket)
+{
+    $ticket->assigned_to = $request->assigned_to;
+    $ticket->save();
+
+    return back()->with('success', 'Ticket assigned successfully.');
+}
+
+    
 }

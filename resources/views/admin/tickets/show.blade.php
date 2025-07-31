@@ -17,10 +17,9 @@
             <p><strong>Nama Kontak:</strong> {{ $ticket->contact_name }}</p>
             <p><strong>Email:</strong> {{ $ticket->email }}</p>
             <p><strong>Telepon:</strong> {{ $ticket->phone }}</p>
-            <p><strong>Layanan:</strong> {{ $ticket->service_name }}</p>
+            <p><strong>Layanan:</strong> {{ $ticket->service->name ?? '-' }}</p>
             <p><strong>Subjek:</strong> {{ $ticket->subject }}</p>
             <p><strong>Deskripsi:</strong> {{ $ticket->description }}</p>
-            <p><strong>Customer Email:</strong> {{ $ticket->customer_email }}</p>
             <p><strong>Inv ID:</strong> {{ $ticket->invoice_id }}</p>
             @if($ticket->attachment)
                 <p><strong>Lampiran:</strong> <a href="{{ Storage::url($ticket->attachment) }}" target="_blank">Download</a></p>
@@ -54,11 +53,21 @@
                 <div class="mb-2">
                     <textarea name="message" rows="3" class="form-control" placeholder="Tulis balasan..."></textarea>
                 </div>
+                <div class="mb-2">
+                    <label for="status"><strong>Status Tiket</strong></label>
+                    <select name="status" id="status" class="form-control">
+                        <option value="dalam_pengerjaan">Dalam Pengerjaan</option>
+                        <option value="selesai">Selesai</option>
+                    </select>
+                </div>
                 <button type="submit" id="admin-reply-btn" class="btn btn-primary flex items-center gap-2">
                     <span id="admin-reply-text">Kirim</span>
-                    <span id="admin-reply-spinner" class="hidden"><span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span></span>
+                    <span id="admin-reply-spinner" class="hidden">
+                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                    </span>
                 </button>
             </form>
+            
         </div>
     </div>
     
