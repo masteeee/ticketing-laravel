@@ -20,14 +20,11 @@
 </head>
 <body>
     <div class="container d-flex align-items-center justify-content-center" style="min-height: 100vh;">
-        <div class="card shadow-lg p-4 w-100" style="max-width: 420px;">
-          <div class="text-center mb-4">
+        <div class="w-100 text-center" style="max-width: 420px;">
+            <div class="flex justify-center mb-3">
             <img src="{{ asset('assets/keloola-logo.png') }}" alt="Keloola Logo" class="mb-3" style="height: 70px; width: auto;">
-            
-            <p class="text-muted">Silakan masuk untuk melanjutkan</p>
         </div>
-
-
+        <p class="text-muted mb-4">Silakan Masuk Untuk Melanjutkan</p>
             @yield('content')
         </div>
     </div>

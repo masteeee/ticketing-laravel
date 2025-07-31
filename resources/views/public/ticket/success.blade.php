@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="min-h-screen flex items-center justify-center bg-gray-50 py-16 px-4">
-    <div class="max-w-lg w-full bg-white shadow-xl rounded-xl p-8 text-center animate__animated animate__fadeInDown">
+    <div class="max-w-lg w-full text-center animate__animated animate__fadeInDown">
         
         {{-- ICON SUKSES --}}
         <div class="flex justify-center mb-4">
