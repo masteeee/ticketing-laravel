@@ -5,6 +5,53 @@
     .hidden {
         display: none;
     }
+    .chat-container {
+        display: flex;
+        flex-direction: column;
+        gap: 16px; /* spasi antar bubble */
+        padding: 10px;
+    }
+
+    .chat-item {
+        max-width: 100%;
+        padding: 12px 16px;
+        border-radius: 15px;
+        font-size: 14px;
+        line-height: 1.5;
+        display: inline-block;
+        word-wrap: break-word;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+
+    .chat-left {
+        background-color: #f1f1f1;
+        align-self: flex-start;
+        border-bottom-left-radius: 0;
+    }
+
+    .chat-right {
+        background-color: #d4f8cb;
+        align-self: flex-end;
+        border-bottom-right-radius: 0;
+        text-align: right;
+    }
+
+    .chat-meta {
+        font-size: 0.75rem;
+        color: #666;
+        margin-top: 5px;
+    }
+
+    .chat-bubble-wrap {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .chat-name {
+        font-weight: 600;
+        margin-bottom: 4px;
+        color: #333;
+    }
 </style>
 <div class="container py-4">
     <h2>Detail Tiket</h2>
@@ -17,7 +64,7 @@
             <p><strong>Nama Kontak:</strong> {{ $ticket->contact_name }}</p>
             <p><strong>Email:</strong> {{ $ticket->email }}</p>
             <p><strong>Telepon:</strong> {{ $ticket->phone }}</p>
-            <p><strong>Layanan:</strong> {{ $ticket->service->name ?? '-' }}</p>
+            <p><strong>Layanan:</strong> <td>{{ $ticket->service->name ?? '-' }}</p>
             <p><strong>Subjek:</strong> {{ $ticket->subject }}</p>
             <p><strong>Deskripsi:</strong> {{ $ticket->description }}</p>
             <p><strong>Inv ID:</strong> {{ $ticket->invoice_id }}</p>
@@ -31,41 +78,52 @@
         <div class="card-header">Percakapan</div>
         <div class="card-body">
             @if($ticket->conversations && $ticket->conversations->count())
+            <div class="chat-container mt-3">
                 @foreach($ticket->conversations as $conv)
-                    <div class="mb-2">
-                        <strong>
-                            @if($conv->user)
-                                {{ $conv->user->name }}
-                            @else
-                                {{ $ticket->email }}
-                            @endif
-                        </strong>
-                        <small class="text-muted">({{ $conv->created_at->diffForHumans() }})</small>
-                        <p>{{ $conv->message }}</p>
+                    @php
+                        $isAdmin = $conv->user && $conv->user->id === auth()->id();
+                        $bubbleClass = $isAdmin ? 'chat-right' : 'chat-left';
+                        $senderName = $conv->user->name ?? $ticket->email;
+                    @endphp
+            
+                    <div class="chat-bubble-wrap {{ $isAdmin ? 'align-self-end text-end' : 'align-self-start text-start' }}">
+                        <div class="chat-item {{ $bubbleClass }}">
+                            <div class="chat-name">{{ $senderName }}</div>
+                            <div>{{ $conv->message }}</div>
+                            <div class="chat-meta">{{ $conv->created_at->diffForHumans() }}</div>
+                        </div>
                     </div>
                 @endforeach
+            </div>
             @else
                 <p class="text-muted">Belum ada percakapan.</p>
             @endif
     
-            <form method="POST" action="{{ route('admin.tickets.reply', $ticket->id) }}">
+            <form method="POST" action="{{ route('admin.tickets.reply', $ticket->id) }}" id="replyForm">
                 @csrf
                 <div class="mb-2">
-                    <textarea name="message" rows="3" class="form-control" placeholder="Tulis balasan..."></textarea>
+                    <textarea name="message" rows="3" class="form-control" placeholder="Tulis balasan..." required></textarea>
                 </div>
-                <div class="mb-2">
-                    <label for="status"><strong>Status Tiket</strong></label>
-                    <select name="status" id="status" class="form-control">
-                        <option value="dalam_pengerjaan">Dalam Pengerjaan</option>
-                        <option value="selesai">Selesai</option>
-                    </select>
+            
+                <input type="hidden" name="status" id="statusInput">
+            
+                <!-- Tombol dropdown status -->
+                <div class="d-flex justify-content-end">
+                    <div class="dropdown">
+                        <button class="btn btn-danger dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                            Kirim
+                        </button>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton">
+                        <li><a class="dropdown-item" href="#" onclick="event.preventDefault(); submitWithStatus('Dalam pengerjaan')">Dalam Pengerjaan</a></li>
+                        <li><a class="dropdown-item" href="#" onclick="event.preventDefault(); submitWithStatus('Solved')">Selesai</a></li>
+                    </ul>
                 </div>
-                <button type="submit" id="admin-reply-btn" class="btn btn-primary flex items-center gap-2">
-                    <span id="admin-reply-text">Kirim</span>
-                    <span id="admin-reply-spinner" class="hidden">
-                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                    </span>
-                </button>
+                
+                
+            
+                <div class="mt-2 d-none" id="submitLoading">
+                    <span class="spinner-border spinner-border-sm text-primary" role="status"></span> Mengirim...
+                </div>
             </form>
             
         </div>
@@ -75,16 +133,34 @@
 
 @section('scripts')
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    const form = document.querySelector('form[action*="tickets.reply"]');
-    if(form) {
-        form.addEventListener('submit', function() {
-            const btn = document.getElementById('admin-reply-btn');
-            btn.disabled = true;
-            document.getElementById('admin-reply-text').classList.add('d-none');
-            document.getElementById('admin-reply-spinner').classList.remove('hidden');
-        });
+    // ✅ Fungsi ini harus DI LUAR DOMContentLoaded supaya bisa diakses global
+    function submitWithStatus(status) {
+        const form = document.getElementById('replyForm');
+        const statusInput = document.getElementById('statusInput');
+
+        if (form && statusInput) {
+            statusInput.value = status;
+
+            // Tampilkan animasi loading kalau ada
+            const loading = document.getElementById('submitLoading');
+            if (loading) loading.classList.remove('d-none');
+
+            form.submit();
+        }
     }
-});
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.getElementById('replyForm');
+        if (form) {
+            form.addEventListener('submit', function() {
+                const btn = document.getElementById('admin-reply-btn');
+                const text = document.getElementById('admin-reply-text');
+                const spinner = document.getElementById('admin-reply-spinner');
+                if (btn) btn.disabled = true;
+                if (text) text.classList.add('d-none');
+                if (spinner) spinner.classList.remove('hidden');
+            });
+        }
+    });
 </script>
 @endsection

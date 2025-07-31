@@ -73,27 +73,43 @@ class AdminTicketController extends Controller
     {
         $request->validate([
             'message' => 'required|string',
+            'status' => 'nullable|in:Dalam Antrean,Dalam pengerjaan,Solved', 
             'assigned_to' => 'nullable|exists:users,id',
         ]);
-
+    
+        // Tambah percakapan
         $ticket->conversations()->create([
             'user_id' => auth()->id(),
             'message' => $request->message,
         ]);
+    
+    // Update status jika ada
+    if ($request->filled('status')) {
+        $ticket->status = $request->status;
 
+        // Assign handler jika belum ditangani
+        if ($ticket->handled_by === null && auth()->check()) {
+            $ticket->handled_by = auth()->id();
+        }
+
+        $ticket->save();
+    }
+    
+        // Kirim notifikasi ke user (jika ada email)
         if ($ticket->email) {
             \Notification::route('mail', $ticket->email)->notify(new TicketUserReplied($ticket, $request->message));
         }
-
-        return back()->with('success', 'Balasan berhasil dikirim.');
+    
+        return back()->with('success', 'Balasan berhasil dikirim dan status diperbarui.');
     }
+    
     public function assign(Request $request, Ticket $ticket)
-{
-    $ticket->assigned_to = $request->assigned_to;
-    $ticket->save();
+    {
+        $ticket->assigned_to = $request->assigned_to;
+        $ticket->save();
 
-    return back()->with('success', 'Ticket assigned successfully.');
-}
+        return back()->with('success', 'Ticket assigned successfully.');
+    }
 
     
 }
