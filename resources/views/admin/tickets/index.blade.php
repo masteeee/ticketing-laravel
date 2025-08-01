@@ -65,15 +65,15 @@
                     </div>
                 </div>
 
-                <div class="row gy-3 gx-2 align-items-end">
-                    <div class="col-md-3">
+                <div class="row gy-3 gx-2 justify-content-end align-items-end">
+                    <!-- <div class="col-md-3">
                         <label for="start_date" class="form-label fs-6">Dari Tanggal</label>
                         <input type="date" name="start_date" id="start_date" class="form-control" value="{{ request('start_date') }}">
                     </div>
                     <div class="col-md-3">
                         <label for="end_date" class="form-label fs-6">Sampai Tanggal</label>
                         <input type="date" name="end_date" id="end_date" class="form-control" value="{{ request('end_date') }}">
-                    </div>
+                    </div> -->
                     <div class="col-md-3 d-flex gap-2">
                         <button type="submit" class="btn btn-danger flex-fill">
                             <i class="fas fa-filter me-1"></i> Terapkan
