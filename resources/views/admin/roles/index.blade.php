@@ -14,7 +14,7 @@
     <div class="card shadow-sm rounded bg-white">
         <div class="card-body p-0">
             <div class="table-responsive">
-                <table class="table table-bordered table-hover mb-0">
+                <table class="table table-bordered mb-0">
                     <thead class="thead-light">
                         <tr>
                             <th>Role</th>
@@ -28,7 +28,7 @@
                             <td class="align-middle">{{ $role->name }}</td>
                             <td class="align-middle">
                                 @foreach($role->permissions as $perm)
-                                    <span class="badge bg-info text-dark me-1 mb-1">{{ $perm->name }}</span>
+                                    <span class="badge bg-danger text-light me-1 mb-1">{{ $perm->name }}</span>
                                 @endforeach
                             </td>
                             <td class="align-middle text-nowrap">

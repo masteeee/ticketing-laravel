@@ -23,7 +23,7 @@
                             <select name="department_id" id="department_id" class="w-full p-3 border border-section-bor rounded-md" required>
                                 <option value="">-- Pilih Department --</option>
                                 @foreach($departments as $dept)
-                                    <option value="{{ $dept->id }}" {{ old('department_id') == $dept->id ? 'selected' : '' }}>
+                                    <option value="{{ $dept->id }}" {{ (old('department_id') == $dept->id || $selectedDepartment == $dept->id) ? 'selected' : '' }}>
                                         {{ $dept->name }}
                                     </option>
                                 @endforeach
@@ -40,7 +40,7 @@
                         <div>
                             <label class="block text-sm font-medium mb-2">Service</label>
                             <select name="service_id" id="service_id" class="w-full p-3 border border-section-bor rounded-md" required>
-                                <option value="">-- Pilih Department dulu --</option>
+                                <option value="">-- Silahkan Pilih Department terlebih dahulu --</option>
                             </select>
                         </div>
 
@@ -123,8 +123,8 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     $(document).ready(function() {
-        $('#department_id').on('change', function() {
-            const deptId = $(this).val();
+        // Function to load services for a department
+        function loadServices(deptId) {
             $('#service_id').empty().append('<option>Loading...</option>');
             if (deptId) {
                 $.ajax({
@@ -143,7 +143,19 @@
             } else {
                 $('#service_id').empty().append('<option value="">-- Pilih Department dulu --</option>');
             }
+        }
+
+        // Handle department change
+        $('#department_id').on('change', function() {
+            const deptId = $(this).val();
+            loadServices(deptId);
         });
+
+        // Auto-load services if department is pre-selected
+        const selectedDeptId = $('#department_id').val();
+        if (selectedDeptId) {
+            loadServices(selectedDeptId);
+        }
     });
 </script>
 @endsection
