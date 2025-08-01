@@ -65,15 +65,15 @@
                     </div>
                 </div>
 
-                <div class="row gy-3 gx-2 justify-content-end align-items-end">
-                    <!-- <div class="col-md-3">
+                <div class="row gy-3 gx-2 align-items-end">
+                    <div class="col-md-3">
                         <label for="start_date" class="form-label fs-6">Dari Tanggal</label>
                         <input type="date" name="start_date" id="start_date" class="form-control" value="{{ request('start_date') }}">
                     </div>
                     <div class="col-md-3">
                         <label for="end_date" class="form-label fs-6">Sampai Tanggal</label>
                         <input type="date" name="end_date" id="end_date" class="form-control" value="{{ request('end_date') }}">
-                    </div> -->
+                    </div>
                     <div class="col-md-3 d-flex gap-2">
                         <button type="submit" class="btn btn-danger flex-fill">
                             <i class="fas fa-filter me-1"></i> Terapkan
@@ -208,6 +208,40 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     });
+
+    // Date range validation
+    const startDateInput = document.getElementById('start_date');
+    const endDateInput = document.getElementById('end_date');
+    const filterForm = document.querySelector('form[method="GET"]');
+
+    if (startDateInput && endDateInput) {
+        startDateInput.addEventListener('change', function() {
+            if (endDateInput.value && this.value > endDateInput.value) {
+                alert('Tanggal mulai tidak boleh lebih besar dari tanggal akhir!');
+                this.value = '';
+            }
+        });
+
+        endDateInput.addEventListener('change', function() {
+            if (startDateInput.value && this.value < startDateInput.value) {
+                alert('Tanggal akhir tidak boleh lebih kecil dari tanggal mulai!');
+                this.value = '';
+            }
+        });
+    }
+
+    // Form validation before submit
+    if (filterForm) {
+        filterForm.addEventListener('submit', function(e) {
+            if (startDateInput && endDateInput && startDateInput.value && endDateInput.value) {
+                if (startDateInput.value > endDateInput.value) {
+                    e.preventDefault();
+                    alert('Tanggal mulai tidak boleh lebih besar dari tanggal akhir!');
+                    return false;
+                }
+            }
+        });
+    }
 });
 </script>
 

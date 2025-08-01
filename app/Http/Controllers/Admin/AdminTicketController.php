@@ -57,7 +57,17 @@ class AdminTicketController extends Controller
 
         // Filter by date range
         if ($request->filled('start_date') && $request->filled('end_date')) {
-            $query->whereBetween('created_at', [$request->start_date, $request->end_date]);
+            $startDate = $request->start_date . ' 00:00:00';
+            $endDate = $request->end_date . ' 23:59:59';
+            $query->whereBetween('created_at', [$startDate, $endDate]);
+        } elseif ($request->filled('start_date')) {
+            // Only start date provided
+            $startDate = $request->start_date . ' 00:00:00';
+            $query->where('created_at', '>=', $startDate);
+        } elseif ($request->filled('end_date')) {
+            // Only end date provided
+            $endDate = $request->end_date . ' 23:59:59';
+            $query->where('created_at', '<=', $endDate);
         }
 
         $tickets = $query->latest()->paginate(10);
