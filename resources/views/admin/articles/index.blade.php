@@ -12,7 +12,7 @@
     @endif
 
     <div class="card shadow-sm rounded overflow-hidden">
-        <div class="table-responsive">
+        <div class="table-responsive table-bordered">
             <table class="table table-bordered table-hover align-middle mb-0">
                 <thead class="table-light">
                     <tr>

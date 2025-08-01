@@ -14,7 +14,7 @@
         </div>
     </div>
 
-    <div class="table-responsive">
+    <div class="table-responsive table-bordered">
         <table class="table table-bordered table-hover align-middle text-sm">
             <thead class="table-light">
                 <tr>
