@@ -19,10 +19,10 @@
         <div class="card-body">
             <h4 class="text-danger fw-bold mb-4 fs-5">Filter Tiket</h4>
             <form method="GET" action="{{ route('admin.tickets.index') }}">
-                <div class="row gy-3 gx-2 mb-3">
+                <div class="row gy-1 gx-2 mb-3">
                     <div class="col-md-3">
                         <label for="department_id" class="form-label fs-6">Departemen</label>
-                        <select name="department_id" id="department_id" class="form-select border">
+                        <select name="department_id" id="department_id" class="form-select form-control border">
                             <option value="">-- Semua --</option>
                             @foreach($departments as $dept)
                                 <option value="{{ $dept->id }}" {{ request('department_id') == $dept->id ? 'selected' : '' }}>
@@ -33,7 +33,7 @@
                     </div>
                     <div class="col-md-3">
                         <label for="service_id" class="form-label fs-6">Layanan</label>
-                        <select name="service_id" id="service_id" class="form-select border">
+                        <select name="service_id" id="service_id" class="form-select form-control border">
                             <option value="">-- Semua --</option>
                             @foreach($services as $service)
                                 <option value="{{ $service->id }}" {{ request('service_id') == $service->id ? 'selected' : '' }}>
@@ -44,11 +44,23 @@
                     </div>
                     <div class="col-md-3">
                         <label for="status" class="form-label fs-6">Status</label>
-                        <select name="status" id="status" class="form-select border">
+                        <select name="status" id="status" class="form-select form-control border">
                             <option value="">-- Semua --</option>
                             <option value="open" {{ request('status') == 'open' ? 'selected' : '' }}>Open</option>
                             <option value="in_progress" {{ request('status') == 'in_progress' ? 'selected' : '' }}>Dalam Pengerjaan</option>
                             <option value="solved" {{ request('status') == 'solved' ? 'selected' : '' }}>Selesai</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label for="assigned_to" class="form-label fs-6">Assigned To</label>
+                        <select name="assigned_to" id="assigned_to" class="form-select form-control border">
+                            <option value="">-- Semua --</option>
+                            <option value="unassigned" {{ request('assigned_to') == 'unassigned' ? 'selected' : '' }}>Belum Di-assign</option>
+                            @foreach($users as $user)
+                                <option value="{{ $user->id }}" {{ request('assigned_to') == $user->id ? 'selected' : '' }}>
+                                    {{ $user->name }}
+                                </option>
+                            @endforeach
                         </select>
                     </div>
                 </div>

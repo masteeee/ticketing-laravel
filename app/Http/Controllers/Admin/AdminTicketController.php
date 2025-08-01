@@ -17,11 +17,20 @@ class AdminTicketController extends Controller
     {
         $departments = Department::all();
         $services = Service::all();
+        $currentUser = Auth::user();
 
         $query = Ticket::with(['department', 'service', 'handler',]);
-        $users = User::whereHas('role', function ($query) {
-            $query->where('name', 'staff');
-        })->get();
+        
+        // Role-based access control
+        if ($currentUser && $currentUser->role && $currentUser->role->name === 'admin') {
+            // Admin can see all tickets
+            $users = User::all();
+        } else {
+            // Staff can only see tickets assigned to them
+            $query->where('assigned_to', $currentUser->id);
+            $users = User::where('id', $currentUser->id)->get();
+        }
+
         // Filter by department
         if ($request->filled('department_id')) {
             $query->where('department_id', $request->department_id);
@@ -35,6 +44,15 @@ class AdminTicketController extends Controller
         // Filter by status
         if ($request->filled('status')) {
             $query->where('status', $request->status);
+        }
+
+        // Filter by assigned_to (only for admin)
+        if ($currentUser && $currentUser->role && $currentUser->role->name === 'admin' && $request->filled('assigned_to')) {
+            if ($request->assigned_to === 'unassigned') {
+                $query->whereNull('assigned_to');
+            } else {
+                $query->where('assigned_to', $request->assigned_to);
+            }
         }
 
         // Filter by date range
