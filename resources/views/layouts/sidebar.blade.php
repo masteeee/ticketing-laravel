@@ -27,12 +27,12 @@
     {{-- Departments --}}
     @if(canView('view departments', $userPermissions) || canView('view services', $userPermissions))
     <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#departmentSub" aria-expanded="false" aria-controls="rolePermissionSub">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#departmentSub" aria-expanded="false" aria-controls="departmentSub">
             <i class="fas fa-fw fa-user-shield"></i>
             <span>Departments</span>
         </a>
         <div id="departmentSub" class="collapse">
-            <div class="bg-white py-2 collapse-inner rounded">
+            <div class="py-2 collapse-inner rounded">
                 @if(canView('view departments', $userPermissions))
                 <a class="collapse-item" href="{{ route('admin.departments.index') }}">All Departments</a>
                 @endif
@@ -115,6 +115,29 @@
 <script src="{{ asset('vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
 <script src="{{ asset('js/sb-admin-2.min.js') }}"></script>
 
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Ensure collapse functionality works properly
+    const collapseElements = document.querySelectorAll('.collapse');
+    
+    collapseElements.forEach(function(element) {
+        // Add event listeners for collapse events
+        element.addEventListener('show.bs.collapse', function() {
+            this.style.display = 'block';
+            this.classList.add('show');
+        });
+        
+        element.addEventListener('hide.bs.collapse', function() {
+            this.classList.remove('show');
+        });
+        
+        element.addEventListener('hidden.bs.collapse', function() {
+            this.style.display = 'none';
+        });
+    });
+});
+</script>
+
 {{-- Tambahkan Style Logo --}}
 <style>
     .keloola-logo {
@@ -126,28 +149,41 @@
         height: 15px;
     }
 
+    .collapse {
+        display: none;
+        transition: all 0.3s ease;
+    }
+    .collapse.show {
+        display: block !important;
+        visibility: visible !important;
+    }
+    .collapse:not(.show) {
+        display: none !important;
+        visibility: hidden !important;
+    }
+
     .collapse-inner {
-        background-color: #fff !important;
+        background-color: rgba(255, 255, 255, 0.1) !important;
         border-radius: 0.35rem;
-        box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
+        box-shadow: 0 0.15rem 1.75rem 0 rgba(38, 38, 43, 0.15);
+        margin: 0 0.5rem;
+        padding: 0.5rem 0;
     }
 
     .collapse-item {
-        color: #3a3b45 !important;
+        color: rgb(255, 255, 255) !important;
         padding: 0.5rem 1rem;
         display: block;
         text-decoration: none;
         border-radius: 0.35rem;
         margin: 0 0.25rem;
+        transition: all 0.2s ease;
     }
 
     .collapse-item:hover {
-        background-color: #eaecf4;
-        color: #3a3b45 !important;
+        background-color: rgba(255, 255, 255, 0.2);
+        color: rgb(255, 255, 255) !important;
         text-decoration: none;
     }
 
-    .collapse.show {
-        display: block !important;
-    }
 </style>

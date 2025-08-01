@@ -30,7 +30,7 @@
     }
 
     .chat-right {
-        background-color: #d4f8cb;
+        background-color:rgb(248, 203, 203);
         align-self: flex-end;
         border-bottom-right-radius: 0;
         text-align: right;
@@ -126,15 +126,26 @@
                     </div>
                     @endif
 
-                    <div class="col-md-6">
+                    <div class="col-md-6 mt-2">
                         <label class="form-label fw-semibold">Status</label>
                         <div>
-                            <span class="badge px-3 py-2 fs-6 rounded
-                                {{ $ticket->status == 'Dalam Antrean' ? 'bg-warning text-dark' : '' }}
-                                {{ $ticket->status == 'Dalam Pengerjaan' ? 'bg-info text-dark' : '' }}
-                                {{ $ticket->status == 'Solved' ? 'bg-success' : '' }}">
-                                {{ $ticket->status ?? 'Dalam Antrean' }}
-                            </span>
+                            @php
+                                $statusStyle = '';
+                                switch($ticket->status) {
+                                    case 'Dalam Antrean':
+                                        $statusStyle = 'display: inline-block; padding: 4px 12px; font-size: 12px; font-weight: 500; border-radius: 20px; background-color: #fef3c7; color: #92400e; border: 1px solid #f59e0b;';
+                                        break;
+                                    case 'Dalam Pengerjaan':
+                                        $statusStyle = 'display: inline-block; padding: 4px 12px; font-size: 12px; font-weight: 500; border-radius: 20px; background-color: #dbeafe; color: #1e40af; border: 1px solid #3b82f6;';
+                                        break;
+                                    case 'Solved':
+                                        $statusStyle = 'display: inline-block; padding: 4px 12px; font-size: 12px; font-weight: 500; border-radius: 20px; background-color: #dcfce7; color: #166534; border: 1px solid #22c55e;';
+                                        break;
+                                    default:
+                                        $statusStyle = 'display: inline-block; padding: 4px 12px; font-size: 12px; font-weight: 500; border-radius: 20px; background-color: #fef3c7; color: #92400e; border: 1px solid #f59e0b;';
+                                }
+                            @endphp
+                            <span style="{{ $statusStyle }}">{{ $ticket->status ?? 'Dalam Antrean' }}</span>
                         </div>
                     </div>
 
@@ -210,8 +221,16 @@
     function submitWithStatus(status) {
         const form = document.getElementById('replyForm');
         const statusInput = document.getElementById('statusInput');
+        const messageTextarea = form.querySelector('textarea[name="message"]');
         const loading = document.getElementById('submitLoading');
 
+        // Validate message
+        if (!messageTextarea.value.trim()) {
+            alert('Pesan tidak boleh kosong!');
+            return;
+        }
+
+        // Set status and submit
         if (form && statusInput) {
             statusInput.value = status;
             if (loading) loading.classList.remove('d-none');
@@ -222,7 +241,16 @@
     document.addEventListener('DOMContentLoaded', function () {
         const form = document.getElementById('replyForm');
         if (form) {
-            form.addEventListener('submit', function () {
+            form.addEventListener('submit', function (e) {
+                const messageTextarea = form.querySelector('textarea[name="message"]');
+                
+                // Validate on form submit
+                if (!messageTextarea.value.trim()) {
+                    e.preventDefault();
+                    alert('Pesan tidak boleh kosong!');
+                    return;
+                }
+                
                 const spinner = document.getElementById('submitLoading');
                 if (spinner) spinner.classList.remove('d-none');
             });

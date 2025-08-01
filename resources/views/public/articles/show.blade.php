@@ -66,23 +66,29 @@
                         <h1 class="text-3xl font-bold text-black-keloola">{{ $article->title }}</h1>
                         <div class="flex gap-4">
                             {{-- PDF Download --}}
-                            <div class="cursor-pointer hover:text-blue-primary" title="Download as PDF">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                    stroke-width="1.5" stroke="currentColor" class="size-6">
-                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                        d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m.75 12 3 3m0 0 3-3m-3 3v-6m-1.5-9H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
-                                </svg>
-                            </div>
-                            {{-- Print --}}
-                            <div class="cursor-pointer hover:text-blue-primary" title="Print"
-                                 onclick="window.print()">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                    stroke-width="1.5" stroke="currentColor" class="size-6">
-                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                        d="M6.72 13.829c-.24.03-.48.062-.72.096m.72-.096a42.415 42.415 0 0 1 10.56 0m-10.56 0L6.34 18m10.94-4.171..." />
-                                </svg>
+                            <div class="flex space-x-2">
+                                <div class="cursor-pointer hover:text-blue-primary transition-colors duration-200" title="Download as PDF" onclick="downloadAsPDF()">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                        stroke-width="1.5" stroke="currentColor" class="size-6">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m.75 12 3 3m0 0 3-3m-3 3v-6m-1.5-9H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
+                                    </svg>
+                                </div>
+                                {{-- Print --}}     
+                                
+                                <div class="cursor-pointer hover:text-green-600 transition-colors duration-200" title="Print Article" onclick="printArticle()">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                        stroke-width="1.5" stroke="currentColor" class="size-6">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="M6.72 13.829c-.24.03-.48.062-.72.096m.72-.096a42.415 42.415 0 0 1 10.56 0m-10.56 0L6.34 18m10.94-4.171c.24.03.48.062.72.096m-.72-.096L17.66 18m0 0 .229 2.523a1.125 1.125 0 0 1-1.12 1.227H7.231c-.662 0-1.277-.457-1.336-1.107L6.34 18m11.318 0h1.091A2.25 2.25 0 0 0 21 15.75V9.456c0-1.081-.768-2.015-1.837-2.175a48.055 48.055 0 0 0-1.913-.247M6.34 18H5.25A2.25 2.25 0 0 1 3 15.75V9.456c0-1.081.768-2.015 1.837-2.175a48.041 48.041 0 0 1 1.913-.247m10.5 0a48.536 48.536 0 0 0-1.086-.211M6.34 18H6.34m11.318 0H6.34" />
+                                    </svg>
+                                </div>
                             </div>
                         </div>
+                    </div>
+                    {{-- Thumbnail --}}
+                    <div class="w-full h-auto">
+                        <img src="{{ asset('storage/' . $article->thumbnail) }}" alt="Thumbnail" class="w-full h-auto">
                     </div>
 
                     {{-- Konten Artikel --}}
@@ -122,7 +128,8 @@
                         @foreach($headings as $heading)
                             <li>
                                 <a href="#{{ $heading['id'] }}" 
-                                   class="flex items-start gap-2 text-black-keloola hover:text-blue-primary">
+                                   class="flex items-start gap-2 text-black-keloola hover:text-blue-primary transition-colors duration-200 cursor-pointer scroll-to-section"
+                                   data-target="{{ $heading['id'] }}">
                                     {{ $heading['text'] }}
                                 </a>
                             </li>
@@ -150,4 +157,200 @@
 </section>
 
 @include('layouts.footer')
+@tailwind
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script>
+function downloadAsPDF() {
+    // Get the article content and thumbnail
+    const articleContent = document.querySelector('.article-content');
+    const articleTitle = document.querySelector('h1').textContent;
+    const thumbnailImg = document.querySelector('img[src*="storage"]');
+    
+    if (!articleContent) {
+        alert('Article content not found!');
+        return;
+    }
+
+    // Get thumbnail URL
+    const thumbnailUrl = thumbnailImg ? thumbnailImg.src : null;
+    
+    // Create a new div for PDF content
+    const pdfContent = document.createElement('div');
+    pdfContent.innerHTML = `
+        <div style="padding: 20px; font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto;">
+            <h1 style="color: #dc2626; font-size: 24px; margin-bottom: 20px; border-bottom: 2px solid #dc2626; padding-bottom: 10px;">
+                ${articleTitle}
+            </h1>
+            ${thumbnailUrl ? `<div style="text-align: center; margin-bottom: 20px;">
+                <img src="${thumbnailUrl}" style="max-width: 100%; height: auto; max-height: 300px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);" alt="Article Thumbnail">
+            </div>` : ''}
+            <div style="line-height: 1.6; font-size: 14px;">
+                ${articleContent.innerHTML}
+            </div>
+            <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #e5e7eb; font-size: 12px; color: #6b7280;">
+                <p>Generated from Keloola Knowledge Base</p>
+                <p>Date: ${new Date().toLocaleDateString()}</p>
+            </div>
+        </div>
+    `;
+
+    // PDF options
+    const opt = {
+        margin: 1,
+        filename: `${articleTitle.replace(/[^a-zA-Z0-9]/g, '_')}.pdf`,
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2 },
+        jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
+    };
+
+    // Generate PDF
+    html2pdf().set(opt).from(pdfContent).save();
+}
+
+function printArticle() {
+    const articleContent = document.querySelector('.article-content');
+    const articleTitle = document.querySelector('h1').textContent;
+    const thumbnailImg = document.querySelector('img[src*="storage"]');
+    
+    if (!articleContent) {
+        alert('Article content not found!');
+        return;
+    }
+
+    const thumbnailUrl = thumbnailImg ? thumbnailImg.src : null;
+    
+    const printContent = `
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <title>${articleTitle}</title>
+            <style>
+                body { 
+                    font-family: Arial, sans-serif; 
+                    line-height: 1.6; 
+                    max-width: 800px; 
+                    margin: 0 auto; 
+                    padding: 20px;
+                }
+                h1 { 
+                    color: #dc2626; 
+                    font-size: 24px; 
+                    margin-bottom: 20px; 
+                    border-bottom: 2px solid #dc2626; 
+                    padding-bottom: 10px;
+                }
+                .thumbnail-container {
+                    text-align: center;
+                    margin-bottom: 20px;
+                }
+                .thumbnail-container img {
+                    max-width: 100%;
+                    height: auto;
+                    max-height: 300px;
+                    border-radius: 8px;
+                    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+                }
+                img { max-width: 100%; height: auto; }
+                .print-footer { 
+                    margin-top: 30px; 
+                    padding-top: 20px; 
+                    border-top: 1px solid #e5e7eb; 
+                    font-size: 12px; 
+                    color: #6b7280;
+                }
+                @media print {
+                    body { margin: 0; padding: 15px; }
+                    .thumbnail-container img {
+                        max-height: 200px;
+                    }
+                }
+            </style>
+        </head>
+        <body>
+            <h1>${articleTitle}</h1>
+            ${thumbnailUrl ? `<div class="thumbnail-container">
+                <img src="${thumbnailUrl}" alt="Article Thumbnail">
+            </div>` : ''}
+            <div>${articleContent.innerHTML}</div>
+            <div class="print-footer">
+                <p>Generated from Keloola Knowledge Base</p>
+                <p>Date: ${new Date().toLocaleDateString()}</p>
+            </div>
+        </body>
+        </html>
+    `;
+
+    // Open print window
+    const printWindow = window.open('', '_blank');
+    printWindow.document.write(printContent);
+    printWindow.document.close();
+    printWindow.focus();
+    
+    // Wait for content to load then print
+    printWindow.onload = function() {
+        printWindow.print();
+        printWindow.close();
+    };
+}
+
+// Smooth scroll functionality
+document.addEventListener('DOMContentLoaded', function() {
+    // Add click event listeners to all scroll-to-section links
+    const scrollLinks = document.querySelectorAll('.scroll-to-section');
+    
+    scrollLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            const targetId = this.getAttribute('data-target');
+            const targetElement = document.getElementById(targetId);
+            
+            if (targetElement) {
+                // Smooth scroll to target
+                targetElement.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+                
+                // Add highlight effect to target
+                targetElement.style.transition = 'background-color 0.3s ease';
+                targetElement.style.backgroundColor = '#fef3c7';
+                
+                // Remove highlight after 2 seconds
+                setTimeout(() => {
+                    targetElement.style.backgroundColor = '';
+                }, 2000);
+                
+                // Update URL hash without jumping
+                history.pushState(null, null, '#' + targetId);
+            } else {
+                console.log('Target element not found:', targetId);
+            }
+        });
+    });
+    
+    // Handle direct URL hash navigation
+    if (window.location.hash) {
+        const targetId = window.location.hash.substring(1);
+        const targetElement = document.getElementById(targetId);
+        
+        if (targetElement) {
+            setTimeout(() => {
+                targetElement.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+                
+                targetElement.style.transition = 'background-color 0.3s ease';
+                // targetElement.style.backgroundColor = '#fef3c7';
+                
+                setTimeout(() => {
+                    targetElement.style.backgroundColor = '';
+                }, 2000);
+            }, 100);
+        }
+    }
+});
+</script>
+
 @endsection

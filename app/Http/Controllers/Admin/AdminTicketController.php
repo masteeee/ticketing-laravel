@@ -73,7 +73,7 @@ class AdminTicketController extends Controller
     {
         $request->validate([
             'message' => 'required|string',
-            'status' => 'nullable|in:Dalam Antrean,Dalam pengerjaan,Solved', 
+            'status' => 'nullable|in:Dalam Antrean,Dalam Pengerjaan,Solved', 
             'assigned_to' => 'nullable|exists:users,id',
         ]);
     
@@ -83,17 +83,17 @@ class AdminTicketController extends Controller
             'message' => $request->message,
         ]);
     
-    // Update status jika ada
-    if ($request->filled('status')) {
-        $ticket->status = $request->status;
+        // Update status jika ada
+        if ($request->filled('status')) {
+            $ticket->status = $request->status;
 
-        // Assign handler jika belum ditangani
-        if ($ticket->handled_by === null && auth()->check()) {
-            $ticket->handled_by = auth()->id();
+            // Assign handler jika belum ditangani
+            if ($ticket->handled_by === null && auth()->check()) {
+                $ticket->handled_by = auth()->id();
+            }
+
+            $ticket->save();
         }
-
-        $ticket->save();
-    }
     
         // Kirim notifikasi ke user (jika ada email)
         if ($ticket->email) {

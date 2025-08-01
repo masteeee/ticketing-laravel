@@ -18,7 +18,7 @@
         <div class="table-responsive">
             <table class="table table-bordered mb-0">
                 <thead class="bg-light text-dark">
-                    <tr>
+                    <tr class="text-black">
                         <th class="whitespace-nowrap">Name</th>
                         <th class="whitespace-nowrap">Email</th>
                         <th class="whitespace-nowrap">Role</th>

@@ -13,14 +13,17 @@
                 <input type="text" name="title" class="form-control" required>
             </div>
 
-            <div class="mb-3">
-                <label for="category_id" class="form-label fw-semibold">Kategori</label>
-                <select name="category_id" class="form-select" required>
-                    <option value="">-- Pilih Kategori --</option>
+            <div class="mb-4">
+                <label for="category_id" class="block text-sm font-medium text-gray-700 mb-2">Kategori <span class="text-red-500">*</span></label>
+                <select name="category_id" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 bg-white shadow-sm hover:shadow-md" required>
+                    <option value="" class="text-gray-500">-- Pilih Kategori --</option>
                     @foreach ($categories as $cat)
-                        <option value="{{ $cat->id }}">{{ $cat->name }}</option>
+                        <option value="{{ $cat->id }}" class="text-gray-800">{{ $cat->name }}</option>
                     @endforeach
                 </select>
+                <div class="mt-1">
+                    <small class="text-gray-500 text-xs">Pilih kategori yang sesuai dengan artikel Anda</small>
+                </div>
             </div>
 
             <div class="mb-3">

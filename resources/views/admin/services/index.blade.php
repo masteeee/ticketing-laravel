@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 
 @section('content')
-<div class="bg-white p-4 rounded shadow">
+<div class="p-4 rounded">
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h1 class="text-3xl font-bold text-gray-800 mb-0">Services</h1>
         <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#addServiceModal">
@@ -15,7 +15,7 @@
 
     <table class="table w-full border border-gray-300">
         <thead class="bg-gray-100 border-b border-gray-300">
-            <tr>
+            <tr class="text-black">
                 <th class="px-4 py-2 border-r border-gray-300">Name</th>
                 <th class="px-4 py-2 border-r border-gray-300">Department</th>
                 <th class="px-2 py-2 text-start whitespace-nowrap w-1">Action</th>

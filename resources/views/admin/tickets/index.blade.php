@@ -78,7 +78,7 @@
     <div class="table-responsive table-bordered">
         <table class="table table-bordered align-middle text-center shadow-sm fs-6">
             <thead class="table-light">
-                <tr>
+                <tr class="text-black">
                     <th>No</th>
                     <th>Departemen</th>
                     <th>Nama Kontak</th>
@@ -103,28 +103,56 @@
                         <a href="{{ route('admin.tickets.show', $ticket->id) }}" class="btn btn-sm btn-primary">Lihat</a>
                     </td>
                     <td>
-                        <span class="badge px-3 py-2 
-                            {{ $ticket->status == 'Dalam Antrean' ? 'bg-warning text-dark' : '' }}
-                            {{ $ticket->status == 'Dalam Pengerjaan' ? 'bg-info text-dark' : '' }}
-                            {{ $ticket->status == 'Solved' ? 'bg-success' : '' }}">
-                            {{ $ticket->status ?? 'Dalam Antrean' }}
-                        </span>
+                    @php
+                        $statusStyle = '';
+                        switch($ticket->status) {
+                            case 'Dalam Antrean':
+                                $statusStyle = 'display: inline-block; padding: 4px 12px; font-size: 12px; font-weight: 500; border-radius: 20px; background-color: #fef3c7; color: #92400e; border: 1px solid #f59e0b;';
+                                break;
+                            case 'Dalam Pengerjaan':
+                                $statusStyle = 'display: inline-block; padding: 4px 12px; font-size: 12px; font-weight: 500; border-radius: 20px; background-color: #dbeafe; color: #1e40af; border: 1px solid #3b82f6;';
+                                break;
+                            case 'Solved':
+                                $statusStyle = 'display: inline-block; padding: 4px 12px; font-size: 12px; font-weight: 500; border-radius: 20px; background-color: #dcfce7; color: #166534; border: 1px solid #22c55e;';
+                                break;
+                            default:
+                                $statusStyle = 'display: inline-block; padding: 4px 12px; font-size: 12px; font-weight: 500; border-radius: 20px; background-color: #fef3c7; color: #92400e; border: 1px solid #f59e0b;';
+                        }
+                    @endphp
+                    <span style="{{ $statusStyle }}">{{ $ticket->status ?? 'Dalam Antrean' }}</span>
                     </td>
                     <td>
-                        <form action="{{ route('admin.tickets.assign', $ticket->id) }}" method="POST">
-                            @csrf
-                            <div class="input-group mb-2">
-                                <select name="assigned_to" class="form-select form-select-sm" required>
-                                    <option value="">-- Pilih Staff --</option>
-                                    @foreach ($users as $user)
-                                        <option value="{{ $user->id }}" {{ $ticket->assigned_to == $user->id ? 'selected' : '' }}>
-                                            {{ $user->name }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                                <button type="submit" class="btn btn-sm btn-danger">Assign</button>
+                        @php
+                            $user = Auth::user();
+                            $isAdmin = $user && $user->role && $user->role->name === 'admin';
+                        @endphp
+                        
+                        @if($isAdmin)
+                            <form action="{{ route('admin.tickets.assign', $ticket->id) }}" method="POST" class="auto-assign-form">
+                                @csrf
+                                <div class="input-group mb-2">
+                                    <select name="assigned_to" class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm auto-assign-select" data-ticket-id="{{ $ticket->id }}" required>
+                                        <option value="">-- Pilih Staff --</option>
+                                        @foreach ($users as $user)
+                                            <option value="{{ $user->id }}" {{ $ticket->assigned_to == $user->id ? 'selected' : '' }}>
+                                                {{ $user->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </form>
+                        @else
+                            <div class="p-2">
+                                @if($ticket->assigned_to)
+                                    @php
+                                        $assignedUser = \App\Models\User::find($ticket->assigned_to);
+                                    @endphp
+                                    <span class="text-sm">{{ $assignedUser ? $assignedUser->name : 'Tidak ada' }}</span>
+                                @else
+                                    <span class="text-sm text-muted">Belum di-assign</span>
+                                @endif
                             </div>
-                        </form>
+                        @endif
                     </td>
                 </tr>
                 @empty
@@ -140,4 +168,35 @@
         {{ $tickets->links() }}
     </div>
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Auto-assign functionality - only for admin users
+    const assignSelects = document.querySelectorAll('.auto-assign-select');
+    
+    assignSelects.forEach(select => {
+        select.addEventListener('change', function() {
+            const selectedValue = this.value;
+            const selectedText = this.options[this.selectedIndex].text;
+            const form = this.closest('.auto-assign-form');
+            
+            if (selectedValue) {
+                // Show confirmation dialog
+                if (confirm(`Apakah Anda yakin ingin mengassign tiket ini kepada ${selectedText}?`)) {
+                    // Store current value for potential reset
+                    this.setAttribute('data-previous-value', selectedValue);
+                    
+                    // Auto-submit the form
+                    form.submit();
+                } else {
+                    // Reset to previous value if user cancels
+                    this.value = this.getAttribute('data-previous-value') || '';
+                }
+            }
+        });
+    });
+});
+</script>
+
 @endsection

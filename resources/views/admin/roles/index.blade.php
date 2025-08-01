@@ -11,12 +11,13 @@
         <div class="alert alert-success">{{ session('success') }}</div>
     @endif
 
-    <div class="card shadow-sm rounded bg-white">
+    <div class="card rounded bg-white">
         <div class="card-body p-0">
             <div class="table-responsive table-bordered">
                 <table class="table table-bordered mb-0">
-                    <thead class="thead-light">
-                        <tr>
+                    <thead class="table-light table-bordered">
+                        <tr class="text-black">
+                            <th>No</th>
                             <th>Role</th>
                             <th>Permissions</th>
                             <th style="width: 150px;">Aksi</th>
@@ -25,6 +26,7 @@
                     <tbody>
                         @foreach ($roles as $role)
                         <tr>
+                            <td class="align-middle">{{ $loop->iteration }}</td>
                             <td class="align-middle">{{ $role->name }}</td>
                             <td class="align-middle">
                                 @foreach($role->permissions as $perm)

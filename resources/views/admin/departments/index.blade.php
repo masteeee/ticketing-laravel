@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 
 @section('content')
-<div class="container bg-white rounded shadow p-4">
+<div class="container rounded p-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h2 class="text-3xl font-bold text-gray-800 mb-0">Departments</h2>
         <div>
@@ -17,7 +17,7 @@
     <div class="table-responsive table-bordered">
         <table class="table table-bordered table-hover align-middle text-sm">
             <thead class="table-light">
-                <tr>
+                <tr class="text-black">
                     <th style="width: 5%;">No</th>
                     <th>Nama</th>
                     <th style="width: 120px;">Logo</th>

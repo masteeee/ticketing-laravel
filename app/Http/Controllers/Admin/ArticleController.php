@@ -11,9 +11,43 @@ use Illuminate\Support\Facades\Storage;
 
 class ArticleController extends Controller
 {
-    public function index() {
-        $articles = Article::with('category')->paginate(10);
-        return view('admin.articles.index', compact('articles'));
+    public function index(Request $request) {
+        $query = Article::with('category');
+        
+        // Search functionality
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('title', 'like', "%{$search}%")
+                  ->orWhere('content', 'like', "%{$search}%");
+            });
+        }
+        
+        // Filter by category
+        if ($request->filled('category_id')) {
+            $query->where('category_id', $request->category_id);
+        }
+        
+        // Sorting
+        switch ($request->get('sort', 'latest')) {
+            case 'oldest':
+                $query->orderBy('created_at', 'asc');
+                break;
+            case 'title_asc':
+                $query->orderBy('title', 'asc');
+                break;
+            case 'title_desc':
+                $query->orderBy('title', 'desc');
+                break;
+            default:
+                $query->orderBy('created_at', 'desc'); // latest
+                break;
+        }
+        
+        $articles = $query->paginate(10)->withQueryString();
+        $categories = Category::all();
+        
+        return view('admin.articles.index', compact('articles', 'categories'));
     }
 
     public function create() {
@@ -92,11 +126,22 @@ class ArticleController extends Controller
             ->limit(5)
             ->get();
     
-        // Ambil heading H2 / H3 dari konten untuk sidebar
+        // Ambil heading H2 / H3 dari konten untuk sidebar dan tambahkan ID
         preg_match_all('/<h[23].*?>(.*?)<\/h[23]>/', $article->content, $matches);
         $headings = collect($matches[1] ?? [])->map(function ($text, $i) {
             return ['id' => 'heading-'.$i, 'text' => strip_tags($text)];
         });
+        
+        // Tambahkan ID ke heading di konten
+        $content = $article->content;
+        $headingIndex = 0;
+        $content = preg_replace_callback('/<h([23])(.*?)>(.*?)<\/h[23]>/', function($matches) use (&$headingIndex) {
+            $headingIndex++;
+            return '<h' . $matches[1] . $matches[2] . ' id="heading-' . ($headingIndex - 1) . '">' . $matches[3] . '</h' . $matches[1] . '>';
+        }, $content);
+        
+        // Update article content dengan ID
+        $article->content = $content;
     
         return view('public.articles.show', compact('article', 'breadcrumbs', 'relatedArticles', 'headings'));
     }

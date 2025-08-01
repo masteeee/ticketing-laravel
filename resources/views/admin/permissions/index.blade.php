@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container py-4">
-    <div class="d-flex justify-between items-center mb-4">
+    <div class="d-flex justify-between items-center">
         <h1 class="text-xl font-bold">Daftar Permission</h1>
         <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#addPermissionModal">+ Tambah Permission</button>
     </div>
@@ -11,10 +11,10 @@
         <div class="alert alert-success">{{ session('success') }}</div>
     @endif
 
-    <div class="table-responsive table-bordered">
-        <table class="table table-bordered bg-white rounded shadow-sm">
-            <thead class="table-light">
-                <tr>
+    <div class="bg-white mt-4 table table-bordered">
+        <table class="table table-responsive  rounded">
+            <thead>
+                <tr class="text-black">
                     <th>Nama</th>
                     <th class="text-center" style="width: 160px;">Aksi</th>
                 </tr>
@@ -40,8 +40,10 @@
                 @endforeach
             </tbody>
         </table>
-        {{ $permissions->links() }}
     </div>
+</div>
+<div class="d-flex justify-content-center">
+    {{ $permissions->links() }}
 </div>
 
 <!-- Modal Tambah -->
