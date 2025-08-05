@@ -13,6 +13,7 @@ use App\Http\Controllers\KnowledgeBaseController;
 use App\Http\Controllers\Admin\AdminTicketController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ServiceController;
+use App\Http\Controllers\NotificationController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -46,6 +47,15 @@ Route::get('/get-services/{department_id}', [TicketController::class, 'getServic
 
 // AUTH ROUTES (Breeze)
 require __DIR__.'/auth.php';
+
+// NOTIFICATION ROUTES (login required)
+Route::middleware(['auth'])->group(function () {
+    Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
+    Route::post('/notifications/{id}/mark-read', [NotificationController::class, 'markAsRead'])->name('notifications.mark-read');
+    Route::post('/notifications/mark-all-read', [NotificationController::class, 'markAllAsRead'])->name('notifications.mark-all-read');
+    Route::get('/notifications/unread-count', [NotificationController::class, 'unreadCount'])->name('notifications.unread-count');
+    Route::get('/mention-suggestions', [AdminTicketController::class, 'getMentionSuggestions'])->name('mention.suggestions');
+});
 
 // ADMIN ROUTES (login required, role = admin)
 Route::middleware(['auth',])->prefix('admin')->name('admin.')->group(function () {

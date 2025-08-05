@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Ticket;
 use App\Models\Department;
 use App\Models\Service;
+use App\Services\MentionService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Notifications\TicketUserReplied;
@@ -13,6 +14,13 @@ use App\Models\User;
 
 class AdminTicketController extends Controller
 {
+    protected $mentionService;
+
+    public function __construct(MentionService $mentionService)
+    {
+        $this->mentionService = $mentionService;
+    }
+
     public function index(Request $request)
     {
         $departments = Department::all();
@@ -91,10 +99,10 @@ class AdminTicketController extends Controller
 
     public function show($id)
     {
-        $ticket = Ticket::with('department')->findOrFail($id);
-        $conversations = []; // Placeholder
+        $ticket = Ticket::with(['department', 'conversations.user'])->findOrFail($id);
+        $conversations = $ticket->conversations;
 
-        return view('admin.tickets.show', compact('ticket', 'conversations',));
+        return view('admin.tickets.show', compact('ticket', 'conversations'));
     }
 
     public function reply(Request $request, Ticket $ticket)
@@ -106,10 +114,18 @@ class AdminTicketController extends Controller
         ]);
     
         // Tambah percakapan
-        $ticket->conversations()->create([
+        $conversation = $ticket->conversations()->create([
             'user_id' => auth()->id(),
             'message' => $request->message,
         ]);
+
+        // Handle mentions
+        $this->mentionService->createMentionNotifications(
+            $request->message,
+            $ticket,
+            $conversation,
+            auth()->user()
+        );
     
         // Update status jika ada
         if ($request->filled('status')) {
@@ -130,6 +146,14 @@ class AdminTicketController extends Controller
     
         return back()->with('success', 'Balasan berhasil dikirim dan status diperbarui.');
     }
+
+    public function getMentionSuggestions(Request $request)
+    {
+        $query = $request->get('q', '');
+        $suggestions = $this->mentionService->getMentionSuggestions($query);
+        
+        return response()->json($suggestions);
+    }
     
     public function assign(Request $request, Ticket $ticket)
     {
@@ -139,5 +163,11 @@ class AdminTicketController extends Controller
         return back()->with('success', 'Ticket assigned successfully.');
     }
 
-    
+    /**
+     * Format message with mentions for display
+     */
+    public static function formatMessageWithMentions($message)
+    {
+        return preg_replace('/@(\w+)/', '<span class="mention">@$1</span>', htmlspecialchars($message));
+    }
 }

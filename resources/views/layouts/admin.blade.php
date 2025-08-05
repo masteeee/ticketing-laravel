@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Keloola Admin</title>
 
     {{-- FontAwesome --}}
@@ -54,6 +55,39 @@
 
         .card {
             @apply bg-white shadow-md rounded-xl p-4;
+        }
+
+        /* Notification styles */
+        .badge-counter {
+            position: absolute;
+            transform: scale(0.7);
+            transform-origin: top right;
+            right: 0.25rem;
+            margin-top: -0.25rem;
+        }
+
+        .icon-circle {
+            height: 2rem;
+            width: 2rem;
+            border-radius: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .dropdown-list {
+            max-width: 20rem !important;
+        }
+
+        .dropdown-list .dropdown-item {
+            white-space: normal;
+            border-left: 0.25rem solid #e3e6f0;
+            border-bottom: 0.125rem solid #e3e6f0;
+        }
+
+        .dropdown-list .dropdown-item:hover {
+            background-color: #eaecf4;
+            color: #2e2f37;
         }
     </style>
 

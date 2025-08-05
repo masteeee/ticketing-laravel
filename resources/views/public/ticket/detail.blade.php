@@ -134,6 +134,13 @@
                 </div>
             </div>
             <div class="mb-2"><b>Deskripsi:</b><br> <span class="text-gray-700">{{ $ticket->description }}</span></div>
+            <div>
+                <b>Attachment : </b>
+                <a href="{{ Storage::url($ticket->attachment) }}" target="_blank" class="text-primary">
+                Download
+            </a>
+            </div>
+            
         </div>
         <div class="bg-white rounded-lg shadow p-6 mb-6">
             <h3 class="text-lg font-semibold mb-4 text-gray-800">Percakapan</h3>

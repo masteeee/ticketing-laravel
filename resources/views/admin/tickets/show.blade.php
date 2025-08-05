@@ -52,6 +52,46 @@
         margin-bottom: 4px;
         color: #333;
     }
+
+    /* Mention styles */
+    .mention {
+        background-color: #007bff;
+        color: white;
+        padding: 2px 6px;
+        border-radius: 12px;
+        font-size: 0.85em;
+        font-weight: 500;
+    }
+
+    .mention-suggestions {
+        position: absolute;
+        background: white;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        max-height: 200px;
+        overflow-y: auto;
+        z-index: 1000;
+        display: none;
+    }
+
+    .mention-suggestion-item {
+        padding: 8px 12px;
+        cursor: pointer;
+        border-bottom: 1px solid #eee;
+    }
+
+    .mention-suggestion-item:hover {
+        background-color: #f8f9fa;
+    }
+
+    .mention-suggestion-item:last-child {
+        border-bottom: none;
+    }
+
+    .message-input-container {
+        position: relative;
+    }
 </style>
 @endpush
 
@@ -177,7 +217,7 @@
                         <div class="chat-bubble-wrap {{ $isAdmin ? 'align-self-end text-end' : 'align-self-start text-start' }}">
                             <div class="chat-item {{ $bubbleClass }}">
                                 <div class="chat-name">{{ $senderName }}</div>
-                                <div>{{ $conv->message }}</div>
+                                <div>{!! \App\Http\Controllers\Admin\AdminTicketController::formatMessageWithMentions($conv->message) !!}</div>
                                 <div class="chat-meta">{{ $conv->created_at->diffForHumans() }}</div>
                             </div>
                         </div>
@@ -190,8 +230,9 @@
             <!-- Form Balasan -->
             <form method="POST" action="{{ route('admin.tickets.reply', $ticket->id) }}" id="replyForm">
                 @csrf
-                <div class="mb-2">
-                    <textarea name="message" rows="3" class="form-control" placeholder="Tulis balasan..." required></textarea>
+                <div class="mb-2 message-input-container">
+                    <textarea name="message" rows="3" class="form-control" id="messageInput" placeholder="Tulis balasan... Gunakan @ untuk mention user lain" required></textarea>
+                    <div class="mention-suggestions" id="mentionSuggestions"></div>
                 </div>
                 <input type="hidden" name="status" id="statusInput">
 
@@ -218,6 +259,9 @@
 
 @push('scripts')
 <script>
+    let mentionTimeout;
+    let currentMentionQuery = '';
+
     function submitWithStatus(status) {
         const form = document.getElementById('replyForm');
         const statusInput = document.getElementById('statusInput');
@@ -238,8 +282,62 @@
         }
     }
 
+    function formatMessageWithMentions(message) {
+        return message.replace(/@(\w+)/g, '<span class="mention">@$1</span>');
+    }
+
+    function showMentionSuggestions(query) {
+        const suggestionsDiv = document.getElementById('mentionSuggestions');
+        
+        if (!query) {
+            suggestionsDiv.style.display = 'none';
+            return;
+        }
+
+        fetch(`/mention-suggestions?q=${encodeURIComponent(query)}`)
+            .then(response => response.json())
+            .then(users => {
+                if (users.length > 0) {
+                    suggestionsDiv.innerHTML = users.map(user => 
+                        `<div class="mention-suggestion-item" data-username="${user.name}">
+                            <strong>${user.name}</strong><br>
+                            <small>${user.email}</small>
+                        </div>`
+                    ).join('');
+                    suggestionsDiv.style.display = 'block';
+                } else {
+                    suggestionsDiv.style.display = 'none';
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching mention suggestions:', error);
+                suggestionsDiv.style.display = 'none';
+            });
+    }
+
+    function insertMention(username) {
+        const textarea = document.getElementById('messageInput');
+        const cursorPos = textarea.selectionStart;
+        const textBefore = textarea.value.substring(0, cursorPos);
+        const textAfter = textarea.value.substring(cursorPos);
+        
+        // Find the last @ symbol before cursor
+        const lastAtIndex = textBefore.lastIndexOf('@');
+        if (lastAtIndex !== -1) {
+            const newText = textBefore.substring(0, lastAtIndex) + '@' + username + ' ' + textAfter;
+            textarea.value = newText;
+            textarea.selectionStart = textarea.selectionEnd = lastAtIndex + username.length + 2;
+        }
+        
+        document.getElementById('mentionSuggestions').style.display = 'none';
+        textarea.focus();
+    }
+
     document.addEventListener('DOMContentLoaded', function () {
         const form = document.getElementById('replyForm');
+        const messageInput = document.getElementById('messageInput');
+        const suggestionsDiv = document.getElementById('mentionSuggestions');
+
         if (form) {
             form.addEventListener('submit', function (e) {
                 const messageTextarea = form.querySelector('textarea[name="message"]');
@@ -253,6 +351,44 @@
                 
                 const spinner = document.getElementById('submitLoading');
                 if (spinner) spinner.classList.remove('d-none');
+            });
+        }
+
+        // Handle mention suggestions
+        if (messageInput) {
+            messageInput.addEventListener('input', function(e) {
+                const cursorPos = e.target.selectionStart;
+                const textBefore = e.target.value.substring(0, cursorPos);
+                const lastAtIndex = textBefore.lastIndexOf('@');
+                
+                if (lastAtIndex !== -1) {
+                    const query = textBefore.substring(lastAtIndex + 1);
+                    if (query.length > 0) {
+                        clearTimeout(mentionTimeout);
+                        mentionTimeout = setTimeout(() => {
+                            showMentionSuggestions(query);
+                        }, 300);
+                    } else {
+                        suggestionsDiv.style.display = 'none';
+                    }
+                } else {
+                    suggestionsDiv.style.display = 'none';
+                }
+            });
+
+            // Handle suggestion clicks
+            suggestionsDiv.addEventListener('click', function(e) {
+                if (e.target.closest('.mention-suggestion-item')) {
+                    const username = e.target.closest('.mention-suggestion-item').dataset.username;
+                    insertMention(username);
+                }
+            });
+
+            // Hide suggestions when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!e.target.closest('.message-input-container')) {
+                    suggestionsDiv.style.display = 'none';
+                }
             });
         }
     });

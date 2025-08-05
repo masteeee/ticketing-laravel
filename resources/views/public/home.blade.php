@@ -71,7 +71,7 @@
          <div class="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-6">
              @foreach($departments as $department)
                  <div class="bg-white-primary shadow rounded-lg p-6">
-                     <div class="flex flex-wrap border-b border-card-bor-keloola mb-4 pb-2">
+                     <div class="flex flex-wrap border-b border-card-bor-keloola mb-4 pb-2 gap-4">
                          @if($department->logo_url)
                          <img src="{{ asset('storage/' . $department->logo_url) }}" alt="icon-{{ Str::slug($department->name) }}" class="w-20 h-20 mr-2 rounded-full object-cover">
                          @endif 

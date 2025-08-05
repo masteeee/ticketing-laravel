@@ -14,14 +14,13 @@ class RedirectIfAuthenticated
 
         foreach ($guards as $guard) {
             if (Auth::guard($guard)->check()) {
-                // ✅ Kamu bisa ubah redirect sesuai role
                 $user = Auth::user();
-                if ($user->role === 'admin' || $user->role->name === 'admin') {
-                    return redirect('/admin/dashboard');
-                } elseif ($user->role === 'staff' || $user->role->name === 'staff') {
-                    return redirect('/staff/dashboard');
-                }
-                return redirect('/');
+                // if ($user->role === 'admin' || $user->role->name === 'admin') {
+                return redirect('/admin/dashboard');
+                // } elseif ($user->role === 'staff' || $user->role->name === 'staff') {
+                    // return redirect('/staff/dashboard');
+                // }
+                // return redirect('/');
             }
         }
 
