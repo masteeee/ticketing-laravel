@@ -136,10 +136,15 @@
                     <td>
                         @php
                             $user = Auth::user();
-                            $isAdmin = $user && $user->role && $user->role->name === 'admin';
+                            $userPermissions = $user && $user->role ? $user->role->permissions->pluck('name')->toArray() : [];
+
+                            $canAssign = function($perm) use ($userPermissions) {
+                                return in_array($perm, $userPermissions);
+                            };
                         @endphp
+
                         
-                        @if($isAdmin)
+                        @if($canAssign('assign tickets'))
                             <form action="{{ route('tickets.assign', $ticket->id) }}" method="POST" class="auto-assign-form">
                                 @csrf
                                 <div class="input-group mb-2">

@@ -27,61 +27,64 @@ class AdminTicketController extends Controller
         $services = Service::all();
         $currentUser = Auth::user();
 
-        $query = Ticket::with(['department', 'service', 'handler',]);
-        
-        // Role-based access control
-        if ($currentUser && $currentUser->role && $currentUser->role->name === 'admin') {
-            // Admin can see all tickets
-            $users = User::all();
-        } else {
-            // Staff can only see tickets assigned to them
+        $query = Ticket::with(['department', 'service', 'handler']);
+
+        // Ambil permission user
+        $userPermissions = $currentUser && $currentUser->role 
+            ? $currentUser->role->permissions->pluck('name')->toArray() 
+            : [];
+
+        // Ambil semua user hanya jika punya permission assign tickets
+        $users = in_array('assign tickets', $userPermissions) 
+            ? User::all() 
+            : User::where('id', $currentUser->id)->get();
+
+        // Filter berdasarkan hak akses
+        if (!in_array('assign tickets', $userPermissions)) {
+            // Tidak punya permission: hanya bisa lihat tiket miliknya
             $query->where('assigned_to', $currentUser->id);
-            $users = User::where('id', $currentUser->id)->get();
+        } else {
+            // Punya permission: bisa lihat semua dan filter
+            if ($request->filled('assigned_to')) {
+                if ($request->assigned_to === 'unassigned') {
+                    $query->whereNull('assigned_to');
+                } else {
+                    $query->where('assigned_to', $request->assigned_to);
+                }
+            }
         }
 
-        // Filter by department
+        // Filter lainnya
         if ($request->filled('department_id')) {
             $query->where('department_id', $request->department_id);
         }
 
-        // Filter by service
         if ($request->filled('service_id')) {
             $query->where('service_id', $request->service_id);
         }
 
-        // Filter by status
         if ($request->filled('status')) {
             $query->where('status', $request->status);
         }
 
-        // Filter by assigned_to (only for admin)
-        if ($currentUser && $currentUser->role && $currentUser->role->name === 'admin' && $request->filled('assigned_to')) {
-            if ($request->assigned_to === 'unassigned') {
-                $query->whereNull('assigned_to');
-            } else {
-                $query->where('assigned_to', $request->assigned_to);
-            }
-        }
-
-        // Filter by date range
+        // Filter tanggal
         if ($request->filled('start_date') && $request->filled('end_date')) {
             $startDate = $request->start_date . ' 00:00:00';
             $endDate = $request->end_date . ' 23:59:59';
             $query->whereBetween('created_at', [$startDate, $endDate]);
         } elseif ($request->filled('start_date')) {
-            // Only start date provided
             $startDate = $request->start_date . ' 00:00:00';
             $query->where('created_at', '>=', $startDate);
         } elseif ($request->filled('end_date')) {
-            // Only end date provided
             $endDate = $request->end_date . ' 23:59:59';
             $query->where('created_at', '<=', $endDate);
         }
 
         $tickets = $query->latest()->paginate(10);
 
-        return view('admin.tickets.index', compact('tickets', 'departments', 'services','users'));
+        return view('admin.tickets.index', compact('tickets', 'departments', 'services', 'users'));
     }
+
 
     public function updateStatus(Request $request, $id)
     {
