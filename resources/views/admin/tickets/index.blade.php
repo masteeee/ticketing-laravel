@@ -18,7 +18,7 @@
     <div class="card mb-4 shadow-sm border-0 rounded-3">
         <div class="card-body">
             <h4 class="text-danger fw-bold mb-4 fs-5">Filter Tiket</h4>
-            <form method="GET" action="{{ route('admin.tickets.index') }}">
+            <form method="GET" action="{{ route('tickets.index') }}">
                 <div class="row gy-1 gx-2 mb-3">
                     <div class="col-md-3">
                         <label for="department_id" class="form-label fs-6">Departemen</label>
@@ -78,7 +78,7 @@
                         <button type="submit" class="btn btn-danger flex-fill">
                             <i class="fas fa-filter me-1"></i> Terapkan
                         </button>
-                        <a href="{{ route('admin.tickets.index') }}" class="btn btn-secondary flex-fill">
+                        <a href="{{ route('tickets.index') }}" class="btn btn-secondary flex-fill">
                             <i class="fas fa-times me-1"></i> Reset
                         </a>
                     </div>
@@ -112,7 +112,7 @@
                     <td>{{ $ticket->email }}</td>
                     <td>{{ $ticket->phone }}</td>
                     <td>
-                        <a href="{{ route('admin.tickets.show', $ticket->id) }}" class="btn btn-sm btn-primary">Lihat</a>
+                        <a href="{{ route('tickets.show', $ticket->id) }}" class="btn btn-sm btn-primary">Lihat</a>
                     </td>
                     <td>
                     @php
@@ -140,7 +140,7 @@
                         @endphp
                         
                         @if($isAdmin)
-                            <form action="{{ route('admin.tickets.assign', $ticket->id) }}" method="POST" class="auto-assign-form">
+                            <form action="{{ route('tickets.assign', $ticket->id) }}" method="POST" class="auto-assign-form">
                                 @csrf
                                 <div class="input-group mb-2">
                                     <select name="assigned_to" class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm auto-assign-select" data-ticket-id="{{ $ticket->id }}" required>

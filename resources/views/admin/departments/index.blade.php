@@ -40,7 +40,7 @@
                         <button class="btn btn-warning btn-sm me-1" data-bs-toggle="modal" data-bs-target="#editModal{{ $department->id }}">
                             Edit
                         </button>
-                        <form action="{{ route('admin.departments.destroy', $department) }}" method="POST" class="d-inline" onsubmit="return confirm('Hapus?')">
+                        <form action="{{ route('departments.destroy', $department) }}" method="POST" class="d-inline" onsubmit="return confirm('Hapus?')">
                             @csrf
                             @method('DELETE')
                             <button class="btn btn-danger btn-sm">Delete</button>
@@ -52,7 +52,7 @@
                 <div class="modal fade" id="editModal{{ $department->id }}" tabindex="-1" aria-labelledby="editModalLabel{{ $department->id }}" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered">
                         <div class="modal-content">
-                            <form action="{{ route('admin.departments.update', $department) }}" method="POST" enctype="multipart/form-data">
+                            <form action="{{ route('departments.update', $department) }}" method="POST" enctype="multipart/form-data">
                                 @csrf
                                 @method('PUT')
                                 <div class="modal-header">
@@ -96,7 +96,7 @@
 <div class="modal fade" id="createModal" tabindex="-1" aria-labelledby="createModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
-            <form action="{{ route('admin.departments.store') }}" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('departments.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div class="modal-header">
                     <h5 class="modal-title" id="createModalLabel">Tambah Department</h5>
@@ -137,7 +137,7 @@
             cancelButtonText: 'Batal'
         }).then((result) => {
             if (!result.isConfirmed) return;
-            fetch("{{ route('admin.departments.refresh') }}", {
+            fetch("{{ route('departments.refresh') }}", {
                 method: 'GET',
                 headers: {
                     'X-Requested-With': 'XMLHttpRequest',

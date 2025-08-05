@@ -71,7 +71,7 @@ class ArticleController extends Controller
 
         Article::create($validated);
 
-        return redirect()->route('admin.articles.index')->with('success', 'Artikel berhasil ditambahkan.');
+        return redirect()->route('articles.index')->with('success', 'Artikel berhasil ditambahkan.');
     }
 
     public function edit(Article $article) {
@@ -98,7 +98,7 @@ class ArticleController extends Controller
 
         $article->update($validated);
 
-        return redirect()->route('admin.articles.index')->with('success', 'Artikel berhasil diperbarui.');
+        return redirect()->route('articles.index')->with('success', 'Artikel berhasil diperbarui.');
     }
 
     public function destroy(Article $article) {

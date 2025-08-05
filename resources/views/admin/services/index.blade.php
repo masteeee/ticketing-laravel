@@ -33,7 +33,7 @@
                     </button>
 
                     <!-- Delete form -->
-                    <form action="{{ route('admin.services.destroy', $service->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Are you sure?')">
+                    <form action="{{ route('services.destroy', $service->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Are you sure?')">
                         @csrf @method('DELETE')
                         <button class="btn btn-sm btn-danger">Delete</button>
                     </form>
@@ -45,7 +45,7 @@
             <div class="modal fade" id="editServiceModal{{ $service->id }}" tabindex="-1" aria-labelledby="editServiceModalLabel{{ $service->id }}" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
-                    <form action="{{ route('admin.services.update', $service->id) }}" method="POST">
+                    <form action="{{ route('services.update', $service->id) }}" method="POST">
                         @csrf
                         @method('PUT')
                         <div class="modal-header">
@@ -86,7 +86,7 @@
 <div class="modal fade" id="addServiceModal" tabindex="-1" aria-labelledby="addServiceModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
-      <form action="{{ route('admin.services.store') }}" method="POST">
+      <form action="{{ route('services.store') }}" method="POST">
           @csrf
           <div class="modal-header">
             <h5 class="modal-title" id="addServiceModalLabel">Add Service</h5>

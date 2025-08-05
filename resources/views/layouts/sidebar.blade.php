@@ -1,6 +1,6 @@
 <ul class="navbar-nav sidebar sidebar-keloola accordion" id="accordionSidebar">
     {{-- Brand --}}
-    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{ route('admin.dashboard') }}">
+    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{ route('dashboard') }}">
         <div class="sidebar-brand-icon">
             <img src="{{ asset('assets/keloola-logo.png') }}" alt="Keloola Logo" class="keloola-logo">
         </div>
@@ -10,7 +10,7 @@
 
     {{-- Dashboard --}}
     <li class="nav-item">
-        <a class="nav-link" href="{{ route('admin.dashboard') }}">
+        <a class="nav-link" href="{{ route('dashboard') }}">
             <i class="fas fa-fw fa-tachometer-alt"></i>
             <span>Dashboard</span>
         </a>
@@ -34,10 +34,10 @@
         <div id="departmentSub" class="collapse">
             <div class="py-2 collapse-inner rounded">
                 @if(canView('view departments', $userPermissions))
-                <a class="collapse-item" href="{{ route('admin.departments.index') }}">All Departments</a>
+                <a class="collapse-item" href="{{ route('departments.index') }}">All Departments</a>
                 @endif
                 @if(canView('view services', $userPermissions))
-                <a class="collapse-item" href="{{ route('admin.services.index') }}">All Services</a>
+                <a class="collapse-item" href="{{ route('services.index') }}">All Services</a>
                 @endif
             </div>
         </div>
@@ -60,13 +60,13 @@
         <div id="rolePermissionSub" class="collapse">
             <div class="bg-white py-2 collapse-inner rounded">
                 @if(canView('view roles', $userPermissions))
-                <a class="collapse-item" href="{{ route('admin.roles.index') }}">Roles</a>
+                <a class="collapse-item" href="{{ route('roles.index') }}">Roles</a>
                 @endif
                 @if(canView('view permissions', $userPermissions))
-                <a class="collapse-item" href="{{ route('admin.permissions.index') }}">Permissions</a>
+                <a class="collapse-item" href="{{ route('permissions.index') }}">Permissions</a>
                 @endif
                 @if(canView('view users', $userPermissions) || canView('create users', $userPermissions) || canView('edit users', $userPermissions) || canView('delete users', $userPermissions))
-                <a class="collapse-item" href="{{ route('admin.users.index') }}">Users</a>
+                <a class="collapse-item" href="{{ route('users.index') }}">Users</a>
                 @endif
             </div>
         </div>
@@ -84,10 +84,10 @@
         <div id="knowledgeBaseSub" class="collapse">
             <div class="bg-white py-2 collapse-inner rounded">
                 @if(canView('view categories', $userPermissions))
-                <a class="collapse-item" href="{{ route('admin.categories.index') }}">Categories</a>
+                <a class="collapse-item" href="{{ route('categories.index') }}">Categories</a>
                 @endif
                 @if(canView('view articles', $userPermissions))
-                <a class="collapse-item" href="{{ route('admin.articles.index') }}">Articles</a>
+                <a class="collapse-item" href="{{ route('articles.index') }}">Articles</a>
                 @endif
             </div>
         </div>
@@ -97,7 +97,7 @@
     {{-- Ticketing --}}
     @if(canView('view tickets', $userPermissions))
     <li class="nav-item">
-        <a class="nav-link" href="{{ route('admin.tickets.index') }}">
+        <a class="nav-link" href="{{ route('tickets.index') }}">
             <i class="fas fa-fw fa-ticket-alt"></i>
             <span>Manajemen Ticketing</span>
         </a>

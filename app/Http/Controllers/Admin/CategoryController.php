@@ -24,7 +24,7 @@ class CategoryController extends Controller
             'name' => $request->name,
             'parent_id' => $request->parent_id
         ]);
-        return redirect()->route('admin.categories.index')->with('success', 'Kategori ditambahkan');
+        return redirect()->route('categories.index')->with('success', 'Kategori ditambahkan');
     }
 
     public function edit(Category $category) {
@@ -34,7 +34,7 @@ class CategoryController extends Controller
     public function update(Request $request, Category $category) {
         $request->validate(['name' => 'required']);
         $category->update($request->all());
-        return redirect()->route('admin.categories.index')->with('success', 'Kategori diupdate');
+        return redirect()->route('categories.index')->with('success', 'Kategori diupdate');
     }
 
     public function destroy(Category $category) {

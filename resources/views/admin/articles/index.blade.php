@@ -4,13 +4,13 @@
 <div class="container py-4">
     <div class="d-flex justify-between items-center mb-4">
         <h1 class="text-xl font-bold">Daftar Artikel</h1>
-        <a href="{{ route('admin.articles.create') }}" class="btn btn-danger">+ Tambah Artikel</a>
+        <a href="{{ route('articles.create') }}" class="btn btn-danger">+ Tambah Artikel</a>
     </div>
 
     {{-- Search and Filter Form --}}
     <div class="card mb-4">
         <div class="card-body">
-            <form method="GET" action="{{ route('admin.articles.index') }}" class="row g-3">
+            <form method="GET" action="{{ route('articles.index') }}" class="row g-3">
                 <div class="col-md-4">
                     <label for="search" class="form-label fw-semibold text-gray-700 mb-1 text-sm">
                         <i class="fas fa-search me-1 text-red-600"></i>Cari Artikel
@@ -63,7 +63,7 @@
                         <button type="submit" class="px-3 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-all duration-200 font-medium flex-fill flex items-center justify-center text-sm">
                             <i class="fas fa-search me-1"></i> Cari
                         </button>
-                        <a href="{{ route('admin.articles.index') }}" class="px-3 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600 transition-all duration-200 font-medium flex-fill flex items-center justify-center text-sm">
+                        <a href="{{ route('articles.index') }}" class="px-3 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600 transition-all duration-200 font-medium flex-fill flex items-center justify-center text-sm">
                             <i class="fas fa-times me-1"></i> Reset
                         </a>
                     </div>
@@ -124,8 +124,8 @@
                             @endif
                         </td>
                         <td class="border text-center">
-                            <a href="{{ route('admin.articles.edit', $article->id) }}" class="btn btn-sm btn-warning me-1">Edit</a>
-                            <form action="{{ route('admin.articles.destroy', $article->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Yakin hapus artikel ini?')">
+                            <a href="{{ route('articles.edit', $article->id) }}" class="btn btn-sm btn-warning me-1">Edit</a>
+                            <form action="{{ route('articles.destroy', $article->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Yakin hapus artikel ini?')">
                                 @csrf @method('DELETE')
                                 <button class="btn btn-sm btn-danger">Hapus</button>
                             </form>

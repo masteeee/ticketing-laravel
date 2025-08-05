@@ -18,7 +18,7 @@
         @endif
 
         {{-- Form Add User --}}
-        <form action="{{ route('admin.users.store') }}" method="POST">
+        <form action="{{ route('users.store') }}" method="POST">
             @csrf
 
             <div class="mb-3">
@@ -54,7 +54,7 @@
             </div>
 
             <div class="d-flex justify-end mt-4">
-                <a href="{{ route('admin.users.index') }}" class="btn btn-secondary me-2">Kembali</a>
+                <a href="{{ route('users.index') }}" class="btn btn-secondary me-2">Kembali</a>
                 <button type="submit" class="btn btn-danger">Simpan</button>
             </div>
         </form>

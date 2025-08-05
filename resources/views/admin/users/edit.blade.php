@@ -18,7 +18,7 @@
         @endif
 
         {{-- Form Edit User --}}
-        <form action="{{ route('admin.users.update', $user->id) }}" method="POST">
+        <form action="{{ route('users.update', $user->id) }}" method="POST">
             @csrf
             @method('PUT')
 
@@ -55,7 +55,7 @@
             </div>
 
             <div class="d-flex justify-end mt-4">
-                <a href="{{ route('admin.users.index') }}" class="btn btn-secondary me-2">Kembali</a>
+                <a href="{{ route('users.index') }}" class="btn btn-secondary me-2">Kembali</a>
                 <button type="submit" class="btn btn-danger">Update</button>
             </div>
         </form>

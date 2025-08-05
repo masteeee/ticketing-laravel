@@ -31,7 +31,7 @@
                                     <td>
                                         <div class="d-flex gap-2">
                                             <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#editModal'.$cat->id.'">Edit</button>
-                                            <form action="'.route('admin.categories.destroy', $cat).'" method="POST" onsubmit="return confirm(\'Hapus kategori ini?\')">
+                                            <form action="'.route('categories.destroy', $cat).'" method="POST" onsubmit="return confirm(\'Hapus kategori ini?\')">
                                                 '.csrf_field().method_field('DELETE').'
                                                 <button class="btn btn-danger btn-sm">Hapus</button>
                                             </form>
@@ -48,7 +48,7 @@
                                             <h5 class="modal-title">Edit Kategori</h5>
                                             <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                                         </div>
-                                        <form action="'.route('admin.categories.update', $cat).'" method="POST">
+                                        <form action="'.route('categories.update', $cat).'" method="POST">
                                             '.csrf_field().method_field('PUT').'
                                             <div class="modal-body">
                                                 <div class="mb-3">
@@ -104,7 +104,7 @@
                 <h5 class="modal-title">Tambah Kategori</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
-            <form action="{{ route('admin.categories.store') }}" method="POST">
+            <form action="{{ route('categories.store') }}" method="POST">
                 @csrf
                 <div class="modal-body">
                     <div class="mb-3">

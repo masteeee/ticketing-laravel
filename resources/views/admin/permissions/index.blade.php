@@ -31,7 +31,7 @@
                             data-name="{{ $permission->name }}">
                             Edit
                         </button>
-                        <form action="{{ route('admin.permissions.destroy', $permission) }}" method="POST" onsubmit="return confirm('Yakin hapus?')">
+                        <form action="{{ route('permissions.destroy', $permission) }}" method="POST" onsubmit="return confirm('Yakin hapus?')">
                             @csrf @method('DELETE')
                             <button class="btn btn-danger btn-sm">Hapus</button>
                         </form>
@@ -49,7 +49,7 @@
 <!-- Modal Tambah -->
 <div class="modal fade" id="addPermissionModal" tabindex="-1" aria-labelledby="addPermissionLabel" aria-hidden="true">
     <div class="modal-dialog">
-        <form class="modal-content" action="{{ route('admin.permissions.store') }}" method="POST">
+        <form class="modal-content" action="{{ route('permissions.store') }}" method="POST">
             @csrf
             <div class="modal-header">
                 <h5 class="modal-title">Tambah Permission</h5>

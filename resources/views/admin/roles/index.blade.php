@@ -4,7 +4,7 @@
 <div class="container py-4">
     <div class="flex justify-between items-center mb-4">
         <h1 class="text-xl font-bold">Daftar Role</h1>
-        <a href="{{ route('admin.roles.create') }}" class="btn btn-danger">+ Tambah Role</a>
+        <a href="{{ route('roles.create') }}" class="btn btn-danger">+ Tambah Role</a>
     </div>
 
     @if(session('success'))
@@ -35,8 +35,8 @@
                             </td>
                             <td class="align-middle text-nowrap">
                                 <div class="d-flex gap-2">
-                                    <a href="{{ route('admin.roles.edit', $role) }}" class="btn btn-warning btn-sm">Edit</a>
-                                    <form action="{{ route('admin.roles.destroy', $role) }}" method="POST" onsubmit="return confirm('Yakin hapus?')">
+                                    <a href="{{ route('roles.edit', $role) }}" class="btn btn-warning btn-sm">Edit</a>
+                                    <form action="{{ route('roles.destroy', $role) }}" method="POST" onsubmit="return confirm('Yakin hapus?')">
                                         @csrf @method('DELETE')
                                         <button class="btn btn-danger btn-sm">Hapus</button>
                                     </form>

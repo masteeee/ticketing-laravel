@@ -22,7 +22,7 @@ class PermissionController extends Controller
             'name' => 'required|unique:permissions,name',
         ]);
         Permission::create(['name' => $request->name]);
-        return redirect()->route('admin.permissions.index')->with('success', 'Permission ditambahkan');
+        return redirect()->route('permissions.index')->with('success', 'Permission ditambahkan');
     }
 
     public function edit(Permission $permission) {
@@ -34,7 +34,7 @@ class PermissionController extends Controller
             'name' => 'required|unique:permissions,name,' . $permission->id,
         ]);
         $permission->update(['name' => $request->name]);
-        return redirect()->route('admin.permissions.index')->with('success', 'Permission diupdate');
+        return redirect()->route('permissions.index')->with('success', 'Permission diupdate');
     }
 
     public function destroy(Permission $permission) {

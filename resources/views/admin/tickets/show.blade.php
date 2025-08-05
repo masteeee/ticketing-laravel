@@ -228,7 +228,7 @@
             @endif
 
             <!-- Form Balasan -->
-            <form method="POST" action="{{ route('admin.tickets.reply', $ticket->id) }}" id="replyForm">
+            <form method="POST" action="{{ route('tickets.reply', $ticket->id) }}" id="replyForm">
                 @csrf
                 <div class="mb-2 message-input-container">
                     <textarea name="message" rows="3" class="form-control" id="messageInput" placeholder="Tulis balasan... Gunakan @ untuk mention user lain" required></textarea>

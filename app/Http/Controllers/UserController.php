@@ -37,14 +37,14 @@ public function index()
             'role_id' => $request->role_id,
         ]);
     
-        return redirect()->route('admin.users.index')->with('success', 'User berhasil ditambahkan');
+        return redirect()->route('users.index')->with('success', 'User berhasil ditambahkan');
     }
 
     public function edit($id)
     {
         $user = User::findOrFail($id);
         $roles = Role::all();
-        return view('admin.users.edit', compact('user', 'roles'));
+        return view('admin. users.edit', compact('user', 'roles'));
     }
 
     public function update(Request $request, $id)
@@ -77,7 +77,7 @@ public function index()
 
         $user->update($updateData);
 
-        return redirect()->route('admin.users.index')->with('success', 'User berhasil diperbarui');
+        return redirect()->route('users.index')->with('success', 'User berhasil diperbarui');
     }
 
     public function destroy($id)
@@ -85,6 +85,6 @@ public function index()
         $user = User::findOrFail($id);
         $user->delete();
 
-        return redirect()->route('admin.users.index')->with('success', 'User berhasil dihapus');
+        return redirect()->route('users.index')->with('success', 'User berhasil dihapus');
     }
 }

@@ -5,7 +5,7 @@
     <div class="card shadow-sm rounded p-4">
         <h1 class="text-xl font-bold mb-4">Edit Artikel</h1>
 
-        <form action="{{ route('admin.articles.update', $article->id) }}" method="POST" enctype="multipart/form-data">
+        <form action="{{ route('articles.update', $article->id) }}" method="POST" enctype="multipart/form-data">
             @csrf
             @method('PUT')
 

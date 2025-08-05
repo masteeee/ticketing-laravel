@@ -13,6 +13,6 @@ class Admin
             return $next($request);
         }
 
-        return redirect('/admin.dashboard')->with('error', 'Unauthorized.');
+        return redirect('/dashboard')->with('error', 'Unauthorized.');
     }
 }

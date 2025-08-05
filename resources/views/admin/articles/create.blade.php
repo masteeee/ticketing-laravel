@@ -5,7 +5,7 @@
     <div class="card shadow-sm rounded p-4">
         <h1 class="text-xl font-bold mb-4">Tambah Artikel</h1>
 
-        <form action="{{ route('admin.articles.store') }}" method="POST" enctype="multipart/form-data">
+        <form action="{{ route('articles.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
 
             <div class="mb-3">

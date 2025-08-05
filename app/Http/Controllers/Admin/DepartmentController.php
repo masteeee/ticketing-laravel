@@ -42,7 +42,7 @@ class DepartmentController extends Controller
     
         Department::create($data);
     
-        return redirect()->route('admin.departments.index')->with('success', 'Department berhasil ditambahkan.');
+        return redirect()->route('departments.index')->with('success', 'Department berhasil ditambahkan.');
     }
 
     public function edit(Request $request, Department $department)
@@ -76,13 +76,13 @@ class DepartmentController extends Controller
         }
     
         $department->update($data);
-        return redirect()->route('admin.departments.index')->with('success', 'Department updated!');
+        return redirect()->route('departments.index')->with('success', 'Department updated!');
     }
 
     public function destroy(Department $department)
     {
         $department->delete();
-        return redirect()->route('admin.departments.index')->with('success', 'Department deleted!');
+        return redirect()->route('departments.index')->with('success', 'Department deleted!');
     }
     public function refresh()
     {

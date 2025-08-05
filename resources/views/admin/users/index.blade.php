@@ -4,7 +4,7 @@
 <div class="container py-4">
     <div class="d-flex justify-between items-center mb-4">
         <h2 class="text-xl font-semibold text-gray-800">User List</h2>
-        <a href="{{ route('admin.users.create') }}" class="btn btn-danger rounded shadow px-4 py-2">+ Add User</a>
+        <a href="{{ route('users.create') }}" class="btn btn-danger rounded shadow px-4 py-2">+ Add User</a>
     </div>
 
     @if(session('success'))
@@ -32,8 +32,8 @@
                             <td>{{ $user->email }}</td>
                             <td>{{ $user->role ? $user->role->name : '-' }}</td>
                             <td class="text-center">
-                                <a href="{{ route('admin.users.edit', $user->id) }}" class="btn btn-sm btn-warning me-1">Edit</a>
-                                <form action="{{ route('admin.users.destroy', $user->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this user?')">
+                                <a href="{{ route('users.edit', $user->id) }}" class="btn btn-sm btn-warning me-1">Edit</a>
+                                <form action="{{ route('users.destroy', $user->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this user?')">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="btn btn-sm btn-danger">Delete</button>

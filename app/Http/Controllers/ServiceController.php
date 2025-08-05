@@ -31,7 +31,7 @@ class ServiceController extends Controller
         ]);
 
         Service::create($request->all());
-        return redirect()->route('admin.services.index')->with('success', 'Service created successfully.');
+        return redirect()->route('services.index')->with('success', 'Service created successfully.');
     }
 
     public function edit(Service $service)
@@ -48,13 +48,13 @@ class ServiceController extends Controller
         ]);
 
         $service->update($request->all());
-        return redirect()->route('admin.services.index')->with('success', 'Service updated successfully.');
+        return redirect()->route('services.index')->with('success', 'Service updated successfully.');
     }
 
     public function destroy(Service $service)
     {
         $service->delete();
-        return redirect()->route('admin.services.index')->with('success', 'Service deleted successfully.');
+        return redirect()->route('services.index')->with('success', 'Service deleted successfully.');
     }
     public function getByDepartment($departmentId)
 {

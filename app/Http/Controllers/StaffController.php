@@ -6,6 +6,6 @@ class StaffController extends Controller
 {
     public function dashboard()
     {
-        return view('admin.dashboard');
+        return view('dashboard');
     }
 }

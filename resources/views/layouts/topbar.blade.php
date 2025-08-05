@@ -68,7 +68,7 @@ function loadNotifications() {
             }
             
             notificationsList.innerHTML = notifications.map(notification => `
-                <a class="dropdown-item d-flex align-items-center" href="/admin/tickets/${notification.ticket_id}" onclick="markAsRead(${notification.id})">
+                <a class="dropdown-item d-flex align-items-center" href="/tickets/${notification.ticket_id}" onclick="markAsRead(${notification.id})">
                     <div class="mr-3">
                         <div class="icon-circle bg-warning">
                             <i class="fas fa-exclamation-triangle text-white"></i>

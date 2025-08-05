@@ -3,7 +3,7 @@
 @section('content')
 <div class="container">
     <h1>Edit Role</h1>
-    <form action="{{ route('admin.roles.update', $role) }}" method="POST">
+    <form action="{{ route('roles.update', $role) }}" method="POST">
         @csrf @method('PUT')
         <div class="mb-3">
             <label for="name" class="form-label">Nama Role</label>

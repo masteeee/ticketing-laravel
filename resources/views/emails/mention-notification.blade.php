@@ -81,7 +81,7 @@
         
         <p>Silakan klik tombol di bawah untuk melihat tiket tersebut:</p>
         
-        <a href="{{ url('/admin/tickets/' . $ticket->id) }}" class="btn">Lihat Tiket</a>
+        <a href="{{ url('/tickets/' . $ticket->id) }}" class="btn">Lihat Tiket</a>
         
         <p>Terima kasih,<br>Tim Support Keloola</p>
     </div>
