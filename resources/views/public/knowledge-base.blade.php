@@ -152,7 +152,7 @@
                         $icon = asset('assets/keloola-logo.png');
                     @endphp
                     <a href="{{ $goUrl }}" class="bg-white-primary shadow rounded-lg p-6 block hover:shadow-md transition">
-                        <div class="flex flex-wrap border-b border-card-bor-keloola pb-3">
+                        <div class="flex flex-wrap border-b border-card-bor-keloola gap-4 pb-3">
                             <img src="{{ $icon }}" alt="{{ $cat->name }}" class="w-10 h-10 object-contain mr-3">
                             <h3 class="text-lg font-semibold">{{ $cat->name }}</h3>
                         </div>

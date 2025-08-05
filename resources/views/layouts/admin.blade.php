@@ -89,6 +89,14 @@
             background-color: #eaecf4;
             color: #2e2f37;
         }
+        .sidebar-keloola{
+            color: white;
+            background : #de342f;
+        }
+        .sidebar-keloola a{
+            text-decoration: none;
+            color: white;
+        }
     </style>
 
     @stack('styles')

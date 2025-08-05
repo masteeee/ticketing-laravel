@@ -37,17 +37,11 @@
                     </a>
                 </li>
                 <li>
-                    <a href="#"
-                       class="{{ request()->is('community') ? 'text-red-keloola' : 'text-black-keloola hover:text-red-keloola' }}">
-                       Community
-                    </a>
-                </li>
-                <li>
                     <a href="{{ route('login') }}"
                        class="{{ request()->is('login') ? 'text-red-keloola' : 'text-black-keloola hover:text-red-keloola' }}">
                        Sign In
                     </a>
-                <li class="relative ml-2">
+                <!-- <li class="relative ml-2">
                     <button id="font-button" class="text-black-keloola hover:text-red-keloola">A<sup>+</sup></button>
                     <div id="font-menu" class="absolute hidden mt-2 bg-white-primary shadow-md rounded-md p-2 z-50 right-0 w-max">
                     <h3 class="text-black-keloola mb-2">Font Size</h3>
@@ -82,7 +76,7 @@
                                    </div>
                               </div>
                      </div>
-                </li>
+                </li> -->
                 <li>
                     <a href="{{ route('ticket.view.form') }}" class="bg-red-keloola text-white-primary px-4 py-2 rounded hover:bg-red-700 transition">View Ticket</a>
                 </li>
