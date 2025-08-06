@@ -25,16 +25,11 @@
             <input type="checkbox" name="remember" class="form-checkbox text-red-500">
             <span class="ml-2 text-gray-600">Ingat saya</span>
         </label>
-        <a href="{{ route('password.request') }}" class="text-red-500 hover:underline">Lupa password?</a>
     </div>
 
     <button type="submit" class="w-full bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded-md">
         Masuk
     </button>
 
-    <p class="mt-4 text-sm text-center text-gray-600">
-        Belum punya akun?
-        <a href="{{ route('register') }}" class="text-red-500 hover:underline">Daftar di sini</a>
-    </p>
 </form>
 @endsection
