@@ -88,7 +88,7 @@
                     </div>
                     {{-- Thumbnail --}}
                     <div class="w-full h-auto">
-                        <img src="{{ asset('storage/' . $article->thumbnail) }}" alt="Thumbnail" class="w-full h-auto">
+                        <img style="height: 250px; object-fit:cover;" src="{{ asset('storage/' . $article->thumbnail) }}" alt="Thumbnail" class="w-full h-auto">
                     </div>
 
                     {{-- Konten Artikel --}}
@@ -101,7 +101,7 @@
                     <h1 id="related-articles" class="text-red-keloola my-5 text-3xl font-medium">Related Articles</h1>
                     <div class="flex flex-col gap-y-2">
                         @foreach($relatedArticles as $related)
-                            <a href="{{ route('public.articles.show', $related->id) }}"
+                            <a href="{{ route('public.articles.show', $related->slug) }}"
                                class="text-base text-primary">
                                 {{ $related->title }}
                             </a>
@@ -143,7 +143,7 @@
                     <ul class="space-y-2">
                         @foreach($relatedArticles as $related)
                             <li>
-                                <a href="{{ route('public.articles.show', $related->id) }}"
+                                <a href="{{ route('public.articles.show', $related->slug) }}"
                                    class="flex items-start gap-2 text-black-keloola hover:text-blue-primary">
                                    {{ $related->title }}
                                 </a>

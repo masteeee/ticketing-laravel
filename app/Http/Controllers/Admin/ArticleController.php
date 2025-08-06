@@ -110,39 +110,5 @@ class ArticleController extends Controller
         return back()->with('success', 'Artikel berhasil dihapus.');
     }
 
-    public function show(Article $article)
-    {
-        // Breadcrumb berdasarkan kategori
-        $breadcrumbs = collect([]);
-        $cat = $article->category;
-        while ($cat) {
-            $breadcrumbs->prepend($cat);
-            $cat = $cat->parent;
-        }
-    
-        // Related Articles (kategori yang sama)
-        $relatedArticles = Article::where('category_id', $article->category_id)
-            ->where('id', '!=', $article->id)
-            ->limit(5)
-            ->get();
-    
-        // Ambil heading H2 / H3 dari konten untuk sidebar dan tambahkan ID
-        preg_match_all('/<h[23].*?>(.*?)<\/h[23]>/', $article->content, $matches);
-        $headings = collect($matches[1] ?? [])->map(function ($text, $i) {
-            return ['id' => 'heading-'.$i, 'text' => strip_tags($text)];
-        });
-        
-        // Tambahkan ID ke heading di konten
-        $content = $article->content;
-        $headingIndex = 0;
-        $content = preg_replace_callback('/<h([23])(.*?)>(.*?)<\/h[23]>/', function($matches) use (&$headingIndex) {
-            $headingIndex++;
-            return '<h' . $matches[1] . $matches[2] . ' id="heading-' . ($headingIndex - 1) . '">' . $matches[3] . '</h' . $matches[1] . '>';
-        }, $content);
-        
-        // Update article content dengan ID
-        $article->content = $content;
-    
-        return view('public.articles.show', compact('article', 'breadcrumbs', 'relatedArticles', 'headings'));
-    }
+   
 }

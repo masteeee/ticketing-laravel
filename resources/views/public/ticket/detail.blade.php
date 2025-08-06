@@ -135,9 +135,11 @@
             </div>
             <div class="mb-2"><b>Deskripsi:</b><br> <span class="text-gray-700">{{ $ticket->description }}</span></div>
             <div>
-                <b>Attachment : </b>
-                <a href="{{ Storage::url($ticket->attachment) }}" target="_blank" class="text-primary">
-                Download
+                @if($ticket->attachment)
+                    <b>Attachment : </b>
+                    <a href="{{ Storage::url($ticket->attachment) }}" target="_blank" class="text-primary">
+                    Download
+                @endif
             </a>
             </div>
             

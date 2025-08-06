@@ -44,8 +44,8 @@ Route::get('/ticket/success', function () {
     return view('public.ticket.success', compact('invoice', 'email'));
 })->name('ticket.success');
 
-Route::get('/articles/{article}', [ArticleController::class, 'show'])
-    ->whereNumber('article') // ✅ Hindari bentrok dengan 'create'
+Route::get('/article/{slug}', [KnowledgeBaseController::class, 'show'])
+    ->whereNumber('article') 
     ->name('public.articles.show');
 
 Route::get('/ticket/view', [TicketController::class, 'viewForm'])->name('ticket.view.form');
@@ -83,9 +83,9 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/tickets/{ticket}/assign', [AdminTicketController::class, 'assign'])->name('tickets.assign');
 
     // Articles
-    Route::get('/articles/create', [ArticleController::class, 'create'])->name('articles.create'); // ✅ fix bentrok
-    Route::resource('articles', ArticleController::class)->except(['create', 'show'])->where(['article' => '[0-9]+']);
-    Route::get('/articles/{article}', [ArticleController::class, 'show'])->name('articles.show')->whereNumber('article'); // ✅ explicit
+    Route::resource('articles', ArticleController::class)->except(['create','show'])->where(['article' => '[0-9]+']);
+    Route::get('/article/create/', [ArticleController::class, 'create'])->name('articles.create');
+    Route::get('/article/{article}', [ArticleController::class, 'show'])->name('articles.show')->whereNumber('article'); // ✅ explicit
 
     // Categories
     Route::resource('categories', CategoryController::class);

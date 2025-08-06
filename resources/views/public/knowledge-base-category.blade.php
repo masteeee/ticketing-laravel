@@ -66,7 +66,11 @@
                         <ul class="space-y-4 mb-8">
                             @foreach($articles as $article)
                                 <li>
-                                    <a href="{{ route('public.articles.show', $article->id) }}"
+                                    <a href="{{ route('public.articles.show', [
+                                        'bulan' => $article->created_at->format('m'),
+                                        'tahun' => $article->created_at->format('Y'),
+                                        'slug' => $article->slug
+                                    ]) }}"
                                        class="flex items-start gap-2 text-black-keloola hover:text-blue-primary">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mt-1 flex-shrink-0"
                                              fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -93,7 +97,7 @@
                                     $articleCount = $child->articles->count();
                                     $sectionCount = $child->children->count();
                                     $url = ($articleCount === 1 && $sectionCount === 0)
-                                        ? route('public.articles.show', $child->articles->first()->id)
+                                        ? route('public.articles.show', $child->articles->first()->slug)
                                         : route('knowledge.category', ['category' => $child->id]);
                                 @endphp
                                 <li>
@@ -141,7 +145,7 @@
                     <ul class="space-y-3">
                         @foreach($popularArticles as $article)
                             <li>
-                                <a href="{{ route('public.articles.show', $article->id) }}"
+                                <a href="{{ route('public.articles.show', $article->slug) }}"
                                    class="flex items-start gap-2 text-black-keloola hover:text-blue-primary">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 flex-shrink-0"
                                          fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -161,7 +165,7 @@
                     <ul class="space-y-3">
                         @foreach($recentArticles as $article)
                             <li>
-                                <a href="{{ route('public.articles.show', $article->id) }}"
+                                <a href="{{ route('public.articles.show', $article->slug) }}"
                                    class="flex items-start gap-2 text-black-keloola hover:text-blue-primary">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 flex-shrink-0"
                                          fill="none" viewBox="0 0 24 24" stroke="currentColor">

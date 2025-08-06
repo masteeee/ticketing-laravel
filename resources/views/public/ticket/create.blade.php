@@ -99,7 +99,7 @@
                     <ul class="space-y-4">
                         @forelse ($popularArticles as $article)
                             <li>
-                                <a href="{{ route('public.articles.show', $article->id) }}" class="flex items-start gap-2 text-black-keloola hover:text-blue-primary">
+                                <a href="{{ route('public.articles.show', $article->slug) }}" class="flex items-start gap-2 text-black-keloola hover:text-blue-primary">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mb-1 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9.5a2.5 2.5 0 00-2.5-2.5H15" />
                                     </svg>

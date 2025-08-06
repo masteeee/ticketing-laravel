@@ -89,7 +89,7 @@
                         $total = totalArticlesView($cat);
                         $first = firstArticleView($cat);
                         $goUrl = ($total === 1 && $first)
-                            ? route('public.articles.show', $first->id)
+                            ? route('public.articles.show', $first->slug)
                             : route('knowledge.category', ['category' => $cat->id]);
                         $icon = asset('assets/keloola-logo.png');
                     @endphp
@@ -117,7 +117,7 @@
             @if(($articles?->count() ?? 0) > 0)
                 <div class="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-6">
                     @foreach($articles as $article)
-                        <a href="{{ route('public.articles.show', $article->id) }}"
+                        <a href="{{ route('public.articles.show', $article->slug) }}"
                            class="bg-white-primary p-6 rounded-lg shadow hover:shadow-md transition block">
                             <div class="flex items-start">
                                 @if($article->thumbnail)
@@ -147,7 +147,7 @@
                         $total = totalArticlesView($cat);
                         $first = firstArticleView($cat);
                         $goUrl = ($total === 1 && $first)
-                            ? route('public.articles.show', $first->id)
+                            ? route('public.articles.show', $first->slug)
                             : route('knowledge.category', ['category' => $cat->id]);
                         $icon = asset('assets/keloola-logo.png');
                     @endphp
@@ -179,7 +179,7 @@
                         <ul class="flex flex-col">
                             @forelse($recentArticles as $article)
                                 <li class="py-5 px-5 border-b last:border-0 border-card-bor-keloola hover:text-blue-primary">
-                                    <a href="{{ route('public.articles.show', $article->id) }}">{{ $article->title }}</a>
+                                    <a href="{{ route('public.articles.show', $article->slug) }}">{{ $article->title }}</a>
                                 </li>
                             @empty
                                 <li class="py-5 px-5">Tidak ada artikel terbaru.</li>
@@ -194,7 +194,7 @@
                         <ul class="flex flex-col">
                             @forelse($popularArticles as $article)
                                 <li class="py-5 px-5 border-b last:border-0 border-card-bor-keloola hover:text-blue-primary">
-                                    <a href="{{ route('public.articles.show', $article->id) }}">{{ $article->title }}</a>
+                                    <a href="{{ route('public.articles.show', $article->slug) }}">{{ $article->title }}</a>
                                 </li>
                             @empty
                                 <li class="py-5 px-5">Tidak ada artikel populer.</li>
