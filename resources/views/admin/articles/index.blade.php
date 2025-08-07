@@ -124,8 +124,8 @@
                             @endif
                         </td>
                         <td class="border text-center">
-                            <a href="{{ route('articles.edit', $article->id) }}" class="btn btn-sm btn-warning me-1">Edit</a>
-                            <form action="{{ route('articles.destroy', $article->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Yakin hapus artikel ini?')">
+                            <a href="{{ route('articles.edit', $article->slug) }}" class="btn btn-sm btn-warning me-1">Edit</a>
+                            <form action="{{ route('articles.destroy', $article->slug) }}" method="POST" class="d-inline" onsubmit="return confirm('Yakin hapus artikel ini?')">
                                 @csrf @method('DELETE')
                                 <button class="btn btn-sm btn-danger">Hapus</button>
                             </form>

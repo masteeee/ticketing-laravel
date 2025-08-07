@@ -83,9 +83,12 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/tickets/{ticket}/assign', [AdminTicketController::class, 'assign'])->name('tickets.assign');
 
     // Articles
-    Route::resource('articles', ArticleController::class)->except(['create','show'])->where(['article' => '[0-9]+']);
-    Route::get('/article/create/', [ArticleController::class, 'create'])->name('articles.create');
-    Route::get('/article/{article}', [ArticleController::class, 'show'])->name('articles.show')->whereNumber('article'); // ✅ explicit
+    Route::get('/articles', [ArticleController::class, 'index'])->name('articles.index');
+    Route::get('/articles/create', [ArticleController::class, 'create'])->name('articles.create');
+    Route::post('/articles', [ArticleController::class, 'store'])->name('articles.store');
+    Route::get('/articles/{article}/edit', [ArticleController::class, 'edit'])->name('articles.edit');
+    Route::put('/articles/{article}', [ArticleController::class, 'update'])->name('articles.update');
+    Route::delete('/articles/{article}', [ArticleController::class, 'destroy'])->name('articles.destroy');
 
     // Categories
     Route::resource('categories', CategoryController::class);
