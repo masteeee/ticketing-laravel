@@ -2,7 +2,7 @@
     {{-- Brand --}}
     <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{ route('dashboard') }}">
         <div class="sidebar-brand-icon">
-            <img src="{{ asset('assets/keloola-logo.png') }}" alt="Keloola Logo" class="keloola-logo">
+            <img src="{{ asset('assets/keloola-logo-white.png') }}" alt="Keloola Logo" class="keloola-logo">
         </div>
     </a>
 

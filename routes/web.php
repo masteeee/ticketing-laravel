@@ -31,6 +31,7 @@ use App\Models\Service;
 Route::get('/', [PublicController::class, 'index'])->name('public.home');
 Route::get('/knowledge', [KnowledgeBaseController::class, 'index'])->name('knowledge.base');
 Route::get('/knowledge/category', [KnowledgeBaseController::class, 'showCategory'])->name('knowledge.category');
+Route::get('/knowledge/search', [KnowledgeBaseController::class, 'search'])->name('knowledge.search');
 Route::get('/ticket/create', [TicketController::class, 'create'])->name('ticket.create');
 Route::post('/ticket/submit', [TicketController::class, 'store'])->name('ticket.public.store');
 Route::get('/ticket/success', function () {

@@ -27,7 +27,7 @@ class TicketUserReplied extends Notification
             ->subject('Balasan Baru pada Tiket Anda')
             ->greeting('Halo, ' . $this->ticket->contact_name)
             ->line('Ada balasan baru dari admin/staff pada tiket Anda.')
-            ->line('Kode INV: ' . $this->ticket->invoice_id)
+            ->line('Kode Tracking ID: ' . $this->ticket->invoice_id)
             ->line('Isi balasan:')
             ->line($this->message)
             ->action('Lihat Tiket', url(route('ticket.public.detail', ['inv' => $this->ticket->invoice_id, 'email' => $this->ticket->email], false)))

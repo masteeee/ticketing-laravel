@@ -45,49 +45,52 @@
 </nav>
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    loadNotifications();
-    loadUnreadCount();
-    
-    // Refresh notifications every 30 seconds
-    setInterval(function() {
+    document.addEventListener('DOMContentLoaded', function () {
         loadNotifications();
         loadUnreadCount();
-    }, 30000);
-});
+        setInterval(function() {
+            loadNotifications();
+            loadUnreadCount();
+        }, 30000);
+    });
 
-function loadNotifications() {
-    fetch('/notifications')
-        .then(response => response.json())
-        .then(notifications => {
-            const notificationsList = document.getElementById('notificationsList');
-            
-            if (notifications.length === 0) {
-                notificationsList.innerHTML = '<div class="dropdown-item text-center small text-gray-500">No notifications</div>';
-                return;
-            }
-            
-            notificationsList.innerHTML = notifications.map(notification => `
-                <a class="dropdown-item d-flex align-items-center" href="/tickets/${notification.ticket_id}" onclick="markAsRead(${notification.id})">
-                    <div class="mr-3">
-                        <div class="icon-circle bg-warning">
-                            <i class="fas fa-exclamation-triangle text-white"></i>
+
+    function loadNotifications() {
+        fetch('/notifications')
+            .then(response => response.json())
+            .then(notifications => {
+                const notificationsList = document.getElementById('notificationsList');
+                
+                if (notifications.length === 0) {
+                    notificationsList.innerHTML = '<div class="dropdown-item text-center small text-gray-500">No notifications</div>';
+                    return;
+                }
+                
+                notificationsList.innerHTML = notifications.map(notification => `
+                    <a class="dropdown-item d-flex align-items-center" href="/tickets/${notification.ticket_id}" onclick="markAsRead(${notification.id})">
+                        <div class="mr-3">
+                            <div class="icon-circle bg-warning">
+                                <i class="fas fa-exclamation-triangle text-white"></i>
+                            </div>
                         </div>
-                    </div>
-                    <div>
-                        <div class="small text-gray-500">${formatDate(notification.created_at)}</div>
-                        <span class="font-weight-bold">${notification.message}</span>
-                    </div>
-                </a>
-            `).join('');
-        })
-        .catch(error => {
-            console.error('Error loading notifications:', error);
-        });
-}
+                        <div>
+                            <div class="small text-gray-500">${formatDate(notification.created_at)}</div>
+                            <span class="font-weight-bold">${notification.message}</span>
+                        </div>
+                    </a>
+                `).join('');
+            })
+            .catch(error => {
+                console.error('Error loading notifications:', error);
+            });
+    }
 
-function loadUnreadCount() {
-    fetch('/notifications/unread-count')
+    function loadUnreadCount() {
+        fetch('/notifications/unread-count', {
+            headers: {
+                'Accept': 'application/json'
+            }
+        })
         .then(response => response.json())
         .then(data => {
             const countElement = document.getElementById('notificationCount');
@@ -101,7 +104,7 @@ function loadUnreadCount() {
         .catch(error => {
             console.error('Error loading unread count:', error);
         });
-}
+    }
 
 function markAsRead(notificationId) {
     fetch(`/notifications/${notificationId}/mark-read`, {

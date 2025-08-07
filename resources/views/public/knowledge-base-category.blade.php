@@ -7,7 +7,7 @@
         <div class="relative">
             <div class="items-center space-x-4 hidden md:flex">
                 <div class="relative flex-1">
-                    <form method="GET" action="{{ route('knowledge.base') }}">
+                    <form method="GET" action="{{ route('knowledge.search') }}">
                         <input id="desktop-search-input" 
                                name="search"
                                type="text"
@@ -61,34 +61,6 @@
             <div class="lg:w-3/4 bg-white-primary border border-section-bor rounded-md">
                 <div class="p-4">
 
-                    {{-- Articles --}}
-                    @if($articles->count())
-                        <ul class="space-y-4 mb-8">
-                            @foreach($articles as $article)
-                                <li>
-                                    <a href="{{ route('public.articles.show', [
-                                        'bulan' => $article->created_at->format('m'),
-                                        'tahun' => $article->created_at->format('Y'),
-                                        'slug' => $article->slug
-                                    ]) }}"
-                                       class="flex items-start gap-2 text-black-keloola hover:text-blue-primary">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mt-1 flex-shrink-0"
-                                             fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                  d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9.5a2.5 2.5 0 00-2.5-2.5H15"/>
-                                        </svg>
-                                        <div>
-                                            <h3 class="text-lg font-semibold">{{ $article->title }}</h3>
-                                            <p class="text-sm text-gray-600">
-                                                {{ \Illuminate\Support\Str::limit(strip_tags($article->excerpt ?? $article->content), 120) }}
-                                            </p>
-                                        </div>
-                                    </a>
-                                </li>
-                            @endforeach
-                        </ul>
-                    @endif
-
                     {{-- Sub Categories --}}
                     @if($category->children->count())
                         <ul class="space-y-4">
@@ -120,6 +92,39 @@
                         </ul>
                     @elseif(!$articles->count())
                         <p class="text-gray-600">No articles or sections available in this category.</p>
+                    @endif
+
+                    @if($category->children->count() && $articles->count())
+                        <hr class="my-4">    
+                    @endif
+
+                    {{-- Articles --}}
+                    @if($articles->count())
+                        <h2 class="text-xl font-semibold mb-4">Articles</h2>
+                        <ul class="space-y-4 mb-8">
+                            @foreach($articles as $article)
+                                <li>
+                                    <a href="{{ route('public.articles.show', [
+                                        'bulan' => $article->created_at->format('m'),
+                                        'tahun' => $article->created_at->format('Y'),
+                                        'slug' => $article->slug
+                                    ]) }}"
+                                       class="flex items-start gap-2 text-black-keloola hover:text-blue-primary">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mt-1 flex-shrink-0"
+                                             fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                  d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9.5a2.5 2.5 0 00-2.5-2.5H15"/>
+                                        </svg>
+                                        <div>
+                                            <h3 class="text-lg font-semibold">{{ $article->title }}</h3>
+                                            <p class="text-sm text-gray-600">
+                                                {{ \Illuminate\Support\Str::limit(strip_tags($article->excerpt ?? $article->content), 120) }}
+                                            </p>
+                                        </div>
+                                    </a>
+                                </li>
+                            @endforeach
+                        </ul>
                     @endif
 
                 </div>

@@ -242,6 +242,7 @@
                             Kirim
                         </button>
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton">
+                            <li><a class="dropdown-item" href="#" onclick="event.preventDefault(); submitWithStatus('Dalam Antrean')">Dalam Antrean</a></li>
                             <li><a class="dropdown-item" href="#" onclick="event.preventDefault(); submitWithStatus('Dalam Pengerjaan')">Dalam Pengerjaan</a></li>
                             <li><a class="dropdown-item" href="#" onclick="event.preventDefault(); submitWithStatus('Solved')">Selesai</a></li>
                         </ul>

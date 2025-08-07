@@ -10,8 +10,8 @@
             @endif
             <form method="GET" action="{{ route('ticket.public.detail') }}" class="p-4">
                 <div class="mb-4">
-                    <label for="inv" class="block text-sm font-medium mb-2">Invoice Number (INV)</label>
-                    <input type="text" name="inv" id="inv" class="form-control w-full p-3 border border-gray-300 rounded" required placeholder="Masukkan kode INV Anda">
+                    <label for="inv" class="block text-sm font-medium mb-2">Tracking ID</label>
+                    <input type="text" name="inv" id="inv" class="form-control w-full p-3 border border-gray-300 rounded" required placeholder="Masukkan kode Tracking ID Anda">
                 </div>
                 <div class="mb-6">
                     <label for="email" class="block text-sm font-medium mb-2">Email</label>

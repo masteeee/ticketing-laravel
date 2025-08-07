@@ -8,8 +8,12 @@ use Illuminate\Support\Facades\Auth;
 
 class NotificationController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
+        if (request()->expectsJson()) {
+            return redirect()->route('dashboard');
+        }
+
         $notifications = Auth::user()->notifications()
             ->with(['ticket', 'mentionedBy'])
             ->orderBy('created_at', 'desc')
@@ -42,8 +46,11 @@ class NotificationController extends Controller
         return response()->json(['success' => true]);
     }
 
-    public function unreadCount()
+    public function unreadCount(Request $request)
     {
+        if (!$request->expectsJson()) {
+            return redirect()->route('dashboard');
+        }
         $count = Auth::user()->unreadNotificationsCount();
         return response()->json(['count' => $count]);
     }

@@ -8,7 +8,7 @@
         <div class="relative">
             <div class="items-center space-x-4 hidden md:flex">
                 <div class="relative flex-1">
-                    <form method="GET" action="{{ route('knowledge.base') }}">
+                    <form method="GET" action="{{ route('knowledge.search') }}">
                         <input id="desktop-search-input" 
                                name="search"
                                type="text"
@@ -88,7 +88,7 @@
                     </div>
                     {{-- Thumbnail --}}
                     <div class="w-full h-auto">
-                        <img style="height: 250px; object-fit:cover;" src="{{ asset('storage/' . $article->thumbnail) }}" alt="Thumbnail" class="w-full h-auto">
+                        <img style="object-fit:cover;" src="{{ asset('storage/' . $article->thumbnail) }}" alt="Thumbnail" class="w-full h-auto">
                     </div>
 
                     {{-- Konten Artikel --}}

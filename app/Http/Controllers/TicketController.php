@@ -80,7 +80,7 @@ class TicketController extends Controller
         // Generate invoice_id jika belum ada
         $invoiceId = $request->invoice_id;
         if (!$invoiceId) {
-            $invoiceId = 'INV-' . date('Ymd') . '-' . strtoupper(substr(uniqid(), -6));
+            $invoiceId = 'TR-' . date('Ymd') . '-' . strtoupper(substr(uniqid(), -6));
         }
 
         $ticket = Ticket::create([
