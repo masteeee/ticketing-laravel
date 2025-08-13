@@ -51,7 +51,7 @@ class KnowledgeBaseController extends Controller
                 ]);
             }
 
-            // ✅ FIX: Hanya redirect jika kategori tidak punya child dan artikelnya hanya 1
+            // Hanya redirect jika kategori tidak punya child dan artikelnya hanya 1
             if ($currentCategory->children->count() === 0 && $currentCategory->articles->count() === 1) {
                 return redirect()->route('articles.show', $currentCategory->articles->first()->id);
             }
@@ -164,7 +164,7 @@ class KnowledgeBaseController extends Controller
             });
         }
 
-        // ✅ FIX juga di sini: redirect hanya jika tidak punya child
+        // redirect hanya jika tidak punya child
         if ($category->children->count() === 0 && $articles->count() === 1) {
             return redirect()->route('public.articles.show', $articles->first()->id);
         }
@@ -194,46 +194,50 @@ class KnowledgeBaseController extends Controller
     }
 
     public function show($slug)
-    {
-        $article = Article::where('slug', $slug)->firstOrFail();
+        {
+            $article = Article::where('slug', $slug)->firstOrFail();
 
-        $breadcrumbs = collect([]);
-        $cat = $article->category;
-        while ($cat) {
-            $breadcrumbs->prepend($cat);
-            $cat = $cat->parent;
+            // Breadcrumbs kategori
+            $breadcrumbs = collect([]);
+            $cat = $article->category;
+            while ($cat) {
+                $breadcrumbs->prepend($cat);
+                $cat = $cat->parent;
+            }
+
+            // Related articles
+            $relatedArticles = Article::where('category_id', $article->category_id)
+                ->where('id', '!=', $article->id)
+                ->limit(5)
+                ->get();
+
+            // Ambil heading h2 & h3 untuk "On this page"
+            preg_match_all('/<h[23].*?>(.*?)<\/h[23]>/', $article->content, $matches);
+            $headings = collect($matches[1] ?? [])->map(function ($text, $i) {
+                return [
+                    'id' => 'heading-'.$i,
+                    'text' => html_entity_decode(strip_tags($text)) // ✅ decode & agar & tampil normal
+                ];
+            });
+
+            // Tambahkan id pada heading di konten
+            $headingIndex = 0;
+            $content = preg_replace_callback('/<h([23])(.*?)>(.*?)<\/h[23]>/', function($matches) use (&$headingIndex) {
+                $headingIndex++;
+                return '<h' . $matches[1] . $matches[2] . ' id="heading-' . ($headingIndex - 1) . '">' . $matches[3] . '</h' . $matches[1] . '>';
+            }, $article->content);
+
+            $article->content = $content;
+
+            return view('public.articles.show', compact('article', 'breadcrumbs', 'relatedArticles', 'headings'));
         }
 
-        $relatedArticles = Article::where('category_id', $article->category_id)
-            ->where('id', '!=', $article->id)
-            ->limit(5)
-            ->get();
-
-        preg_match_all('/<h[23].*?>(.*?)<\/h[23]>/', $article->content, $matches);
-        $headings = collect($matches[1] ?? [])->map(function ($text, $i) {
-            return ['id' => 'heading-'.$i, 'text' => strip_tags($text)];
-        });
-
-        $content = $article->content;
-        $headingIndex = 0;
-        $content = preg_replace_callback('/<h([23])(.*?)>(.*?)<\/h[23]>/', function($matches) use (&$headingIndex) {
-            $headingIndex++;
-            return '<h' . $matches[1] . $matches[2] . ' id="heading-' . ($headingIndex - 1) . '">' . $matches[3] . '</h' . $matches[1] . '>';
-        }, $content);
-
-        $article->content = $content;
-
-        return view('public.articles.show', compact('article', 'breadcrumbs', 'relatedArticles', 'headings'));
-    }
 
     public function search(Request $request)
     {
-        $keyword = strtolower($request->query('search'));
-
-        $articles = Article::where(function ($q) use ($keyword) {
-                $q->whereRaw('LOWER(title) LIKE ?', ["%{$keyword}%"])
-                  ->orWhereRaw('LOWER(content) LIKE ?', ["%{$keyword}%"]);
-            })
+        $keyword = $request->query('search');
+        $articles = Article::where('title', 'like', "%{$keyword}%")
+            ->orWhere('content', 'like', "%{$keyword}%")
             ->get();
 
         $recentArticles  = Article::latest()->take(5)->get();
