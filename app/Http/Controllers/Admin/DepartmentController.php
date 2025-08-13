@@ -53,15 +53,13 @@ class DepartmentController extends Controller
 
     public function update(Request $request, Department $department)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'description' => 'nullable|string',
+        $validated = $request->validate(Department::updateRules($department->id) + [
             'logo' => 'nullable|image|mimes:jpg,jpeg,png,svg|max:2048',
         ]);
     
         $data = [
-            'name' => $request->name,
-            'description' => $request->description,
+            'name' => $validated['name'],
+            'description' => $validated['description'] ?? null,
         ];
     
         if ($request->hasFile('logo')) {
@@ -76,7 +74,8 @@ class DepartmentController extends Controller
         }
     
         $department->update($data);
-        return redirect()->route('departments.index')->with('success', 'Department updated!');
+        return redirect()->route('departments.index')
+            ->with('success', 'Department updated!');
     }
 
     public function destroy(Department $department)

@@ -14,12 +14,12 @@ class ArticleController extends Controller
     public function index(Request $request) {
         $query = Article::with('category');
         
-        // Search functionality
+        // Search functionality (case-insensitive)
         if ($request->filled('search')) {
-            $search = $request->search;
+            $search = strtolower($request->search);
             $query->where(function($q) use ($search) {
-                $q->where('title', 'like', "%{$search}%")
-                  ->orWhere('content', 'like', "%{$search}%");
+                $q->whereRaw('LOWER(title) LIKE ?', ["%{$search}%"])
+                  ->orWhereRaw('LOWER(content) LIKE ?', ["%{$search}%"]);
             });
         }
         

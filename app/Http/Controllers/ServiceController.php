@@ -25,13 +25,11 @@ class ServiceController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
-            'name' => 'required',
-            'department_id' => 'required|exists:departments,id',
-        ]);
+        $validated = $request->validate(Service::createRules($request->department_id));
 
-        Service::create($request->all());
-        return redirect()->route('services.index')->with('success', 'Service created successfully.');
+        Service::create($validated);
+        return redirect()->route('services.index')
+            ->with('success', 'Service created successfully.');
     }
 
     public function edit(Service $service)
