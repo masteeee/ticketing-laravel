@@ -5,8 +5,8 @@
 ### 1. Clone Repository
 
 ```bash
-git clone https://github.com/your-org/keloola-ticketing.git
-cd keloola-ticketing
+git clone git@github.com:devthrive/keloola-support.git
+cd keloola-support
 ```
 
 ### 2. Build dan Jalankan Docker Compose

@@ -151,7 +151,7 @@
                     </div>
 
                     <div class="col-md-6">
-                        <label class="form-label fw-semibold">Invoice ID</label>
+                        <label class="form-label fw-semibold">Tracking ID</label>
                         <div class="bg-light p-3 rounded border">{{ $ticket->invoice_id }}</div>
                     </div>
 
@@ -238,7 +238,7 @@
 
                 <div class="d-flex justify-content-end">
                     <div class="dropdown">
-                        <button class="btn btn-danger dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                        <button class="btn btn-danger dropdown-toggle" {{ $ticket->status === 'Solved' ? 'disabled' : '' }} type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
                             Kirim
                         </button>
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton">
@@ -263,25 +263,48 @@
     let mentionTimeout;
     let currentMentionQuery = '';
 
+    let isSubmitting = false; // lock global
+
     function submitWithStatus(status) {
+        if (isSubmitting) return; // kalau sudah submit, hentikan
+
         const form = document.getElementById('replyForm');
         const statusInput = document.getElementById('statusInput');
         const messageTextarea = form.querySelector('textarea[name="message"]');
         const loading = document.getElementById('submitLoading');
+        const sendButton = document.querySelector('#dropdownMenuButton');
+        const dropdownItems = document.querySelectorAll('.dropdown-menu a');
 
-        // Validate message
+        // Validasi pesan
         if (!messageTextarea.value.trim()) {
             alert('Pesan tidak boleh kosong!');
             return;
         }
 
-        // Set status and submit
+        // Set lock agar tidak bisa submit lagi
+        isSubmitting = true;
+
+        // Disable tombol utama
+        if (sendButton) {
+            sendButton.disabled = true;
+            sendButton.innerHTML = 'Mengirim...';
+        }
+
+        // Disable semua item dropdown
+        dropdownItems.forEach(item => {
+            item.classList.add('disabled');
+            item.style.pointerEvents = 'none';
+            item.style.opacity = '0.5';
+        });
+
+        // Set status dan submit
         if (form && statusInput) {
             statusInput.value = status;
             if (loading) loading.classList.remove('d-none');
             form.submit();
         }
     }
+
 
     function formatMessageWithMentions(message) {
         return message.replace(/@(\w+)/g, '<span class="mention">@$1</span>');

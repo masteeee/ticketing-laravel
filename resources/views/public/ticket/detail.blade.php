@@ -107,7 +107,7 @@
         <div class="bg-white rounded-lg shadow p-6 mb-6">
             <h2 class="text-xl font-bold text-red-600 mb-4">Detail Ticket</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-2 mb-4">
-                <div><b>Invoice:</b> {{ $ticket->invoice_id }}</div>
+                <div><b>Tracking:</b> {{ $ticket->invoice_id }}</div>
                 <div><b>Email:</b> {{ $ticket->email }}</div>
                 <div><b>Nama Kontak:</b> {{ $ticket->contact_name }}</div>
                 <div><b>Departemen:</b> {{ $ticket->department->name ?? '-' }}</div>
@@ -170,15 +170,21 @@
             @endif
         </div>
         <div class="bg-white rounded-lg shadow p-6">
+            @if($ticket->status === 'Solved')
+                <div class="text-center py-8">
+                    <div class="text-gray-400 text-sm">Ticket sudah complete.</div>
+                </div>
+            @else
             <h3 class="font-semibold mb-3">Kirim Balasan</h3>
             <form method="POST" action="{{ route('ticket.public.reply', ['inv' => $ticket->invoice_id, 'email' => $ticket->email]) }}">
                 @csrf
                 <textarea name="message" class="form-control w-full border border-gray-300 rounded mb-3 p-4" rows="3" required placeholder="Tulis balasan..."></textarea>
-                <button type="submit" id="reply-ticket-btn" class="bg-red-600 text-white px-6 py-2 rounded hover:bg-red-700 transition flex items-center gap-2" style="background-color: #FF0000; color: white; border: none; ">
+                <button type="submit" {{ $ticket->status === 'Solved' ? 'disabled' : '' }} id="reply-ticket-btn" class="bg-red-600 text-white px-6 py-2 rounded hover:bg-red-700 transition flex items-center gap-2" style="background-color: #FF0000; color: white; border: none; ">
                     <span id="reply-ticket-text">Kirim</span>
                     <span id="reply-ticket-spinner" class="hidden animate-spin"><svg class="w-5 h-5" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path></svg></span>
                 </button>
             </form>
+            @endif
         </div>
     </div>
 </div>
