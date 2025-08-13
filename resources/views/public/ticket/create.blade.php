@@ -115,7 +115,7 @@
 
             <!-- Sidebar kanan -->
             <div class="lg:w-1/4">
-                <div class="mt-3">
+                <div class="mt-3 sticky top-6">
                     <h2 class="text-xl font-semibold mb-4">Popular Articles</h2>
                     <ul class="space-y-4">
                         @forelse ($popularArticles as $article)
