@@ -228,9 +228,12 @@ class KnowledgeBaseController extends Controller
 
     public function search(Request $request)
     {
-        $keyword = $request->query('search');
-        $articles = Article::where('title', 'like', "%{$keyword}%")
-            ->orWhere('content', 'like', "%{$keyword}%")
+        $keyword = strtolower($request->query('search'));
+
+        $articles = Article::where(function ($q) use ($keyword) {
+                $q->whereRaw('LOWER(title) LIKE ?', ["%{$keyword}%"])
+                  ->orWhereRaw('LOWER(content) LIKE ?', ["%{$keyword}%"]);
+            })
             ->get();
 
         $recentArticles  = Article::latest()->take(5)->get();
