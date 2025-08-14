@@ -359,30 +359,28 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 <style>
-    .article-content img {
-        max-width: 100% !important;
-        height: auto !important;
-        width: auto !important;
-        display: block;
-        margin-left: auto;
-        margin-right: auto;
-        object-fit: contain;
+    .article-content table {
+        border-collapse: collapse;
+        width: 100%;
     }
-    
-    .article-content {
-        overflow-wrap: break-word;
-        word-wrap: break-word;
+
+    .article-content th,
+    .article-content td {
+        border: 1px solid #dee2e6;
+        padding: 8px;
     }
-    
-    /* Ensure all media elements are responsive */
-    .article-content video,
-    .article-content iframe,
-    .article-content embed,
-    .article-content object {
-        max-width: 100% !important;
-        height: auto !important;
+
+    .article-content thead th {
+        background-color: #f8f9fa;
+        font-weight: bold;
     }
 </style>
-
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('.article-content table')
+            .forEach(table => table.classList.add('table', 'table-bordered'));
+    });
+    </script>
+    
 
 @endsection
