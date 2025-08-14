@@ -66,14 +66,22 @@
                 <h5 class="modal-title" id="cropModalLabel">Crop Foto Profil</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body">
-                <div>
-                    <img id="imageToCrop" style="max-width: 100%;">
+            <<div class="modal-body">
+                <div class="row">
+                    <div class="col-md-8">
+                        <img id="imageToCrop" style="max-width: 100%;">
+                    </div>
+                    <div class="col-md-4 d-flex flex-column align-items-center">
+                        <h6 class="mb-2">Preview</h6>
+                        <div class="preview rounded-circle border" 
+                             style="width:150px; height:150px; overflow:hidden;"></div>
+                    </div>
                 </div>
             </div>
+            
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                <button type="button" id="cropAndSave" class="btn btn-primary">Crop & Simpan</button>
+                <button type="button" id="cropAndSave" class="btn btn-danger">Crop & Simpan</button>
             </div>
         </div>
     </div>
@@ -106,16 +114,17 @@
 
     document.getElementById('cropModal').addEventListener('shown.bs.modal', function() {
         cropper = new Cropper(image, {
-            aspectRatio: 1,
-            viewMode: 1,
-            preview: '.preview',
-            background: false,
-            movable: true,
-            zoomable: true,
-            rotatable: false,
-            scalable: false,
-            responsive: true
-        });
+        aspectRatio: 1,
+        viewMode: 1,
+        preview: '.preview', // preview langsung ke div preview bulat
+        background: false,
+        movable: true,
+        zoomable: true,
+        rotatable: false,
+        scalable: false,
+        responsive: true
+     });
+
     });
 
     document.getElementById('cropModal').addEventListener('hidden.bs.modal', function() {
@@ -144,4 +153,10 @@
         modal.hide();
     });
 </script>
+<style>
+    .preview {
+        border-radius: 50% !important;
+    }
+    </style>
+    
 @endpush
