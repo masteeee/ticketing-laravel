@@ -238,6 +238,7 @@
             }
         }).render();
     }
+    
 </script>
 @endpush
 
