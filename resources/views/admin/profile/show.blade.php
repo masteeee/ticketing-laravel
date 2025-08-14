@@ -3,7 +3,7 @@
 @section('content')
 <div class="container py-4">
     <div class="card shadow-sm rounded p-4 text-center">
-        <h1 class="text-2xl font-bold mb-4">Profile Admin</h1>
+        <h1 class="text-2xl font-bold mb-4">Profile {{ Auth::user()->name ?? 'User' }}</h1>
 
         <!-- Foto Profil di Tengah -->
         <div class="mb-4 d-flex justify-content-center">
