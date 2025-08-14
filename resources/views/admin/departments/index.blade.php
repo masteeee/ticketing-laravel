@@ -13,6 +13,20 @@
             </button>
         </div>
     </div>
+    
+    @if(session('success'))
+        <div class="alert alert-success">{{ session('success') }}</div>
+    @endif
+    
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul class="mb-0">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
 
     <div class="table-responsive table-bordered">
         <table class="table table-bordered table-hover align-middle text-sm">
@@ -62,11 +76,17 @@
                                 <div class="modal-body">
                                     <div class="mb-3">
                                         <label class="form-label">Nama Department</label>
-                                        <input type="text" name="name" class="form-control" value="{{ $department->name }}" required>
+                                        <input type="text" name="name" class="form-control @error('name') is-invalid @enderror" value="{{ old('name', $department->name) }}" required>
+                                        @error('name')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                     <div class="mb-3">
                                         <label class="form-label">Deskripsi</label>
-                                        <textarea name="description" class="form-control">{{ $department->description }}</textarea>
+                                        <textarea name="description" class="form-control @error('description') is-invalid @enderror">{{ old('description', $department->description) }}</textarea>
+                                        @error('description')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                     <div class="mb-3">
                                         <label class="form-label">Logo (opsional)</label>
@@ -105,11 +125,17 @@
                 <div class="modal-body">
                     <div class="mb-3">
                         <label class="form-label">Nama Department</label>
-                        <input type="text" name="name" class="form-control" required>
+                        <input type="text" name="name" class="form-control @error('name') is-invalid @enderror" value="{{ old('name') }}" required>
+                        @error('name')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Deskripsi</label>
-                        <textarea name="description" class="form-control"></textarea>
+                        <textarea name="description" class="form-control @error('description') is-invalid @enderror">{{ old('description') }}</textarea>
+                        @error('description')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Logo (opsional)</label>

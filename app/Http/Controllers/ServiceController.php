@@ -40,10 +40,7 @@ class ServiceController extends Controller
 
     public function update(Request $request, Service $service)
     {
-        $request->validate([
-            'name' => 'required',
-            'department_id' => 'required|exists:departments,id',
-        ]);
+        $request->validate(Service::updateRules($service->id, $request->department_id));
 
         $service->update($request->all());
         return redirect()->route('services.index')->with('success', 'Service updated successfully.');

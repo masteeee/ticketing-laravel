@@ -21,7 +21,7 @@ class Service extends Model
         return [
             'name' => 'required|string|max:100',
             'department_id' => 'required|exists:departments,id',
-            'description' => 'nullable|string',
+            'description' => 'nullable|string|max:500',
         ];
     }
 
@@ -40,7 +40,7 @@ class Service extends Model
                 })
             ],
             'department_id' => 'required|exists:departments,id',
-            'description' => 'nullable|string',
+            'description' => 'nullable|string|max:500',
         ];
     }
 
@@ -59,7 +59,7 @@ class Service extends Model
                 })->ignore($id)
             ],
             'department_id' => 'required|exists:departments,id',
-            'description' => 'nullable|string',
+            'description' => 'nullable|string|max:500',
         ];
     }
 

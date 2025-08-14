@@ -10,6 +10,16 @@
     @if(session('success'))
         <div class="alert alert-success">{{ session('success') }}</div>
     @endif
+    
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul class="mb-0">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
 
     <div class="bg-white mt-4 table table-bordered">
         <table class="table table-responsive  rounded">
@@ -58,7 +68,10 @@
             <div class="modal-body">
                 <div class="mb-3">
                     <label for="permission_name" class="form-label">Nama Permission</label>
-                    <input type="text" name="name" id="permission_name" class="form-control" required>
+                    <input type="text" name="name" id="permission_name" class="form-control @error('name') is-invalid @enderror" value="{{ old('name') }}" required>
+                    @error('name')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
                 </div>
             </div>
             <div class="modal-footer">
@@ -82,7 +95,10 @@
                 <input type="hidden" name="id" id="edit_id">
                 <div class="mb-3">
                     <label for="edit_name" class="form-label">Nama Permission</label>
-                    <input type="text" name="name" id="edit_name" class="form-control" required>
+                    <input type="text" name="name" id="edit_name" class="form-control @error('name') is-invalid @enderror" required>
+                    @error('name')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
                 </div>
             </div>
             <div class="modal-footer">

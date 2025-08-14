@@ -33,7 +33,7 @@
 
             <div class="mb-3">
                 <label for="content" class="form-label fw-semibold">Konten</label>
-                <textarea id="summernote" name="content" class="form-control"></textarea>
+                <textarea id="summernote" name="content" class="form-control" required></textarea>
             </div>
 
             <div class="text-end">

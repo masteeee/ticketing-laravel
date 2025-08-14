@@ -20,9 +20,9 @@ class Department extends Model
     {
         return [
             'name' => 'required|string|max:100|unique:departments,name',
-            'description' => 'nullable|string',
-            'logo_url' => 'nullable|url',
-            'external_id' => 'nullable|string',
+            'description' => 'nullable|string|max:500',
+            'logo_url' => 'nullable|url|max:255',
+            'external_id' => 'nullable|string|max:50',
         ];
     }
 
@@ -33,9 +33,9 @@ class Department extends Model
     {
         return [
             'name' => 'required|string|max:100|unique:departments,name,' . $id,
-            'description' => 'nullable|string',
-            'logo_url' => 'nullable|url',
-            'external_id' => 'nullable|string',
+            'description' => 'nullable|string|max:500',
+            'logo_url' => 'nullable|url|max:255',
+            'external_id' => 'nullable|string|max:50',
         ];
     }
 

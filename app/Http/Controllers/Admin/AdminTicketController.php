@@ -152,11 +152,21 @@ class AdminTicketController extends Controller
 
     public function getMentionSuggestions(Request $request)
     {
-        $query = $request->get('q', '');
-        $suggestions = $this->mentionService->getMentionSuggestions($query);
-        
-        return response()->json($suggestions);
+        $query = trim($request->get('q', ''));
+
+        $users = User::query()
+            ->when($query, function ($q) use ($query) {
+                // Kalau ada query, filter berdasarkan nama atau email
+                $q->where('name', 'like', "%{$query}%")
+                ->orWhere('email', 'like', "%{$query}%");
+            })
+            ->orderBy('name')
+            ->limit(8) // max 8 user
+            ->get(['id', 'name', 'email']);
+
+        return response()->json($users);
     }
+
     
     public function assign(Request $request, Ticket $ticket)
     {
@@ -171,6 +181,32 @@ class AdminTicketController extends Controller
      */
     public static function formatMessageWithMentions($message)
     {
-        return preg_replace('/@(\w+)/', '<span class="mention">@$1</span>', htmlspecialchars($message));
+        // Escape HTML untuk mencegah XSS
+        $escapedMessage = htmlspecialchars($message);
+
+        // Ambil semua user dan urutkan dari nama terpanjang
+        $users = \App\Models\User::all()->sortByDesc(function($user) {
+            return strlen($user->name);
+        });
+
+        foreach ($users as $user) {
+            // Escape nama user untuk regex
+            $userName = preg_quote($user->name, '/');
+
+            // Pattern:
+            // - @ diikuti nama lengkap (boleh ada spasi)
+            // - Pastikan dibatasi oleh akhir string atau karakter pemisah (spasi, tanda baca, dll.)
+            $pattern = '/@(' . $userName . ')(?=$|\s|[.,!?;:])/iu';
+
+            // Ganti dengan span
+            $escapedMessage = preg_replace(
+                $pattern,
+                '<span class="mention">@$1</span>',
+                $escapedMessage
+            );
+        }
+
+        return $escapedMessage;
     }
+
 }

@@ -313,11 +313,7 @@
     function showMentionSuggestions(query) {
         const suggestionsDiv = document.getElementById('mentionSuggestions');
         
-        if (!query) {
-            suggestionsDiv.style.display = 'none';
-            return;
-        }
-
+        // Hapus pengecekan query kosong supaya tetap muncul
         fetch(`/mention-suggestions?q=${encodeURIComponent(query)}`)
             .then(response => response.json())
             .then(users => {
@@ -338,6 +334,7 @@
                 suggestionsDiv.style.display = 'none';
             });
     }
+
 
     function insertMention(username) {
         const textarea = document.getElementById('messageInput');
@@ -384,21 +381,20 @@
                 const cursorPos = e.target.selectionStart;
                 const textBefore = e.target.value.substring(0, cursorPos);
                 const lastAtIndex = textBefore.lastIndexOf('@');
-                
+
                 if (lastAtIndex !== -1) {
                     const query = textBefore.substring(lastAtIndex + 1);
-                    if (query.length > 0) {
-                        clearTimeout(mentionTimeout);
-                        mentionTimeout = setTimeout(() => {
-                            showMentionSuggestions(query);
-                        }, 300);
-                    } else {
-                        suggestionsDiv.style.display = 'none';
-                    }
+                    clearTimeout(mentionTimeout);
+                    mentionTimeout = setTimeout(() => {
+                        // Kirim query kosong kalau belum ketik apapun setelah @
+                        showMentionSuggestions(query.trim());
+                    }, 100);
                 } else {
                     suggestionsDiv.style.display = 'none';
                 }
             });
+
+
 
             // Handle suggestion clicks
             suggestionsDiv.addEventListener('click', function(e) {
