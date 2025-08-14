@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container py-4">
-    <div class="d-flex justify-between items-center mb-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
         <h2 class="text-xl font-semibold">Kategori Artikel</h2>
         <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#createModal">+ Tambah Kategori</button>
     </div>
@@ -24,10 +24,10 @@
             </thead>
             <tbody>
                 @php
-                    function renderCategoryRows($categories, $parentId = null, $prefix = '') {
+                    function renderCategoryRows($categories, $allCategories, $parentId = null, $prefix = '') {
                         foreach ($categories->where('parent_id', $parentId) as $cat) {
                             echo '<tr>
-                                    <td>' . $prefix . e($cat->name) . '</td>
+                                    <td>' . ($parentId ? $prefix . e($cat->name) : '<strong>' . e($cat->name) . '</strong>') . '</td>
                                     <td>
                                         <div class="d-flex gap-2">
                                             <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#editModal'.$cat->id.'">Edit</button>
@@ -37,7 +37,7 @@
                                             </form>
                                         </div>
                                     </td>
-                                    </tr>';
+                                  </tr>';
 
                             // Modal Edit
                             echo '
@@ -59,7 +59,7 @@
                                                     <label class="form-label">Parent Kategori (opsional)</label>
                                                     <select name="parent_id" class="form-control">
                                                         <option value="">-- Tidak ada --</option>';
-                                                        renderParentOptions($categories, '', null, $cat->id);
+                                                        renderParentOptions($allCategories, '', null, $cat->id);
                             echo '              </select>
                                                 </div>
                                             </div>
@@ -72,7 +72,8 @@
                                 </div>
                             </div>';
 
-                            renderCategoryRows($categories, $cat->id, $prefix . '↳ ');
+                            // Recursive untuk child
+                            renderCategoryRows($allCategories, $allCategories, $cat->id, $prefix . '↳ ');
                         }
                     }
 
@@ -85,14 +86,29 @@
                         }
                     }
 
-                    renderCategoryRows($categories);
+                    renderCategoryRows($parentCategories, $allCategories);
                 @endphp
             </tbody>
         </table>
     </div>
 
-    <div class="mt-3">
-        {{ $categories->links() }}
+    <!-- Pagination + Per Page -->
+    <div class="d-flex justify-content-between align-items-center mt-3">
+        <div>
+            {{ $parentCategories->appends(request()->query())->links('pagination::bootstrap-4') }}
+        </div>
+        <div>
+            <form method="GET" action="{{ route('categories.index') }}">
+                <label for="perPage" class="me-2">Tampilkan</label>
+                <select name="perPage" id="perPage" class="form-select d-inline-block w-auto" onchange="this.form.submit()">
+                    <option value="5" {{ request('perPage') == 5 ? 'selected' : '' }}>5</option>
+                    <option value="10" {{ request('perPage') == 10 ? 'selected' : '' }}>10</option>
+                    <option value="25" {{ request('perPage') == 25 ? 'selected' : '' }}>25</option>
+                    <option value="50" {{ request('perPage') == 50 ? 'selected' : '' }}>50</option>
+                </select>
+                <span class="ms-1">per halaman</span>
+            </form>
+        </div>
     </div>
 </div>
 
@@ -115,7 +131,7 @@
                         <label class="form-label">Parent Kategori (opsional)</label>
                         <select name="parent_id" class="form-control">
                             <option value="">-- Tidak ada (Root) --</option>
-                            @php renderParentOptions($categories); @endphp
+                            @php renderParentOptions($allCategories); @endphp
                         </select>
                     </div>
                 </div>

@@ -8,36 +8,70 @@ use App\Http\Controllers\Controller;
 
 class CategoryController extends Controller
 {
-    public function index() {
-        $categories = Category::paginate(10);
-        return view('admin.categories.index', compact('categories'));
+    public function index(Request $request)
+    {
+        $perPage = (int) $request->get('perPage', 10);
+        $search = $request->get('search', '');
+    
+        $query = Category::whereNull('parent_id')
+            ->orderBy('name');
+    
+        if ($search) {
+            $query->where('name', 'like', "%{$search}%");
+        }
+    
+        $parentCategories = $query
+            ->paginate($perPage)
+            ->appends($request->query());
+    
+        $allCategories = Category::orderBy('name')->get();
+    
+        return view('admin.categories.index', compact('allCategories', 'parentCategories', 'search', 'perPage'));
     }
+    
+    
+    public function store(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'parent_id' => 'nullable|exists:categories,id',
+        ]);
 
-    public function create() {
-        $categories = Category::all();
-        return view('admin.categories.create', compact('categories'));
-    }
-
-    public function store(Request $request) {
-        $request->validate(['name' => 'required']);
         Category::create([
             'name' => $request->name,
             'parent_id' => $request->parent_id
         ]);
-        return redirect()->route('categories.index')->with('success', 'Kategori ditambahkan');
+
+        // Redirect ke halaman terakhir supaya kategori baru terlihat
+        $lastPage = ceil(Category::whereNull('parent_id')->count() / 10);
+        return redirect()->route('categories.index', ['page' => $lastPage])
+                         ->with('success', 'Kategori ditambahkan');
     }
 
-    public function edit(Category $category) {
-        return view('admin.categories.edit', compact('category'));
+    public function edit(Category $category)
+    {
+        $allCategories = Category::all();
+        return view('admin.categories.edit', compact('category', 'allCategories'));
     }
 
-    public function update(Request $request, Category $category) {
-        $request->validate(['name' => 'required']);
-        $category->update($request->all());
+    public function update(Request $request, Category $category)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'parent_id' => 'nullable|exists:categories,id',
+        ]);
+
+        $category->update($request->only('name', 'parent_id'));
         return redirect()->route('categories.index')->with('success', 'Kategori diupdate');
     }
 
-    public function destroy(Category $category) {
+    public function destroy(Category $category)
+    {
+        // Optional: cek jika memiliki child
+        if ($category->children()->count()) {
+            return back()->with('error', 'Kategori memiliki subkategori, tidak bisa dihapus');
+        }
+
         $category->delete();
         return back()->with('success', 'Kategori dihapus');
     }

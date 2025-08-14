@@ -131,7 +131,7 @@ class TicketController extends Controller
             ->where('email', $request->email)
             ->first();
         if (!$ticket) {
-            return redirect()->route('ticket.view.form')->with('error', 'Ticket tidak ditemukan atau email salah.');
+            return redirect()->route('ticket.view.form')->with('error', 'Tiket Anda tidak ditemukan. Mohon periksa kembali Email atau ID tiket Anda.');
         }
         $conversations = $ticket->conversations()->with('user')->get();
         return view('public.ticket.detail', compact('ticket', 'conversations'));
@@ -148,7 +148,7 @@ class TicketController extends Controller
             ->where('email', $request->email)
             ->first();
         if (!$ticket) {
-            return redirect()->route('ticket.view.form')->with('error', 'Ticket tidak ditemukan atau email salah.');
+            return redirect()->route('ticket.view.form')->with('error', 'Tiket Anda tidak ditemukan. Mohon periksa kembali Email atau ID tiket Anda.');
         }
         $ticket->conversations()->create([
             'user_id' => null, // public user
