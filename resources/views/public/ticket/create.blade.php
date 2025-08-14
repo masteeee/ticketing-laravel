@@ -14,25 +14,12 @@
                 <div class="p-6">
                     <h1 class="text-3xl font-semibold mb-6">Submit a request</h1>
                     <h4 class="text-xl font-semibold my-10">Request Information</h4>
-
-                    {{-- Error Laravel --}}
-                    @if ($errors->any())
-                        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
-                            <strong class="font-bold">Terjadi kesalahan:</strong>
-                            <ul class="list-disc list-inside">
-                                @foreach ($errors->all() as $error)
-                                    <li>{{ $error }}</li>
-                                @endforeach
-                            </ul>
-                        </div>
-                    @endif
-
                     <form class="space-y-6" action="{{ route('ticket.public.store') }}" method="POST" enctype="multipart/form-data">
                         @csrf
 
                         <!-- Department -->
                         <div>
-                            <label class="block text-sm font-medium mb-2">Department <span class="text-red-keloola">*</span></label>
+                            <label class="block text-sm font-medium mb-2">Department</label>
                             <select name="department_id" id="department_id" class="w-full p-3 border border-section-bor rounded-md" required>
                                 <option value="">-- Pilih Department --</option>
                                 @foreach($departments as $dept)
@@ -41,51 +28,44 @@
                                     </option>
                                 @endforeach
                             </select>
-                            @error('department_id') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
                         </div>
 
                         <!-- Contact Name -->
                         <div>
                             <label class="block text-sm font-medium mb-2">Contact Name <span class="text-red-keloola">*</span></label>
                             <input name="contact_name" type="text" class="w-full p-2 border border-section-bor rounded-md" value="{{ old('contact_name') }}" required />
-                            @error('contact_name') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
                         </div>
 
                         <!-- Service -->
                         <div>
-                            <label class="block text-sm font-medium mb-2">Service <span class="text-red-keloola">*</span></label>
+                            <label class="block text-sm font-medium mb-2">Service</label>
                             <select name="service_id" id="service_id" class="w-full p-3 border border-section-bor rounded-md" required>
                                 <option value="">-- Silahkan Pilih Department terlebih dahulu --</option>
                             </select>
-                            @error('service_id') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
                         </div>
 
                         <!-- Email -->
                         <div>
-                            <label class="block text-sm font-medium mb-2">Email <span class="text-red-keloola">*</span></label>
-                            <input name="email" type="email" class="w-full p-2 border border-section-bor rounded-md" value="{{ old('email') }}" required />
-                            @error('email') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                            <label class="block text-sm font-medium mb-2">Email</label>
+                            <input name="email" type="email" class="w-full p-2 border border-section-bor rounded-md" value="{{ old('email') }}" />
                         </div>
 
                         <!-- Phone -->
                         <div>
                             <label class="block text-sm font-medium mb-2">Phone</label>
                             <input name="phone" type="text" class="w-full p-2 border border-section-bor rounded-md" value="{{ old('phone') }}" />
-                            @error('phone') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
                         </div>
 
                         <!-- Subject -->
                         <div>
                             <label class="block text-sm font-medium mb-2">Subject <span class="text-red-keloola">*</span></label>
                             <input name="subject" type="text" class="w-full p-2 border border-section-bor rounded-md" value="{{ old('subject') }}" required />
-                            @error('subject') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
                         </div>
 
                         <!-- Description -->
                         <div>
                             <label class="block text-sm font-medium mb-2">Description</label>
                             <textarea name="description" class="w-full p-2 border border-section-bor rounded-md min-h-[200px]">{{ old('description') }}</textarea>
-                            @error('description') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
                         </div>
 
                         <!-- Attachment -->
@@ -93,7 +73,6 @@
                             <label class="block text-sm font-medium mb-2">Attach a file</label>
                             <input name="attachment" type="file" class="w-full p-2 border rounded-md" />
                             <small>(Up to 40 MB)</small>
-                            @error('attachment') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
                         </div>
 
                         <!-- Submit -->
@@ -114,8 +93,8 @@
             </div>
 
             <!-- Sidebar kanan -->
-            <div class="lg:w-1/4">
-                <div class="mt-3 sticky top-6">
+            <div class="lg:w-1/3">
+                <div class="mt-3">
                     <h2 class="text-xl font-semibold mb-4">Popular Articles</h2>
                     <ul class="space-y-4">
                         @forelse ($popularArticles as $article)
@@ -144,6 +123,7 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     $(document).ready(function() {
+        // Function to load services for a department
         function loadServices(deptId) {
             $('#service_id').empty().append('<option>Loading...</option>');
             if (deptId) {
@@ -165,11 +145,13 @@
             }
         }
 
+        // Handle department change
         $('#department_id').on('change', function() {
             const deptId = $(this).val();
             loadServices(deptId);
         });
 
+        // Auto-load services if department is pre-selected
         const selectedDeptId = $('#department_id').val();
         if (selectedDeptId) {
             loadServices(selectedDeptId);

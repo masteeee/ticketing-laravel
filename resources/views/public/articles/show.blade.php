@@ -87,9 +87,11 @@
                         </div>
                     </div>
                     {{-- Thumbnail --}}
-                    <div class="w-full h-auto">
-                        <img style="object-fit:cover;" src="{{ asset('storage/' . $article->thumbnail) }}" alt="Thumbnail" class="w-full h-auto">
-                    </div>
+                    @if($article->thumbnail)
+                        <div class="w-full h-auto">
+                            <img style="object-fit:cover;" src="{{ asset('storage/' . $article->thumbnail) }}" alt="Thumbnail" class="w-full h-auto">
+                        </div>
+                    @endif
 
                     {{-- Konten Artikel --}}
                     <div class="text-lg my-8 leading-relaxed article-content prose max-w-none">
@@ -160,6 +162,8 @@
 @tailwind
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <script>
+
+
 function downloadAsPDF() {
     // Get the article content and thumbnail
     const articleContent = document.querySelector('.article-content');
@@ -268,10 +272,12 @@ function printArticle() {
         </head>
         <body>
             <h1>${articleTitle}</h1>
-            ${thumbnailUrl ? `<div class="thumbnail-container">
-                <img src="${thumbnailUrl}" alt="Article Thumbnail">
-            </div>` : ''}
-            <div>${articleContent.innerHTML}</div>
+            @if($article->thumbnail)
+                <div class="thumbnail-container">
+                    <img src="{{ asset('storage/' . $article->thumbnail) }}" alt="Article Thumbnail">
+                </div>
+            @endif
+            <div class="article-content">${articleContent.innerHTML}</div>
             <div class="print-footer">
                 <p>Generated from Keloola Knowledge Base</p>
                 <p>Date: ${new Date().toLocaleDateString()}</p>
@@ -352,5 +358,31 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 </script>
+<style>
+    .article-content img {
+        max-width: 100% !important;
+        height: auto !important;
+        width: auto !important;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        object-fit: contain;
+    }
+    
+    .article-content {
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+    }
+    
+    /* Ensure all media elements are responsive */
+    .article-content video,
+    .article-content iframe,
+    .article-content embed,
+    .article-content object {
+        max-width: 100% !important;
+        height: auto !important;
+    }
+</style>
+
 
 @endsection

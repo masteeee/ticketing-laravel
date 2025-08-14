@@ -14,6 +14,16 @@
         return $count;
     }
 
+    // Cari artikel pertama dari kategori & turunannya
+    function firstArticleView($cat) {
+        if (($cat->articles ?? collect())->count() > 0) return $cat->articles->first();
+        foreach (($cat->children ?? collect()) as $child) {
+            $a = firstArticleView($child);
+            if ($a) return $a;
+        }
+        return null;
+    }
+
     // Breadcrumbs rekursif
     function breadcrumbs($category, $items = []) {
         if (!$category) return $items;
@@ -30,7 +40,6 @@
         $breadcrumbs = breadcrumbs($currentCategory);
     }
 @endphp
-
 <section class="bg-search-section py-8">
     <div class="container mx-auto px-4">
         {{-- Search --}}
@@ -53,7 +62,7 @@
                             </svg>
                         </button>
                     </form>
-                    {{-- Dropdown search --}}
+                    {{-- Dropdown search (opsional AJAX) --}}
                     <ul id="desktop-search-menu"
                         class="absolute hidden right-[15%] mt-1 w-48 bg-white-primary shadow-md rounded-md z-50"></ul>
                 </div>
@@ -65,26 +74,22 @@
     <div class="container mx-auto px-4 py-4">
         <div class="text-sm text-primary">
             <a href="{{ route('knowledge.base') }}" class="text-primary lg:inline hidden">Knowledge Base</a>
+
         </div>
     </div>
 </section>
-
 <section class="bg-form-section py-10">
     <div class="container mx-auto px-4">
-
-        {{-- Sections jika kategori punya children --}}
+        {{-- SECTIONS jika kategori punya children --}}
         @if(isset($currentCategory) && $currentCategory && ($categories?->count() ?? 0) > 0)
             <h2 class="text-lg font-semibold mb-4">Sections</h2>
             <div class="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-6 mb-10">
                 @foreach($categories as $cat)
                     @php
-                        $totalArticles = totalArticlesView($cat);
-                        $directArticle = null;
-                        if (($cat->children ?? collect())->count() === 0 && ($cat->articles ?? collect())->count() === 1) {
-                            $directArticle = $cat->articles->first();
-                        }
-                        $goUrl = $directArticle
-                            ? route('public.articles.show', $directArticle->slug)
+                        $total = totalArticlesView($cat);
+                        $first = firstArticleView($cat);
+                        $goUrl = ($total === 1 && $first)
+                            ? route('public.articles.show', $first->slug)
                             : route('knowledge.category', ['category' => $cat->id]);
                         $icon = asset('assets/keloola-logo.png');
                     @endphp
@@ -98,7 +103,7 @@
                             {{ $cat->description ?? "Explore articles in {$cat->name}" }}
                         </p>
                         <div class="mt-20 flex gap-x-5 text-icon-breadcrumb">
-                            <span>{{ $totalArticles }} Articles</span>
+                            <span>{{ $total }} Articles</span>
                             <span>{{ ($cat->children ?? collect())->count() }} Sections</span>
                         </div>
                     </a>
@@ -135,21 +140,17 @@
                 </div>
             @endif
         @else
-            {{-- Root kategori utama --}}
+            {{-- ROOT: kategori utama --}}
             <div class="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-6">
                 @forelse($categories as $cat)
                     @php
-                        $totalArticles = totalArticlesView($cat);
-                        $directArticle = null;
-                        if (($cat->children ?? collect())->count() === 0 && ($cat->articles ?? collect())->count() === 1) {
-                            $directArticle = $cat->articles->first();
-                        }
-                        $goUrl = $directArticle
-                            ? route('public.articles.show', $directArticle->slug)
+                        $total = totalArticlesView($cat);
+                        $first = firstArticleView($cat);
+                        $goUrl = ($total === 1 && $first)
+                            ? route('public.articles.show', $first->slug)
                             : route('knowledge.category', ['category' => $cat->id]);
                         $icon = asset('assets/keloola-logo.png');
                     @endphp
-
                     <a href="{{ $goUrl }}" class="bg-white-primary shadow rounded-lg p-6 block hover:shadow-md transition">
                         <div class="flex flex-wrap border-b border-card-bor-keloola gap-4 pb-3">
                             <img src="{{ $icon }}" alt="{{ $cat->name }}" class="w-10 h-10 object-contain mr-3">
@@ -157,7 +158,7 @@
                         </div>
                         <p class="text-black-keloola my-4">Explore articles in {{ $cat->name }}</p>
                         <div class="mt-20 flex gap-x-5 text-icon-breadcrumb">
-                            <span>{{ $totalArticles }} Articles</span>
+                            <span>{{ $total }} Articles</span>
                             <span>{{ ($cat->children ?? collect())->count() }} Sections</span>
                         </div>
                     </a>
@@ -206,6 +207,5 @@
 
     </div>
 </section>
-
 @include('layouts.footer')
 @endsection
