@@ -93,7 +93,7 @@
                     @endif
 
                     {{-- Konten Artikel --}}
-                    <div class="text-lg my-8 leading-relaxed article-content prose max-w-none">
+                    <div class="text-lg my-8 leading-relaxed article-content max-w-none">
                         {!! $article->content !!}
                     </div>
 
@@ -261,6 +261,38 @@ function printArticle() {
                     font-size: 12px; 
                     color: #6b7280;
                 }
+                /* Ensure tables print with clear borders similar to Summernote */
+                .article-content table {
+                    width: 100%;
+                    border-collapse: collapse;
+                    border: 1px solid #444; /* default border; inline styles from Summernote will override */
+                    margin: 12px 0;
+                }
+                .article-content thead th {
+                    background: #f3f4f6; /* light gray header */
+                    -webkit-print-color-adjust: exact;
+                    print-color-adjust: exact;
+                }
+                .article-content th,
+                .article-content td {
+                    border: 1px solid #444;
+                    padding: 8px 10px;
+                    vertical-align: top;
+                }
+                .article-content tbody tr:nth-child(even) td {
+                    background: #fafafa;
+                    -webkit-print-color-adjust: exact;
+                    print-color-adjust: exact;
+                }
+                /* Respect any inline border styles coming from Summernote (higher specificity inline wins) */
+                .article-content table[border],
+                .article-content table[style*="border"],
+                .article-content th[style*="border"],
+                .article-content td[style*="border"] {
+                    border-color: inherit;
+                }
+                @page { margin: 20mm; }
+                body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
                 @media print {
                     body { margin: 0; padding: 15px; }
                     .thumbnail-container img {
@@ -524,13 +556,5 @@ document.addEventListener('DOMContentLoaded', function() {
         font-family: 'Courier New', monospace !important;
     }
 </style>
-
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        document.querySelectorAll('.article-content table')
-            .forEach(table => table.classList.add('table', 'table-bordered'));
-    });
-    </script>
-    
 
 @endsection

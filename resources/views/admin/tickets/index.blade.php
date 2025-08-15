@@ -15,6 +15,10 @@
         <div class="alert alert-success fs-6">{{ session('success') }}</div> 
     @endif
 
+    @if(session('error'))
+        <div class="alert alert-danger fs-6">{{ session('error') }}</div>
+    @endif
+
     <div class="card mb-4 shadow-sm border-0 rounded-3">
         <div class="card-body">
             <h4 class="text-danger fw-bold mb-4 fs-5">Filter Tiket</h4>
