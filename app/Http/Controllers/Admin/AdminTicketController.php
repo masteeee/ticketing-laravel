@@ -64,8 +64,17 @@ class AdminTicketController extends Controller
         }
 
         if ($request->filled('status')) {
-            $query->where('status', $request->status);
+            $statusMap = [
+                'Dalam Antrean' => 'Dalam Antrean',
+                'Dalam Pengerjaan' => 'Dalam Pengerjaan',
+                'Solved' => 'Solved'
+            ];
+        
+            $status = $statusMap[$request->status] ?? $request->status;
+        
+            $query->where('status', $status);
         }
+        
 
         // Filter tanggal
         if ($request->filled('start_date') && $request->filled('end_date')) {

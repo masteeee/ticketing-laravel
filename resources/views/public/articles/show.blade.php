@@ -302,7 +302,17 @@ function printArticle() {
 document.addEventListener('DOMContentLoaded', function() {
     // Add click event listeners to all scroll-to-section links
     const scrollLinks = document.querySelectorAll('.scroll-to-section');
-    
+    document.querySelectorAll('.article-content table').forEach(function(table) {
+        // Cek kalau belum dibungkus
+        if (!table.parentElement.classList.contains('table-wrapper')) {
+            const wrapper = document.createElement('div');
+            wrapper.classList.add('table-wrapper');
+            wrapper.style.overflowX = 'auto';
+            wrapper.style.width = '100%';
+            wrapper.appendChild(table.cloneNode(true));
+            table.parentNode.replaceChild(wrapper, table);
+        }
+    });
     scrollLinks.forEach(link => {
         link.addEventListener('click', function(e) {
             e.preventDefault();
@@ -355,33 +365,172 @@ document.addEventListener('DOMContentLoaded', function() {
             }, 100);
         }
     }
+    
 });
 </script>
 <style>
+    .table-wrapper {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch; /* biar smooth di iOS */
+}
+    /* Table styling */
+    .article-content table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    .article-content th,
+    .article-content td {
+        border: 1px solid #dee2e6;
+        padding: 8px;
+    }
+
+    .article-content thead th {
+        background-color: #f8f9fa;
+        font-weight: bold;
+    }
+
+    /* Responsive table wrapper */
+    .article-content table {
+        display: block;
+        width: 100%;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+
+    /* Responsive image in article */
     .article-content img {
         max-width: 100% !important;
         height: auto !important;
-        width: auto !important;
         display: block;
         margin-left: auto;
         margin-right: auto;
-        object-fit: contain;
+    }
+
+    /* Remove float on mobile for pasted images */
+    @media (max-width: 768px) {
+        .article-content img {
+            float: none !important;
+            margin: 0 auto !important;
+        }
     }
     
-    .article-content {
-        overflow-wrap: break-word;
-        word-wrap: break-word;
+    /* Fix ordered and unordered lists */
+    .article-content ol {
+        list-style-type: decimal !important;
+        margin-left: 1.5rem !important;
+        margin-bottom: 1rem !important;
+        padding-left: 0.5rem !important;
     }
     
-    /* Ensure all media elements are responsive */
-    .article-content video,
-    .article-content iframe,
-    .article-content embed,
-    .article-content object {
-        max-width: 100% !important;
-        height: auto !important;
+    .article-content ul {
+        list-style-type: disc !important;
+        margin-left: 1.5rem !important;
+        margin-bottom: 1rem !important;
+        padding-left: 0.5rem !important;
+    }
+    
+    .article-content ol li,
+    .article-content ul li {
+        margin-bottom: 0.5rem !important;
+        display: list-item !important;
+    }
+    
+    .article-content ol ol {
+        list-style-type: lower-alpha !important;
+        margin-top: 0.5rem !important;
+    }
+    
+    .article-content ol ol ol {
+        list-style-type: lower-roman !important;
+    }
+    
+    /* Fix table borders and styling */
+    .article-content table {
+        border-collapse: collapse !important;
+        width: 100% !important;
+        margin: 1rem 0 !important;
+        border: 1px solid #d1d5db !important;
+    }
+    
+    .article-content table th,
+    .article-content table td {
+        border: 1px solid #d1d5db !important;
+        padding: 0.75rem !important;
+        text-align: left !important;
+    }
+    
+    .article-content table th {
+        background-color: #f9fafb !important;
+        font-weight: 600 !important;
+    }
+    
+    .article-content table tr:nth-child(even) {
+        background-color: #f9fafb !important;
+    }
+    
+    .article-content table tr:hover {
+        background-color: #f3f4f6 !important;
+    }
+    
+    /* Fix paragraph spacing */
+    .article-content p {
+        margin-bottom: 1rem !important;
+        line-height: 1.6 !important;
+    }
+    
+    /* Fix headings */
+    .article-content h1,
+    .article-content h2,
+    .article-content h3,
+    .article-content h4,
+    .article-content h5,
+    .article-content h6 {
+        margin-top: 1.5rem !important;
+        margin-bottom: 1rem !important;
+        font-weight: 600 !important;
+    }
+    
+    .article-content h1 { font-size: 2rem !important; }
+    .article-content h2 { font-size: 1.75rem !important; }
+    .article-content h3 { font-size: 1.5rem !important; }
+    .article-content h4 { font-size: 1.25rem !important; }
+    .article-content h5 { font-size: 1.125rem !important; }
+    .article-content h6 { font-size: 1rem !important; }
+    
+    /* Fix blockquotes */
+    .article-content blockquote {
+        border-left: 4px solid #d1d5db !important;
+        padding-left: 1rem !important;
+        margin: 1rem 0 !important;
+        font-style: italic !important;
+        background-color: #f9fafb !important;
+        padding: 1rem !important;
+    }
+    
+    /* Fix code blocks */
+    .article-content pre {
+        background-color: #f3f4f6 !important;
+        padding: 1rem !important;
+        border-radius: 0.375rem !important;
+        overflow-x: auto !important;
+        margin: 1rem 0 !important;
+    }
+    
+    .article-content code {
+        background-color: #f3f4f6 !important;
+        padding: 0.25rem 0.5rem !important;
+        border-radius: 0.25rem !important;
+        font-family: 'Courier New', monospace !important;
     }
 </style>
 
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('.article-content table')
+            .forEach(table => table.classList.add('table', 'table-bordered'));
+    });
+    </script>
+    
 
 @endsection

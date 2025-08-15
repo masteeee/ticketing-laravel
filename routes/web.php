@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\StaffController;
 use App\Http\Controllers\PublicController;
-use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\Admin\DepartmentController;
 use App\Http\Controllers\TicketController; 
 use App\Http\Controllers\Admin\CategoryController;
@@ -16,6 +16,7 @@ use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\PermissionController;
+
 use App\Models\Role;
 use App\Models\Service;
 
@@ -120,7 +121,7 @@ Route::middleware(['auth'])->group(function () {
     });
 
     // Profile
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::get('/profile', [ProfileController::class, 'show'])->name('admin.profile');
+    Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('admin.profile.edit');
+    Route::post('/profile/update', [ProfileController::class, 'update'])->name('admin.profile.update');
 });
