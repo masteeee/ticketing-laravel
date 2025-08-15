@@ -46,9 +46,9 @@
                         <label for="status" class="form-label fs-6">Status</label>
                         <select name="status" id="status" class="form-select form-control border">
                             <option value="">-- Semua --</option>
-                            <option value="open" {{ request('status') == 'open' ? 'selected' : '' }}>Open</option>
-                            <option value="in_progress" {{ request('status') == 'in_progress' ? 'selected' : '' }}>Dalam Pengerjaan</option>
-                            <option value="solved" {{ request('status') == 'solved' ? 'selected' : '' }}>Selesai</option>
+                            <option value="Dalam Antrean" {{ request('status') == 'Dalam Antrean' ? 'selected' : '' }}>Open</option>
+                            <option value="Dalam Pengerjaan" {{ request('status') == 'Dalam Pengerjaan' ? 'selected' : '' }}>Dalam Pengerjaan</option>
+                            <option value="Solved" {{ request('status') == 'Solved' ? 'selected' : '' }}>Selesai</option>                            
                         </select>
                     </div>
                     <div class="col-md-3">

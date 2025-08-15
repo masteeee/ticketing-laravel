@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container py-4">
-    <div class="d-flex justify-between items-center mb-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
         <h2 class="text-xl font-semibold">Kategori Artikel</h2>
         <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#createModal">+ Tambah Kategori</button>
     </div>

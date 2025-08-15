@@ -302,7 +302,17 @@ function printArticle() {
 document.addEventListener('DOMContentLoaded', function() {
     // Add click event listeners to all scroll-to-section links
     const scrollLinks = document.querySelectorAll('.scroll-to-section');
-    
+    document.querySelectorAll('.article-content table').forEach(function(table) {
+        // Cek kalau belum dibungkus
+        if (!table.parentElement.classList.contains('table-wrapper')) {
+            const wrapper = document.createElement('div');
+            wrapper.classList.add('table-wrapper');
+            wrapper.style.overflowX = 'auto';
+            wrapper.style.width = '100%';
+            wrapper.appendChild(table.cloneNode(true));
+            table.parentNode.replaceChild(wrapper, table);
+        }
+    });
     scrollLinks.forEach(link => {
         link.addEventListener('click', function(e) {
             e.preventDefault();
@@ -355,31 +365,54 @@ document.addEventListener('DOMContentLoaded', function() {
             }, 100);
         }
     }
+    
 });
 </script>
 <style>
+    .table-wrapper {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch; /* biar smooth di iOS */
+}
+    /* Table styling */
+    .article-content table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    .article-content th,
+    .article-content td {
+        border: 1px solid #dee2e6;
+        padding: 8px;
+    }
+
+    .article-content thead th {
+        background-color: #f8f9fa;
+        font-weight: bold;
+    }
+
+    /* Responsive table wrapper */
+    .article-content table {
+        display: block;
+        width: 100%;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+
+    /* Responsive image in article */
     .article-content img {
         max-width: 100% !important;
         height: auto !important;
-        width: auto !important;
         display: block;
         margin-left: auto;
         margin-right: auto;
-        object-fit: contain;
     }
-    
-    .article-content {
-        overflow-wrap: break-word;
-        word-wrap: break-word;
-    }
-    
-    /* Ensure all media elements are responsive */
-    .article-content video,
-    .article-content iframe,
-    .article-content embed,
-    .article-content object {
-        max-width: 100% !important;
-        height: auto !important;
+
+    /* Remove float on mobile for pasted images */
+    @media (max-width: 768px) {
+        .article-content img {
+            float: none !important;
+            margin: 0 auto !important;
+        }
     }
     
     /* Fix ordered and unordered lists */
@@ -492,5 +525,12 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 </style>
 
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('.article-content table')
+            .forEach(table => table.classList.add('table', 'table-bordered'));
+    });
+    </script>
+    
 
 @endsection
