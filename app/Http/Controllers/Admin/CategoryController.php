@@ -8,9 +8,33 @@ use App\Http\Controllers\Controller;
 
 class CategoryController extends Controller
 {
-    public function index() {
-        $categories = Category::paginate(10);
-        return view('admin.categories.index', compact('categories'));
+    public function index(Request $request) {
+        // Get all categories for dropdowns and relationships
+        $allCategories = Category::all();
+        
+        // Build query with search and filter
+        $query = Category::query();
+        
+        // Search by name (case-insensitive)
+        if ($request->filled('search')) {
+            $searchTerm = strtolower($request->search);
+            $query->whereRaw('LOWER(name) LIKE ?', ['%' . $searchTerm . '%']);
+        }
+        
+        // Filter by parent
+        if ($request->filled('parent_filter')) {
+            if ($request->parent_filter === 'root') {
+                $query->whereNull('parent_id');
+            } else {
+                $query->where('parent_id', $request->parent_filter);
+            }
+        }
+        
+        // Paginate results
+        $parentCategories = $query->paginate(10)->appends($request->query());
+        
+        // Pass collections to the view
+        return view('admin.categories.index', compact('allCategories', 'parentCategories'));
     }
 
     public function create() {

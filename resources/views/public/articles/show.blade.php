@@ -381,6 +381,115 @@ document.addEventListener('DOMContentLoaded', function() {
         max-width: 100% !important;
         height: auto !important;
     }
+    
+    /* Fix ordered and unordered lists */
+    .article-content ol {
+        list-style-type: decimal !important;
+        margin-left: 1.5rem !important;
+        margin-bottom: 1rem !important;
+        padding-left: 0.5rem !important;
+    }
+    
+    .article-content ul {
+        list-style-type: disc !important;
+        margin-left: 1.5rem !important;
+        margin-bottom: 1rem !important;
+        padding-left: 0.5rem !important;
+    }
+    
+    .article-content ol li,
+    .article-content ul li {
+        margin-bottom: 0.5rem !important;
+        display: list-item !important;
+    }
+    
+    .article-content ol ol {
+        list-style-type: lower-alpha !important;
+        margin-top: 0.5rem !important;
+    }
+    
+    .article-content ol ol ol {
+        list-style-type: lower-roman !important;
+    }
+    
+    /* Fix table borders and styling */
+    .article-content table {
+        border-collapse: collapse !important;
+        width: 100% !important;
+        margin: 1rem 0 !important;
+        border: 1px solid #d1d5db !important;
+    }
+    
+    .article-content table th,
+    .article-content table td {
+        border: 1px solid #d1d5db !important;
+        padding: 0.75rem !important;
+        text-align: left !important;
+    }
+    
+    .article-content table th {
+        background-color: #f9fafb !important;
+        font-weight: 600 !important;
+    }
+    
+    .article-content table tr:nth-child(even) {
+        background-color: #f9fafb !important;
+    }
+    
+    .article-content table tr:hover {
+        background-color: #f3f4f6 !important;
+    }
+    
+    /* Fix paragraph spacing */
+    .article-content p {
+        margin-bottom: 1rem !important;
+        line-height: 1.6 !important;
+    }
+    
+    /* Fix headings */
+    .article-content h1,
+    .article-content h2,
+    .article-content h3,
+    .article-content h4,
+    .article-content h5,
+    .article-content h6 {
+        margin-top: 1.5rem !important;
+        margin-bottom: 1rem !important;
+        font-weight: 600 !important;
+    }
+    
+    .article-content h1 { font-size: 2rem !important; }
+    .article-content h2 { font-size: 1.75rem !important; }
+    .article-content h3 { font-size: 1.5rem !important; }
+    .article-content h4 { font-size: 1.25rem !important; }
+    .article-content h5 { font-size: 1.125rem !important; }
+    .article-content h6 { font-size: 1rem !important; }
+    
+    /* Fix blockquotes */
+    .article-content blockquote {
+        border-left: 4px solid #d1d5db !important;
+        padding-left: 1rem !important;
+        margin: 1rem 0 !important;
+        font-style: italic !important;
+        background-color: #f9fafb !important;
+        padding: 1rem !important;
+    }
+    
+    /* Fix code blocks */
+    .article-content pre {
+        background-color: #f3f4f6 !important;
+        padding: 1rem !important;
+        border-radius: 0.375rem !important;
+        overflow-x: auto !important;
+        margin: 1rem 0 !important;
+    }
+    
+    .article-content code {
+        background-color: #f3f4f6 !important;
+        padding: 0.25rem 0.5rem !important;
+        border-radius: 0.25rem !important;
+        font-family: 'Courier New', monospace !important;
+    }
 </style>
 
 
