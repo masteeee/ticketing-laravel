@@ -10,8 +10,11 @@
 
             {{-- Judul --}}
             <div class="mb-3">
-                <label for="title" class="form-label fw-semibold">Judul</label>
-                <input type="text" name="title" class="form-control" required>
+                <label for="title" class="form-label fw-semibold">Judul <span class="text-danger">*</span></label>
+                <input type="text" name="title" class="form-control" value="{{ old('title') }}" required>
+                @error('title')
+                    <div class="text-danger small">{{ $message }}</div>
+                @enderror
             </div>
 
             <div class="mb-4">
@@ -37,8 +40,11 @@
 
             {{-- Konten --}}
             <div class="mb-3">
-                <label for="content" class="form-label fw-semibold">Konten</label>
-                <textarea id="summernote" name="content" class="form-control" required></textarea>
+                <label for="content" class="form-label fw-semibold">Konten <span class="text-danger">*</span></label>
+                <textarea id="summernote" name="content" class="form-control" required>{{ old('content') }}</textarea>
+                @error('content')
+                    <div class="text-danger small">{{ $message }}</div>
+                @enderror
             </div>
 
             <div class="text-end">
