@@ -11,6 +11,23 @@ use Illuminate\Support\Facades\Storage;
 
 class ArticleController extends Controller
 {
+    private function convertYoutubeLinks($content)
+{
+    // YouTube full URL
+    $pattern1 = '/https?:\/\/(?:www\.)?youtube\.com\/watch\?v=([a-zA-Z0-9_-]+)/';
+    // Short URL
+    $pattern2 = '/https?:\/\/youtu\.be\/([a-zA-Z0-9_-]+)/';
+
+    $replacement = '<iframe width="560" height="315" 
+        src="https://www.youtube.com/embed/$1" 
+        frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+        allowfullscreen></iframe>';
+
+    $content = preg_replace($pattern1, $replacement, $content);
+    $content = preg_replace($pattern2, $replacement, $content);
+
+    return $content;
+}
     public function index(Request $request) {
         $query = Article::with('category');
         
@@ -80,27 +97,29 @@ class ArticleController extends Controller
     }
 
     public function update(Request $request, Article $article) {
+        $request->merge([
+            'content' => trim(strip_tags($request->content)) === '' ? null : $request->content,
+        ]);
+    
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'content' => 'required',
             'category_id' => 'required|exists:categories,id',
-            'thumbnail' => 'nullable|image|max:10240', // Increased to 10MB
+            'thumbnail' => 'nullable|image|max:10240',
         ]);
-
+    
         if ($request->hasFile('thumbnail')) {
-            // Hapus file lama jika ada
             if ($article->thumbnail) {
                 Storage::disk('public')->delete($article->thumbnail);
             }
-
             $validated['thumbnail'] = $request->file('thumbnail')->store('thumbnails', 'public');
         }
-
+    
         $article->update($validated);
-
+    
         return redirect()->route('articles.index')->with('success', 'Artikel berhasil diperbarui.');
     }
-
+    
     public function destroy(Article $article) {
         if ($article->thumbnail) {
             Storage::disk('public')->delete($article->thumbnail);

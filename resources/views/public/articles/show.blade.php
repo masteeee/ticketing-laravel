@@ -161,8 +161,6 @@
 @tailwind
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <script>
-
-
 function downloadAsPDF() {
     // Get the article content and thumbnail
     const articleContent = document.querySelector('.article-content');
@@ -332,9 +330,20 @@ function printArticle() {
 
 // Smooth scroll functionality
 document.addEventListener('DOMContentLoaded', function() {
+
     // Add click event listeners to all scroll-to-section links
+    document.querySelectorAll(".article-content iframe").forEach(function (iframe) {
+        // cek kalau belum ada wrapper
+        if (!iframe.parentElement.classList.contains("video-wrapper")) {
+            const wrapper = document.createElement("div");
+            wrapper.className = "video-wrapper";
+            iframe.parentNode.insertBefore(wrapper, iframe);
+            wrapper.appendChild(iframe);
+        }
+    });
     const scrollLinks = document.querySelectorAll('.scroll-to-section');
     document.querySelectorAll('.article-content table').forEach(function(table) {
+
         // Cek kalau belum dibungkus
         if (!table.parentElement.classList.contains('table-wrapper')) {
             const wrapper = document.createElement('div');
@@ -401,6 +410,26 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 <style>
+    .article-content .video-wrapper {
+    position: relative;
+    padding-bottom: 56.25%; /* 16:9 */
+    height: 0;
+    overflow: hidden;
+    max-width: 100%;
+    background: #000;
+    margin: 1rem 0;
+    border-radius: 8px; /* opsional biar lebih rapih */
+}
+
+.article-content .video-wrapper iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100% !important;
+    height: 100% !important;
+    border: 0;
+}
+
     .table-wrapper {
     overflow-x: auto;
     -webkit-overflow-scrolling: touch; /* biar smooth di iOS */

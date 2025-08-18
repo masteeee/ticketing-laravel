@@ -246,17 +246,18 @@ class KnowledgeBaseController extends Controller
             return view('public.articles.show', compact('article', 'breadcrumbs', 'relatedArticles', 'headings'));
         }
 
-    public function search(Request $request)
-    {
-        $keyword = $request->query('search');
-        $articles = Article::where('title', 'like', "%{$keyword}%")
-            ->orWhere('content', 'like', "%{$keyword}%")
-            ->get();
-
-        $recentArticles  = Article::latest()->take(5)->get();
-        $popularArticles = Article::orderBy('views', 'desc')->take(5)->get();
-
-        return view('public.knowledge-base-search', compact('articles', 'keyword', 'recentArticles', 'popularArticles'));
-    }
+        public function search(Request $request)
+        {
+            $keyword = strtolower($request->query('search')); // turunin jadi lowercase
+        
+            $articles = Article::whereRaw('LOWER(title) LIKE ?', ["%{$keyword}%"])
+                ->orWhereRaw('LOWER(content) LIKE ?', ["%{$keyword}%"])
+                ->get();
+        
+            $recentArticles  = Article::latest()->take(5)->get();
+            $popularArticles = Article::orderBy('views', 'desc')->take(5)->get();
+        
+            return view('public.knowledge-base-search', compact('articles', 'keyword', 'recentArticles', 'popularArticles'));
+        }
 
 }

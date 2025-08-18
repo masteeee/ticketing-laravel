@@ -37,6 +37,7 @@
             <div class="mb-3">
                 <label for="content" class="form-label fw-semibold">Konten <span class="text-red-500">*</span></label>
                 <textarea id="summernote" name="content" class="form-control">{!! $article->content !!}</textarea>
+                <div id="content-error" class="text-danger small d-none">Konten wajib diisi</div>
             </div>
 
             <div class="text-end">
@@ -194,6 +195,7 @@
     }
 
     $(function () {
+        // Init Summernote
         $('#summernote').summernote({
             placeholder: 'Tulis konten artikel di sini...',
             tabsize: 2,
@@ -213,7 +215,8 @@
 
         tablePropsModal = new bootstrap.Modal(document.getElementById('tablePropsModal'));
 
-        $('#tableBorderWidth, #tableBorderColor, #tableBorderStyle, #tableBgColor').on('input change', updatePreview);
+        $('#tableBorderWidth, #tableBorderColor, #tableBorderStyle, #tableBgColor')
+            .on('input change', updatePreview);
 
         $('#applyTableProps').on('click', function () {
             if (!selectedTable) return;
@@ -249,6 +252,25 @@
 
             cloneTableToPreview(selectedTable);
         });
+
+        // 🚀 VALIDASI konten wajib diisi
+        $('form').on('submit', function(e) {
+            let content = $('#summernote').summernote('isEmpty') ? '' : $('#summernote').summernote('code');
+            let cleanContent = $('<div>').html(content).text().trim();
+
+            if (cleanContent === '' || content === '<p><br></p>') {
+                e.preventDefault();
+                $('#content-error').removeClass('d-none');
+                return false;
+            } else {
+                $('#content-error').addClass('d-none');
+            }
+        });
+
+        // Hilangkan error kalau user mulai ngetik
+        $('#summernote').on('summernote.change', function() {
+            $('#content-error').addClass('d-none');
+        });
     });
 
     function TablePropertiesButton(context) {
@@ -277,6 +299,6 @@
             }
         }).render();
     }
-    
 </script>
+
 @endpush
