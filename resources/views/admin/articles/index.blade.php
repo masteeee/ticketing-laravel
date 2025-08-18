@@ -76,6 +76,10 @@
         <div class="alert alert-success shadow-sm rounded">{{ session('success') }}</div>
     @endif
 
+    @if(session('error'))
+        <div class="alert alert-danger shadow-sm rounded">{{ session('error') }}</div>
+    @endif
+
     {{-- Search Results Info --}}
     @if(request('search') || request('category_id') || request('sort'))
         <div class="alert alert-info shadow-sm rounded mb-3">

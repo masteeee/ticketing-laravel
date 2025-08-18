@@ -19,6 +19,9 @@
                placeholder="••••••••"
                class="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-red-300" />
     </div>
+    @if(session('error'))
+        <span class="mb-3 text-red-500 text-left">{{ session('error') }}</span>
+    @endif
 
     <div class="flex items-center justify-between mb-4 text-sm">
         <label class="inline-flex items-center">
@@ -26,6 +29,8 @@
             <span class="ml-2 text-gray-600">Ingat saya</span>
         </label>
     </div>
+
+   
 
     <button type="submit" class="w-full bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded-md">
         Masuk

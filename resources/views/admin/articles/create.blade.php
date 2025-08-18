@@ -10,16 +10,16 @@
 
             {{-- Judul --}}
             <div class="mb-3">
-                <label for="title" class="form-label fw-semibold">Judul <span class="text-danger">*</span></label>
-                <input type="text" name="title" class="form-control" value="{{ old('title') }}" required>
-                @error('title')
-                    <div class="text-danger small">{{ $message }}</div>
-                @enderror
+                <label for="title" class="form-label fw-semibold">Judul</label>
+                <input type="text" name="title" class="form-control" required>
             </div>
 
             <div class="mb-4">
-                <label for="category_id" class="block text-sm font-medium text-gray-700 mb-2">Kategori <span class="text-red-500">*</span></label>
-                <select name="category_id" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 bg-white shadow-sm hover:shadow-md" required>
+                <label for="category_id" class="block text-sm font-medium text-gray-700 mb-2">
+                    Kategori <span class="text-red-500">*</span>
+                </label>
+                <select name="category_id" class="w-full px-4 py-3 border border-gray-300 rounded-lg 
+                    focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 bg-white shadow-sm hover:shadow-md" required>
                     <option value="" class="text-gray-500">-- Pilih Kategori --</option>
                     @foreach ($categories as $cat)
                         <option value="{{ $cat->id }}" class="text-gray-800">{{ $cat->name }}</option>
@@ -37,11 +37,8 @@
 
             {{-- Konten --}}
             <div class="mb-3">
-                <label for="content" class="form-label fw-semibold">Konten <span class="text-danger">*</span></label>
-                <textarea id="summernote" name="content" class="form-control" required>{{ old('content') }}</textarea>
-                @error('content')
-                    <div class="text-danger small">{{ $message }}</div>
-                @enderror
+                <label for="content" class="form-label fw-semibold">Konten</label>
+                <textarea id="summernote" name="content" class="form-control" required></textarea>
             </div>
 
             <div class="text-end">
@@ -54,6 +51,43 @@
 
 @push('styles')
 <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.20/dist/summernote-lite.min.css" rel="stylesheet">
+
+<style>
+    /* Biar bullet & numbering muncul meski pakai Tailwind */
+    .note-editor .note-editable ul {
+        list-style-type: disc !important;
+        list-style-position: outside !important;
+        margin-left: 1.25rem !important;
+        padding-left: 1.25rem !important;
+    }
+    .note-editor .note-editable ol {
+        list-style-type: decimal !important;
+        list-style-position: outside !important;
+        margin-left: 1.25rem !important;
+        padding-left: 1.25rem !important;
+    }
+    .note-editor .note-editable li {
+        display: list-item !important;
+    }
+    /* Nested lists */
+    .note-editor .note-editable ul ul,
+    .note-editor .note-editable ol ul {
+        list-style-type: circle !important;
+    }
+    .note-editor .note-editable ul ol,
+    .note-editor .note-editable ol ol {
+        list-style-type: lower-alpha !important;
+    }
+    /* As a last resort, revert Tailwind resets inside editor */
+    .note-editor .note-editable ul,
+    .note-editor .note-editable ol {
+        list-style: revert !important;
+        margin: revert !important;
+        padding: revert !important;
+    }
+</style>
+@endpush
+
 @push('scripts')
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.20/dist/summernote-lite.min.js"></script>
@@ -81,9 +115,9 @@
             <div class="mb-3">
               <label class="form-label">Border Style</label>
               <select id="tableBorderStyle" class="form-select">
-                <option value="solid">_____</option>
-                <option value="dashed">------</option>
-                <option value="dotted">.......</option>
+                <option value="solid">Solid</option>
+                <option value="dashed">Dashed</option>
+                <option value="dotted">Dotted</option>
               </select>
             </div>
             <div class="mb-3">
@@ -162,6 +196,33 @@
         updatePreview();
     }
 
+    function TablePropertiesButton(context) {
+        const ui = $.summernote.ui;
+        return ui.button({
+            contents: '<i class="note-icon-magic"></i> Table Props',
+            tooltip: 'Table Properties',
+            click: function () {
+                const $table = $(context.invoke('editor.createRange').commonAncestor()).closest('table');
+                if (!$table.length) {
+                    alert('Pilih tabel terlebih dahulu untuk mengubah properties.');
+                    return;
+                }
+                selectedTable = $table;
+
+                const $firstCell = $table.find('th, td').first();
+                const cs = window.getComputedStyle($firstCell[0]);
+
+                $('#tableBorderWidth').val(parseInt(cs.borderTopWidth, 10) || 1);
+                $('#tableBorderColor').val(rgbToHex(cs.borderTopColor) || '#dee2e6');
+                $('#tableBorderStyle').val(cs.borderTopStyle || 'solid');
+                $('#tableBgColor').val(rgbToHex(cs.backgroundColor) || '#ffffff');
+
+                cloneTableToPreview($table);
+                tablePropsModal.show();
+            }
+        }).render();
+    }
+
     $(function () {
         $('#summernote').summernote({
             placeholder: 'Tulis konten artikel di sini...',
@@ -182,7 +243,8 @@
 
         tablePropsModal = new bootstrap.Modal(document.getElementById('tablePropsModal'));
 
-        $('#tableBorderWidth, #tableBorderColor, #tableBorderStyle, #tableBgColor').on('input change', updatePreview);
+        $('#tableBorderWidth, #tableBorderColor, #tableBorderStyle, #tableBgColor')
+            .on('input change', updatePreview);
 
         $('#applyTableProps').on('click', function () {
             if (!selectedTable) return;
@@ -217,50 +279,6 @@
             });
 
             cloneTableToPreview(selectedTable);
-        });
-    });
-
-    function TablePropertiesButton(context) {
-        const ui = $.summernote.ui;
-        return ui.button({
-            contents: '<i class="note-icon-magic"></i> Table Props',
-            tooltip: 'Table Properties',
-            click: function () {
-                const $table = $(context.invoke('editor.createRange').commonAncestor()).closest('table');
-                if (!$table.length) {
-                    alert('Pilih tabel terlebih dahulu untuk mengubah properties.');
-                    return;
-                }
-                selectedTable = $table;
-
-                const $firstCell = $table.find('th, td').first();
-                const cs = window.getComputedStyle($firstCell[0]);
-
-                $('#tableBorderWidth').val(parseInt(cs.borderTopWidth, 10) || 1);
-                $('#tableBorderColor').val(rgbToHex(cs.borderTopColor) || '#dee2e6');
-                $('#tableBorderStyle').val(cs.borderTopStyle || 'solid');
-                $('#tableBgColor').val(rgbToHex(cs.backgroundColor) || '#ffffff');
-
-                cloneTableToPreview($table);
-                tablePropsModal.show();
-            }
-        }).render();
-    }
-    
-</script>
-@endpush
-
-@endpush
-
-@push('scripts')
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.20/dist/summernote-lite.min.js"></script>
-<script>
-    $(function () {
-        $('#summernote').summernote({
-            placeholder: 'Tulis konten artikel di sini...',
-            tabsize: 2,
-            height: 300
         });
     });
 </script>
