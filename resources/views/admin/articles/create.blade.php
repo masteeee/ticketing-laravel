@@ -40,12 +40,13 @@
 
             {{-- Konten --}}
             <div class="mb-3">
-                <label for="content" class="form-label fw-semibold">Konten <span class="text-danger">*</span></label>
-                <textarea id="summernote" name="content" class="form-control" required>{{ old('content') }}</textarea>
-                @error('content')
-                    <div class="text-danger small">{{ $message }}</div>
-                @enderror
+                <label for="content" class="form-label fw-semibold">
+                    Konten <span class="text-danger">*</span>
+                </label>
+                <textarea id="summernote" name="content" class="form-control">{{ old('content') }}</textarea>
+                <div id="content-error" class="text-danger small d-none">Konten wajib diisi</div>
             </div>
+            
 
             <div class="text-end">
                 <button type="submit" class="btn btn-danger">Simpan</button>
@@ -286,6 +287,24 @@
 
             cloneTableToPreview(selectedTable);
         });
+
+        // 🚀 Validasi konten sebelum submit
+        $('form').on('submit', function(e) {
+            let content = $('#summernote').summernote('isEmpty') ? '' : $('#summernote').summernote('code');
+            if (content === '' || content === '<p><br></p>') {
+                e.preventDefault();
+                $('#content-error').removeClass('d-none');
+                return false;
+            } else {
+                $('#content-error').addClass('d-none');
+            }
+        });
+
+        // hilangkan error saat user mulai ngetik
+        $('#summernote').on('summernote.change', function() {
+            $('#content-error').addClass('d-none');
+        });
     });
 </script>
+
 @endpush
