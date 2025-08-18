@@ -12,7 +12,7 @@ class UserController extends Controller
     
 public function index()
 {
-    $users = User::with('role')->get(); // pastikan relasi 'role' sudah ada di model User
+    $users = User::with('role')->get(); 
     return view('admin.users.index', compact('users'));
 }
     public function create()
