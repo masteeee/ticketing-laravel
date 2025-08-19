@@ -11,9 +11,60 @@ use Illuminate\Support\Facades\Storage;
 
 class ArticleController extends Controller
 {
-    public function index() {
-        $articles = Article::with('category')->paginate(10);
-        return view('admin.articles.index', compact('articles'));
+    private function convertYoutubeLinks($content)
+{
+    // YouTube full URL
+    $pattern1 = '/https?:\/\/(?:www\.)?youtube\.com\/watch\?v=([a-zA-Z0-9_-]+)/';
+    // Short URL
+    $pattern2 = '/https?:\/\/youtu\.be\/([a-zA-Z0-9_-]+)/';
+
+    $replacement = '<iframe width="560" height="315" 
+        src="https://www.youtube.com/embed/$1" 
+        frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+        allowfullscreen></iframe>';
+
+    $content = preg_replace($pattern1, $replacement, $content);
+    $content = preg_replace($pattern2, $replacement, $content);
+
+    return $content;
+}
+    public function index(Request $request) {
+        $query = Article::with('category');
+        
+        // Search functionality (case-insensitive)
+        if ($request->filled('search')) {
+            $search = strtolower($request->search);
+            $query->where(function($q) use ($search) {
+                $q->whereRaw('LOWER(title) LIKE ?', ["%{$search}%"])
+                  ->orWhereRaw('LOWER(content) LIKE ?', ["%{$search}%"]);
+            });
+        }
+        
+        // Filter by category
+        if ($request->filled('category_id')) {
+            $query->where('category_id', $request->category_id);
+        }
+        
+        // Sorting
+        switch ($request->get('sort', 'latest')) {
+            case 'oldest':
+                $query->orderBy('created_at', 'asc');
+                break;
+            case 'title_asc':
+                $query->orderBy('title', 'asc');
+                break;
+            case 'title_desc':
+                $query->orderBy('title', 'desc');
+                break;
+            default:
+                $query->orderBy('created_at', 'desc'); // latest
+                break;
+        }
+        
+        $articles = $query->paginate(10)->withQueryString();
+        $categories = Category::all();
+        
+        return view('admin.articles.index', compact('articles', 'categories'));
     }
 
     public function create() {
@@ -37,7 +88,7 @@ class ArticleController extends Controller
 
         Article::create($validated);
 
-        return redirect()->route('admin.articles.index')->with('success', 'Artikel berhasil ditambahkan.');
+        return redirect()->route('articles.index')->with('success', 'Artikel berhasil ditambahkan.');
     }
 
     public function edit(Article $article) {
@@ -46,27 +97,29 @@ class ArticleController extends Controller
     }
 
     public function update(Request $request, Article $article) {
+        $request->merge([
+            'content' => trim(strip_tags($request->content)) === '' ? null : $request->content,
+        ]);
+    
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'content' => 'required',
             'category_id' => 'required|exists:categories,id',
-            'thumbnail' => 'nullable|image|max:10240', // Increased to 10MB
+            'thumbnail' => 'nullable|image|max:10240',
         ]);
-
+    
         if ($request->hasFile('thumbnail')) {
-            // Hapus file lama jika ada
             if ($article->thumbnail) {
                 Storage::disk('public')->delete($article->thumbnail);
             }
-
             $validated['thumbnail'] = $request->file('thumbnail')->store('thumbnails', 'public');
         }
-
+    
         $article->update($validated);
-
-        return redirect()->route('admin.articles.index')->with('success', 'Artikel berhasil diperbarui.');
+    
+        return redirect()->route('articles.index')->with('success', 'Artikel berhasil diperbarui.');
     }
-
+    
     public function destroy(Article $article) {
         if ($article->thumbnail) {
             Storage::disk('public')->delete($article->thumbnail);
@@ -76,28 +129,5 @@ class ArticleController extends Controller
         return back()->with('success', 'Artikel berhasil dihapus.');
     }
 
-    public function show(Article $article)
-    {
-        // Breadcrumb berdasarkan kategori
-        $breadcrumbs = collect([]);
-        $cat = $article->category;
-        while ($cat) {
-            $breadcrumbs->prepend($cat);
-            $cat = $cat->parent;
-        }
-    
-        // Related Articles (kategori yang sama)
-        $relatedArticles = Article::where('category_id', $article->category_id)
-            ->where('id', '!=', $article->id)
-            ->limit(5)
-            ->get();
-    
-        // Ambil heading H2 / H3 dari konten untuk sidebar
-        preg_match_all('/<h[23].*?>(.*?)<\/h[23]>/', $article->content, $matches);
-        $headings = collect($matches[1] ?? [])->map(function ($text, $i) {
-            return ['id' => 'heading-'.$i, 'text' => strip_tags($text)];
-        });
-    
-        return view('public.articles.show', compact('article', 'breadcrumbs', 'relatedArticles', 'headings'));
-    }
+   
 }

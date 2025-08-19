@@ -19,61 +19,86 @@
 
                         <!-- Department -->
                         <div>
-                            <label class="block text-sm font-medium mb-2">Department</label>
-                            <select name="department_id" id="department_id" class="w-full p-3 border border-section-bor rounded-md" required>
+                            <label class="block text-sm font-medium mb-2">Department <span class="text-red-keloola">*</span></label>
+                            <select name="department_id" id="department_id" class="w-full p-3 border border-section-bor rounded-md @error('department_id') border-red-500 @enderror" required>
                                 <option value="">-- Pilih Department --</option>
                                 @foreach($departments as $dept)
-                                    <option value="{{ $dept->id }}" {{ old('department_id') == $dept->id ? 'selected' : '' }}>
+                                    <option value="{{ $dept->id }}" {{ (old('department_id') == $dept->id || $selectedDepartment == $dept->id) ? 'selected' : '' }}>
                                         {{ $dept->name }}
                                     </option>
                                 @endforeach
                             </select>
+                            @error('department_id')
+                                <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                            @enderror
                         </div>
 
                         <!-- Contact Name -->
                         <div>
                             <label class="block text-sm font-medium mb-2">Contact Name <span class="text-red-keloola">*</span></label>
-                            <input name="contact_name" type="text" class="w-full p-2 border border-section-bor rounded-md" value="{{ old('contact_name') }}" required />
+                            <input name="contact_name" type="text" class="w-full p-2 border border-section-bor rounded-md @error('contact_name') border-red-500 @enderror" value="{{ old('contact_name') }}" required />
+                            @error('contact_name')
+                                <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                            @enderror
                         </div>
 
                         <!-- Service -->
                         <div>
-                            <label class="block text-sm font-medium mb-2">Service</label>
-                            <select name="service_id" id="service_id" class="w-full p-3 border border-section-bor rounded-md" required>
-                                <option value="">-- Pilih Department dulu --</option>
+                            <label class="block text-sm font-medium mb-2">Service <span class="text-red-keloola">*</span></label>
+                            <select name="service_id" id="service_id" class="w-full p-3 border border-section-bor rounded-md @error('service_id') border-red-500 @enderror" required>
+                                <option value="">-- Silahkan Pilih Department terlebih dahulu --</option>
                             </select>
+                            @error('service_id')
+                                <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                            @enderror
                         </div>
 
                         <!-- Email -->
                         <div>
-                            <label class="block text-sm font-medium mb-2">Email</label>
-                            <input name="email" type="email" class="w-full p-2 border border-section-bor rounded-md" value="{{ old('email') }}" />
+                            <label class="block text-sm font-medium mb-2">Email <span class="text-red-keloola">*</span></label>
+                            <input name="email" type="email" class="w-full p-2 border border-section-bor rounded-md @error('email') border-red-500 @enderror" value="{{ old('email') }}" required />
+                            @error('email')
+                                <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                            @enderror
                         </div>
 
-                        <!-- Phone -->
+                        <!-- Phone (nullable) -->
                         <div>
                             <label class="block text-sm font-medium mb-2">Phone</label>
-                            <input name="phone" type="text" class="w-full p-2 border border-section-bor rounded-md" value="{{ old('phone') }}" />
+                            <input name="phone" type="text" class="w-full p-2 border border-section-bor rounded-md @error('phone') border-red-500 @enderror" value="{{ old('phone') }}" />
+                            @error('phone')
+                                <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                            @enderror
                         </div>
 
                         <!-- Subject -->
                         <div>
                             <label class="block text-sm font-medium mb-2">Subject <span class="text-red-keloola">*</span></label>
-                            <input name="subject" type="text" class="w-full p-2 border border-section-bor rounded-md" value="{{ old('subject') }}" required />
+                            <input name="subject" type="text" class="w-full p-2 border border-section-bor rounded-md @error('subject') border-red-500 @enderror" value="{{ old('subject') }}" required />
+                            @error('subject')
+                                <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                            @enderror
                         </div>
 
-                        <!-- Description -->
+                        <!-- Description (nullable) -->
                         <div>
                             <label class="block text-sm font-medium mb-2">Description</label>
-                            <textarea name="description" class="w-full p-2 border border-section-bor rounded-md min-h-[200px]">{{ old('description') }}</textarea>
+                            <textarea name="description" class="w-full p-2 border border-section-bor rounded-md min-h-[200px] @error('description') border-red-500 @enderror">{{ old('description') }}</textarea>
+                            @error('description')
+                                <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                            @enderror
                         </div>
 
-                        <!-- Attachment -->
+                        <!-- Attachment (nullable) -->
                         <div>
                             <label class="block text-sm font-medium mb-2">Attach a file</label>
-                            <input name="attachment" type="file" class="w-full p-2 border rounded-md" />
+                            <input name="attachment" type="file" class="w-full p-2 border rounded-md @error('attachment') border-red-500 @enderror" />
                             <small>(Up to 40 MB)</small>
+                            @error('attachment')
+                                <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                            @enderror
                         </div>
+
 
                         <!-- Submit -->
                         <div class="flex gap-4">
@@ -99,7 +124,7 @@
                     <ul class="space-y-4">
                         @forelse ($popularArticles as $article)
                             <li>
-                                <a href="{{ route('public.articles.show', $article->id) }}" class="flex items-start gap-2 text-black-keloola hover:text-blue-primary">
+                                <a href="{{ route('public.articles.show', $article->slug) }}" class="flex items-start gap-2 text-black-keloola hover:text-blue-primary">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mb-1 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9.5a2.5 2.5 0 00-2.5-2.5H15" />
                                     </svg>
@@ -123,8 +148,8 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     $(document).ready(function() {
-        $('#department_id').on('change', function() {
-            const deptId = $(this).val();
+        // Function to load services for a department
+        function loadServices(deptId) {
             $('#service_id').empty().append('<option>Loading...</option>');
             if (deptId) {
                 $.ajax({
@@ -143,7 +168,19 @@
             } else {
                 $('#service_id').empty().append('<option value="">-- Pilih Department dulu --</option>');
             }
+        }
+
+        // Handle department change
+        $('#department_id').on('change', function() {
+            const deptId = $(this).val();
+            loadServices(deptId);
         });
+
+        // Auto-load services if department is pre-selected
+        const selectedDeptId = $('#department_id').val();
+        if (selectedDeptId) {
+            loadServices(selectedDeptId);
+        }
     });
 </script>
 @endsection

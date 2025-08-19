@@ -19,22 +19,22 @@
                placeholder="••••••••"
                class="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-red-300" />
     </div>
+    @if(session('error'))
+        <span class="mb-3 text-red-500 text-left">{{ session('error') }}</span>
+    @endif
 
     <div class="flex items-center justify-between mb-4 text-sm">
         <label class="inline-flex items-center">
             <input type="checkbox" name="remember" class="form-checkbox text-red-500">
             <span class="ml-2 text-gray-600">Ingat saya</span>
         </label>
-        <a href="{{ route('password.request') }}" class="text-red-500 hover:underline">Lupa password?</a>
     </div>
+
+   
 
     <button type="submit" class="w-full bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded-md">
         Masuk
     </button>
 
-    <p class="mt-4 text-sm text-center text-gray-600">
-        Belum punya akun?
-        <a href="{{ route('register') }}" class="text-red-500 hover:underline">Daftar di sini</a>
-    </p>
 </form>
 @endsection

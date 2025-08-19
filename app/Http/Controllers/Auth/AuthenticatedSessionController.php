@@ -24,22 +24,12 @@ Class AuthenticatedSessionController extends Controller
         ]);
 
         if (!Auth::attempt($request->only('email', 'password'), $request->boolean('remember'))) {
-            throw ValidationException::withMessages([
-                'email' => __('auth.failed'),
-            ]);
+            return redirect()->route('login')->with('error', 'Email atau password salah');
         }
 
         $request->session()->regenerate();
 
-        // ✅ ROLE-BASED REDIRECT
-        if (Auth::user()->role && Auth::user()->role->name === 'admin') {
-            return redirect()->intended('/admin/dashboard');
-        }
-        if (Auth::user()->role && Auth::user()->role->name === 'staff') {
-            return redirect()->intended('/staff/dashboard');
-        }
-
-        return redirect()->intended('/');
+        return redirect()->intended('/dashboard');
     }
 
     public function destroy(Request $request): RedirectResponse

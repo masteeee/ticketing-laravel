@@ -7,9 +7,9 @@
                 <div class="shrink-0 flex items-center">
                     @auth
                         @if(Auth::user()->role && Auth::user()->role->name === 'admin')
-                            <a href="{{ route('admin.dashboard') }}">
+                            <a href="{{ route('dashboard') }}">
                         @elseif(Auth::user()->role && Auth::user()->role->name === 'staff')
-                            <a href="{{ route('staff.dashboard') }}">
+                            <a href="{{ route('dashboard') }}">
                         @else
                             <a href="{{ route('public.home') }}">
                         @endif
@@ -26,11 +26,11 @@
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     @auth
                         @if(Auth::user()->role && Auth::user()->role->name === 'admin')
-                            <x-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.dashboard')">
+                            <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                                 {{ __('Dashboard') }}
                             </x-nav-link>
                         @elseif(Auth::user()->role && Auth::user()->role->name === 'staff')
-                            <x-nav-link :href="route('staff.dashboard')" :active="request()->routeIs('staff.dashboard')">
+                            <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                                 {{ __('Dashboard') }}
                             </x-nav-link>
                         @endif
@@ -92,11 +92,11 @@
         @auth
             <div class="pt-2 pb-3 space-y-1">
                 @if(Auth::user()->role && Auth::user()->role->name === 'admin')
-                    <x-responsive-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.dashboard')">
+                    <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-responsive-nav-link>
                 @elseif(Auth::user()->role && Auth::user()->role->name === 'staff')
-                    <x-responsive-nav-link :href="route('staff.dashboard')" :active="request()->routeIs('staff.dashboard')">
+                    <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-responsive-nav-link>
                 @endif

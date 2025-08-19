@@ -24,9 +24,7 @@ class DepartmentController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'description' => 'nullable|string',
+        $request->validate(Department::rules() + [
             'logo' => 'nullable|image|mimes:jpg,jpeg,png,svg|max:2048',
         ]);
     
@@ -42,7 +40,7 @@ class DepartmentController extends Controller
     
         Department::create($data);
     
-        return redirect()->route('admin.departments.index')->with('success', 'Department berhasil ditambahkan.');
+        return redirect()->route('departments.index')->with('success', 'Department berhasil ditambahkan.');
     }
 
     public function edit(Request $request, Department $department)
@@ -53,15 +51,13 @@ class DepartmentController extends Controller
 
     public function update(Request $request, Department $department)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'description' => 'nullable|string',
+        $validated = $request->validate(Department::updateRules($department->id) + [
             'logo' => 'nullable|image|mimes:jpg,jpeg,png,svg|max:2048',
         ]);
     
         $data = [
-            'name' => $request->name,
-            'description' => $request->description,
+            'name' => $validated['name'],
+            'description' => $validated['description'] ?? null,
         ];
     
         if ($request->hasFile('logo')) {
@@ -76,13 +72,14 @@ class DepartmentController extends Controller
         }
     
         $department->update($data);
-        return redirect()->route('admin.departments.index')->with('success', 'Department updated!');
+        return redirect()->route('departments.index')
+            ->with('success', 'Department updated!');
     }
 
     public function destroy(Department $department)
     {
         $department->delete();
-        return redirect()->route('admin.departments.index')->with('success', 'Department deleted!');
+        return redirect()->route('departments.index')->with('success', 'Department deleted!');
     }
     public function refresh()
     {

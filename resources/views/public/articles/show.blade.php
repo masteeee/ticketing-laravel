@@ -8,7 +8,7 @@
         <div class="relative">
             <div class="items-center space-x-4 hidden md:flex">
                 <div class="relative flex-1">
-                    <form method="GET" action="{{ route('knowledge.base') }}">
+                    <form method="GET" action="{{ route('knowledge.search') }}">
                         <input id="desktop-search-input" 
                                name="search"
                                type="text"
@@ -16,11 +16,10 @@
                                placeholder="Search articles"
                                class="w-4/5 p-4 pr-32 border border-gray-primary outline-none">
                         <button id="desktop-search-dropdown"
-                                class="absolute right-[20%] top-0 h-full px-4 rounded-r-lg flex items-center hover:shadow-md">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 ml-1" fill="none"
-                                viewBox="0 0 24 24" stroke="currentColor">
+                            class="absolute right-[20%] top-0 h-full px-4 rounded-r-lg flex items-center hover:shadow-md">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M19 9l-7 7-7-7" />
+                                    d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 1110.5 3a7.5 7.5 0 016.15 13.65z" />
                             </svg>
                         </button>
                     </form>
@@ -66,27 +65,35 @@
                         <h1 class="text-3xl font-bold text-black-keloola">{{ $article->title }}</h1>
                         <div class="flex gap-4">
                             {{-- PDF Download --}}
-                            <div class="cursor-pointer hover:text-blue-primary" title="Download as PDF">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                    stroke-width="1.5" stroke="currentColor" class="size-6">
-                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                        d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m.75 12 3 3m0 0 3-3m-3 3v-6m-1.5-9H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
-                                </svg>
-                            </div>
-                            {{-- Print --}}
-                            <div class="cursor-pointer hover:text-blue-primary" title="Print"
-                                 onclick="window.print()">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                    stroke-width="1.5" stroke="currentColor" class="size-6">
-                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                        d="M6.72 13.829c-.24.03-.48.062-.72.096m.72-.096a42.415 42.415 0 0 1 10.56 0m-10.56 0L6.34 18m10.94-4.171..." />
-                                </svg>
+                            <div class="flex space-x-2">
+                                <div class="cursor-pointer hover:text-blue-primary transition-colors duration-200" title="Download as PDF" onclick="downloadAsPDF()">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                        stroke-width="1.5" stroke="currentColor" class="size-6">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m.75 12 3 3m0 0 3-3m-3 3v-6m-1.5-9H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
+                                    </svg>
+                                </div>
+                                {{-- Print --}}     
+                                
+                                <div class="cursor-pointer hover:text-green-600 transition-colors duration-200" title="Print Article" onclick="printArticle()">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                        stroke-width="1.5" stroke="currentColor" class="size-6">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="M6.72 13.829c-.24.03-.48.062-.72.096m.72-.096a42.415 42.415 0 0 1 10.56 0m-10.56 0L6.34 18m10.94-4.171c.24.03.48.062.72.096m-.72-.096L17.66 18m0 0 .229 2.523a1.125 1.125 0 0 1-1.12 1.227H7.231c-.662 0-1.277-.457-1.336-1.107L6.34 18m11.318 0h1.091A2.25 2.25 0 0 0 21 15.75V9.456c0-1.081-.768-2.015-1.837-2.175a48.055 48.055 0 0 0-1.913-.247M6.34 18H5.25A2.25 2.25 0 0 1 3 15.75V9.456c0-1.081.768-2.015 1.837-2.175a48.041 48.041 0 0 1 1.913-.247m10.5 0a48.536 48.536 0 0 0-1.086-.211M6.34 18H6.34m11.318 0H6.34" />
+                                    </svg>
+                                </div>
                             </div>
                         </div>
                     </div>
+                    {{-- Thumbnail --}}
+                    @if($article->thumbnail)
+                        <div class="w-full h-auto">
+                            <img style="object-fit:cover;" src="{{ asset('storage/' . $article->thumbnail) }}" alt="Thumbnail" class="w-full h-auto">
+                        </div>
+                    @endif
 
                     {{-- Konten Artikel --}}
-                    <div class="text-lg my-8 leading-relaxed article-content prose max-w-none">
+                    <div class="text-lg my-8 leading-relaxed article-content max-w-none">
                         {!! $article->content !!}
                     </div>
 
@@ -95,7 +102,7 @@
                     <h1 id="related-articles" class="text-red-keloola my-5 text-3xl font-medium">Related Articles</h1>
                     <div class="flex flex-col gap-y-2">
                         @foreach($relatedArticles as $related)
-                            <a href="{{ route('public.articles.show', $related->id) }}"
+                            <a href="{{ route('public.articles.show', $related->slug) }}"
                                class="text-base text-primary">
                                 {{ $related->title }}
                             </a>
@@ -122,7 +129,8 @@
                         @foreach($headings as $heading)
                             <li>
                                 <a href="#{{ $heading['id'] }}" 
-                                   class="flex items-start gap-2 text-black-keloola hover:text-blue-primary">
+                                   class="flex items-start gap-2 text-black-keloola hover:text-blue-primary transition-colors duration-200 cursor-pointer scroll-to-section"
+                                   data-target="{{ $heading['id'] }}">
                                     {{ $heading['text'] }}
                                 </a>
                             </li>
@@ -136,7 +144,7 @@
                     <ul class="space-y-2">
                         @foreach($relatedArticles as $related)
                             <li>
-                                <a href="{{ route('public.articles.show', $related->id) }}"
+                                <a href="{{ route('public.articles.show', $related->slug) }}"
                                    class="flex items-start gap-2 text-black-keloola hover:text-blue-primary">
                                    {{ $related->title }}
                                 </a>
@@ -150,4 +158,432 @@
 </section>
 
 @include('layouts.footer')
+@tailwind
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script>
+function downloadAsPDF() {
+    // Get the article content and thumbnail
+    const articleContent = document.querySelector('.article-content');
+    const articleTitle = document.querySelector('h1').textContent;
+    const thumbnailImg = document.querySelector('img[src*="storage"]');
+    
+    if (!articleContent) {
+        alert('Article content not found!');
+        return;
+    }
+
+    // Get thumbnail URL
+    const thumbnailUrl = thumbnailImg ? thumbnailImg.src : null;
+    
+    // Create a new div for PDF content
+    const pdfContent = document.createElement('div');
+    pdfContent.innerHTML = `
+        <div style="padding: 20px; font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto;">
+            <h1 style="color: #dc2626; font-size: 24px; margin-bottom: 20px; border-bottom: 2px solid #dc2626; padding-bottom: 10px;">
+                ${articleTitle}
+            </h1>
+            ${thumbnailUrl ? `<div style="text-align: center; margin-bottom: 20px;">
+                <img src="${thumbnailUrl}" style="max-width: 100%; height: auto; max-height: 300px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);" alt="Article Thumbnail">
+            </div>` : ''}
+            <div style="line-height: 1.6; font-size: 14px;">
+                ${articleContent.innerHTML}
+            </div>
+            <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #e5e7eb; font-size: 12px; color: #6b7280;">
+                <p>Generated from Keloola Knowledge Base</p>
+                <p>Date: ${new Date().toLocaleDateString()}</p>
+            </div>
+        </div>
+    `;
+
+    // PDF options
+    const opt = {
+        margin: 1,
+        filename: `${articleTitle.replace(/[^a-zA-Z0-9]/g, '_')}.pdf`,
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2 },
+        jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
+    };
+
+    // Generate PDF
+    html2pdf().set(opt).from(pdfContent).save();
+}
+
+function printArticle() {
+    const articleContent = document.querySelector('.article-content');
+    const articleTitle = document.querySelector('h1').textContent;
+    const thumbnailImg = document.querySelector('img[src*="storage"]');
+    
+    if (!articleContent) {
+        alert('Article content not found!');
+        return;
+    }
+
+    const thumbnailUrl = thumbnailImg ? thumbnailImg.src : null;
+    
+    const printContent = `
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <title>${articleTitle}</title>
+            <style>
+                body { 
+                    font-family: Arial, sans-serif; 
+                    line-height: 1.6; 
+                    max-width: 800px; 
+                    margin: 0 auto; 
+                    padding: 20px;
+                }
+                h1 { 
+                    color: #dc2626; 
+                    font-size: 24px; 
+                    margin-bottom: 20px; 
+                    border-bottom: 2px solid #dc2626; 
+                    padding-bottom: 10px;
+                }
+                .thumbnail-container {
+                    text-align: center;
+                    margin-bottom: 20px;
+                }
+                .thumbnail-container img {
+                    max-width: 100%;
+                    height: auto;
+                    max-height: 300px;
+                    border-radius: 8px;
+                    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+                }
+                img { max-width: 100%; height: auto; }
+                .print-footer { 
+                    margin-top: 30px; 
+                    padding-top: 20px; 
+                    border-top: 1px solid #e5e7eb; 
+                    font-size: 12px; 
+                    color: #6b7280;
+                }
+                /* Ensure tables print with clear borders similar to Summernote */
+                .article-content table {
+                    width: 100%;
+                    border-collapse: collapse;
+                    border: 1px solid #444; /* default border; inline styles from Summernote will override */
+                    margin: 12px 0;
+                }
+                .article-content thead th {
+                    background: #f3f4f6; /* light gray header */
+                    -webkit-print-color-adjust: exact;
+                    print-color-adjust: exact;
+                }
+                .article-content th,
+                .article-content td {
+                    border: 1px solid #444;
+                    padding: 8px 10px;
+                    vertical-align: top;
+                }
+                .article-content tbody tr:nth-child(even) td {
+                    background: #fafafa;
+                    -webkit-print-color-adjust: exact;
+                    print-color-adjust: exact;
+                }
+                /* Respect any inline border styles coming from Summernote (higher specificity inline wins) */
+                .article-content table[border],
+                .article-content table[style*="border"],
+                .article-content th[style*="border"],
+                .article-content td[style*="border"] {
+                    border-color: inherit;
+                }
+                @page { margin: 20mm; }
+                body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+                @media print {
+                    body { margin: 0; padding: 15px; }
+                    .thumbnail-container img {
+                        max-height: 200px;
+                    }
+                }
+            </style>
+        </head>
+        <body>
+            <h1>${articleTitle}</h1>
+            @if($article->thumbnail)
+                <div class="thumbnail-container">
+                    <img src="{{ asset('storage/' . $article->thumbnail) }}" alt="Article Thumbnail">
+                </div>
+            @endif
+            <div class="article-content">${articleContent.innerHTML}</div>
+            <div class="print-footer">
+                <p>Generated from Keloola Knowledge Base</p>
+                <p>Date: ${new Date().toLocaleDateString()}</p>
+            </div>
+        </body>
+        </html>
+    `;
+
+    // Open print window
+    const printWindow = window.open('', '_blank');
+    printWindow.document.write(printContent);
+    printWindow.document.close();
+    printWindow.focus();
+    
+    // Wait for content to load then print
+    printWindow.onload = function() {
+        printWindow.print();
+        printWindow.close();
+    };
+}
+
+// Smooth scroll functionality
+document.addEventListener('DOMContentLoaded', function() {
+
+    // Add click event listeners to all scroll-to-section links
+    document.querySelectorAll(".article-content iframe").forEach(function (iframe) {
+        // cek kalau belum ada wrapper
+        if (!iframe.parentElement.classList.contains("video-wrapper")) {
+            const wrapper = document.createElement("div");
+            wrapper.className = "video-wrapper";
+            iframe.parentNode.insertBefore(wrapper, iframe);
+            wrapper.appendChild(iframe);
+        }
+    });
+    const scrollLinks = document.querySelectorAll('.scroll-to-section');
+    document.querySelectorAll('.article-content table').forEach(function(table) {
+
+        // Cek kalau belum dibungkus
+        if (!table.parentElement.classList.contains('table-wrapper')) {
+            const wrapper = document.createElement('div');
+            wrapper.classList.add('table-wrapper');
+            wrapper.style.overflowX = 'auto';
+            wrapper.style.width = '100%';
+            wrapper.appendChild(table.cloneNode(true));
+            table.parentNode.replaceChild(wrapper, table);
+        }
+    });
+    scrollLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            const targetId = this.getAttribute('data-target');
+            const targetElement = document.getElementById(targetId);
+            
+            if (targetElement) {
+                // Smooth scroll to target
+                targetElement.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+                
+                // Add highlight effect to target
+                targetElement.style.transition = 'background-color 0.3s ease';
+                targetElement.style.backgroundColor = '#fef3c7';
+                
+                // Remove highlight after 2 seconds
+                setTimeout(() => {
+                    targetElement.style.backgroundColor = '';
+                }, 2000);
+                
+                // Update URL hash without jumping
+                history.pushState(null, null, '#' + targetId);
+            } else {
+                console.log('Target element not found:', targetId);
+            }
+        });
+    });
+    
+    // Handle direct URL hash navigation
+    if (window.location.hash) {
+        const targetId = window.location.hash.substring(1);
+        const targetElement = document.getElementById(targetId);
+        
+        if (targetElement) {
+            setTimeout(() => {
+                targetElement.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+                
+                targetElement.style.transition = 'background-color 0.3s ease';
+                // targetElement.style.backgroundColor = '#fef3c7';
+                
+                setTimeout(() => {
+                    targetElement.style.backgroundColor = '';
+                }, 2000);
+            }, 100);
+        }
+    }
+    
+});
+</script>
+<style>
+    .article-content .video-wrapper {
+    position: relative;
+    padding-bottom: 56.25%; /* 16:9 */
+    height: 0;
+    overflow: hidden;
+    max-width: 100%;
+    background: #000;
+    margin: 1rem 0;
+    border-radius: 8px; /* opsional biar lebih rapih */
+}
+
+.article-content .video-wrapper iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100% !important;
+    height: 100% !important;
+    border: 0;
+}
+
+    .table-wrapper {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch; /* biar smooth di iOS */
+}
+    /* Table styling */
+    .article-content table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    .article-content th,
+    .article-content td {
+        border: 1px solid #dee2e6;
+        padding: 8px;
+    }
+
+    .article-content thead th {
+        background-color: #f8f9fa;
+        font-weight: bold;
+    }
+
+    /* Responsive table wrapper */
+    .article-content table {
+        display: block;
+        width: 100%;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+
+    /* Responsive image in article */
+    .article-content img {
+        max-width: 100% !important;
+        height: auto !important;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    /* Remove float on mobile for pasted images */
+    @media (max-width: 768px) {
+        .article-content img {
+            float: none !important;
+            margin: 0 auto !important;
+        }
+    }
+    
+    /* Fix ordered and unordered lists */
+    .article-content ol {
+        list-style-type: decimal !important;
+        margin-left: 1.5rem !important;
+        margin-bottom: 1rem !important;
+        padding-left: 0.5rem !important;
+    }
+    
+    .article-content ul {
+        list-style-type: disc !important;
+        margin-left: 1.5rem !important;
+        margin-bottom: 1rem !important;
+        padding-left: 0.5rem !important;
+    }
+    
+    .article-content ol li,
+    .article-content ul li {
+        margin-bottom: 0.5rem !important;
+        display: list-item !important;
+    }
+    
+    .article-content ol ol {
+        list-style-type: lower-alpha !important;
+        margin-top: 0.5rem !important;
+    }
+    
+    .article-content ol ol ol {
+        list-style-type: lower-roman !important;
+    }
+    
+    /* Fix table borders and styling */
+    .article-content table {
+        border-collapse: collapse !important;
+        width: 100% !important;
+        margin: 1rem 0 !important;
+        border: 1px solid #d1d5db !important;
+    }
+    
+    .article-content table th,
+    .article-content table td {
+        border: 1px solid #d1d5db !important;
+        padding: 0.75rem !important;
+        text-align: left !important;
+    }
+    
+    .article-content table th {
+        background-color: #f9fafb !important;
+        font-weight: 600 !important;
+    }
+    
+    .article-content table tr:nth-child(even) {
+        background-color: #f9fafb !important;
+    }
+    
+    .article-content table tr:hover {
+        background-color: #f3f4f6 !important;
+    }
+    
+    /* Fix paragraph spacing */
+    .article-content p {
+        margin-bottom: 1rem !important;
+        line-height: 1.6 !important;
+    }
+    
+    /* Fix headings */
+    .article-content h1,
+    .article-content h2,
+    .article-content h3,
+    .article-content h4,
+    .article-content h5,
+    .article-content h6 {
+        margin-top: 1.5rem !important;
+        margin-bottom: 1rem !important;
+        font-weight: 600 !important;
+    }
+    
+    .article-content h1 { font-size: 2rem !important; }
+    .article-content h2 { font-size: 1.75rem !important; }
+    .article-content h3 { font-size: 1.5rem !important; }
+    .article-content h4 { font-size: 1.25rem !important; }
+    .article-content h5 { font-size: 1.125rem !important; }
+    .article-content h6 { font-size: 1rem !important; }
+    
+    /* Fix blockquotes */
+    .article-content blockquote {
+        border-left: 4px solid #d1d5db !important;
+        padding-left: 1rem !important;
+        margin: 1rem 0 !important;
+        font-style: italic !important;
+        background-color: #f9fafb !important;
+        padding: 1rem !important;
+    }
+    
+    /* Fix code blocks */
+    .article-content pre {
+        background-color: #f3f4f6 !important;
+        padding: 1rem !important;
+        border-radius: 0.375rem !important;
+        overflow-x: auto !important;
+        margin: 1rem 0 !important;
+    }
+    
+    .article-content code {
+        background-color: #f3f4f6 !important;
+        padding: 0.25rem 0.5rem !important;
+        border-radius: 0.25rem !important;
+        font-family: 'Courier New', monospace !important;
+    }
+</style>
+
 @endsection

@@ -6,43 +6,94 @@ use App\Http\Controllers\Controller;
 use App\Models\Ticket;
 use App\Models\Department;
 use App\Models\Service;
+use App\Services\MentionService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Notifications\TicketUserReplied;
+use App\Models\User;
 
 class AdminTicketController extends Controller
 {
+    protected $mentionService;
+
+    public function __construct(MentionService $mentionService)
+    {
+        $this->mentionService = $mentionService;
+    }
+
     public function index(Request $request)
     {
         $departments = Department::all();
         $services = Service::all();
+        $currentUser = Auth::user();
 
         $query = Ticket::with(['department', 'service', 'handler']);
 
-        // Filter by department
+        // Ambil permission user
+        $userPermissions = $currentUser && $currentUser->role 
+            ? $currentUser->role->permissions->pluck('name')->toArray() 
+            : [];
+
+        // Ambil semua user hanya jika punya permission assign tickets
+        $users = in_array('assign tickets', $userPermissions) 
+            ? User::all() 
+            : User::where('id', $currentUser->id)->get();
+
+        // Filter berdasarkan hak akses
+        if (!in_array('assign tickets', $userPermissions)) {
+            // Tidak punya permission: hanya bisa lihat tiket miliknya
+            $query->where('assigned_to', $currentUser->id);
+        } else {
+            // Punya permission: bisa lihat semua dan filter
+            if ($request->filled('assigned_to')) {
+                if ($request->assigned_to === 'unassigned') {
+                    $query->whereNull('assigned_to');
+                } else {
+                    $query->where('assigned_to', $request->assigned_to);
+                }
+            }
+        }
+
+        // Filter lainnya
         if ($request->filled('department_id')) {
             $query->where('department_id', $request->department_id);
         }
 
-        // Filter by service
         if ($request->filled('service_id')) {
             $query->where('service_id', $request->service_id);
         }
 
-        // Filter by status
         if ($request->filled('status')) {
-            $query->where('status', $request->status);
+            $statusMap = [
+                'Dalam Antrean' => 'Dalam Antrean',
+                'Dalam Pengerjaan' => 'Dalam Pengerjaan',
+                'Solved' => 'Solved'
+            ];
+        
+            $status = $statusMap[$request->status] ?? $request->status;
+        
+            $query->where('status', $status);
         }
+        
 
-        // Filter by date range
+        // Filter tanggal
         if ($request->filled('start_date') && $request->filled('end_date')) {
-            $query->whereBetween('created_at', [$request->start_date, $request->end_date]);
+            $startDate = $request->start_date . ' 00:00:00';
+            $endDate = $request->end_date . ' 23:59:59';
+            $query->whereBetween('created_at', [$startDate, $endDate]);
+        } elseif ($request->filled('start_date')) {
+            $startDate = $request->start_date . ' 00:00:00';
+            $query->where('created_at', '>=', $startDate);
+        } elseif ($request->filled('end_date')) {
+            $endDate = $request->end_date . ' 23:59:59';
+            $query->where('created_at', '<=', $endDate);
         }
 
         $tickets = $query->latest()->paginate(10);
 
-        return view('admin.tickets.index', compact('tickets', 'departments', 'services'));
+        return view('admin.tickets.index', compact('tickets', 'departments', 'services', 'users'));
     }
+
 
     public function updateStatus(Request $request, $id)
     {
@@ -60,8 +111,8 @@ class AdminTicketController extends Controller
 
     public function show($id)
     {
-        $ticket = Ticket::with('department')->findOrFail($id);
-        $conversations = []; // Placeholder
+        $ticket = Ticket::with(['department', 'conversations.user'])->findOrFail($id);
+        $conversations = $ticket->conversations;
 
         return view('admin.tickets.show', compact('ticket', 'conversations'));
     }
@@ -70,17 +121,101 @@ class AdminTicketController extends Controller
     {
         $request->validate([
             'message' => 'required|string',
+            'status' => 'nullable|in:Dalam Antrean,Dalam Pengerjaan,Solved', 
+            'assigned_to' => 'nullable|exists:users,id',
         ]);
-
-        $ticket->conversations()->create([
+    
+        // Tambah percakapan
+        $conversation = $ticket->conversations()->create([
             'user_id' => auth()->id(),
             'message' => $request->message,
         ]);
 
+        // Handle mentions
+        $this->mentionService->createMentionNotifications(
+            $request->message,
+            $ticket,
+            $conversation,
+            auth()->user()
+        );
+    
+        // Update status jika ada
+        if ($request->filled('status')) {
+            $ticket->status = $request->status;
+
+            // Assign handler jika belum ditangani
+            if ($ticket->handled_by === null && auth()->check()) {
+                $ticket->handled_by = auth()->id();
+            }
+
+            $ticket->save();
+        }
+    
+        // Kirim notifikasi ke user (jika ada email)
         if ($ticket->email) {
             \Notification::route('mail', $ticket->email)->notify(new TicketUserReplied($ticket, $request->message));
         }
-
-        return back()->with('success', 'Balasan berhasil dikirim.');
+    
+        return back()->with('success', 'Balasan berhasil dikirim dan status diperbarui.');
     }
+
+    public function getMentionSuggestions(Request $request)
+    {
+        $query = trim($request->get('q', ''));
+
+        $users = User::query()
+            ->when($query, function ($q) use ($query) {
+                // Kalau ada query, filter berdasarkan nama atau email
+                $q->where('name', 'like', "%{$query}%")
+                ->orWhere('email', 'like', "%{$query}%");
+            })
+            ->orderBy('name')
+            ->limit(8) // max 8 user
+            ->get(['id', 'name', 'email']);
+
+        return response()->json($users);
+    }
+
+    
+    public function assign(Request $request, Ticket $ticket)
+    {
+        $ticket->assigned_to = $request->assigned_to;
+        $ticket->save();
+
+        return back()->with('success', 'Ticket assigned successfully.');
+    }
+
+    /**
+     * Format message with mentions for display
+     */
+    public static function formatMessageWithMentions($message)
+    {
+        // Escape HTML untuk mencegah XSS
+        $escapedMessage = htmlspecialchars($message);
+
+        // Ambil semua user dan urutkan dari nama terpanjang
+        $users = \App\Models\User::all()->sortByDesc(function($user) {
+            return strlen($user->name);
+        });
+
+        foreach ($users as $user) {
+            // Escape nama user untuk regex
+            $userName = preg_quote($user->name, '/');
+
+            // Pattern:
+            // - @ diikuti nama lengkap (boleh ada spasi)
+            // - Pastikan dibatasi oleh akhir string atau karakter pemisah (spasi, tanda baca, dll.)
+            $pattern = '/@(' . $userName . ')(?=$|\s|[.,!?;:])/iu';
+
+            // Ganti dengan span
+            $escapedMessage = preg_replace(
+                $pattern,
+                '<span class="mention">@$1</span>',
+                $escapedMessage
+            );
+        }
+
+        return $escapedMessage;
+    }
+
 }

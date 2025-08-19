@@ -12,7 +12,9 @@ class ServiceController extends Controller
     public function index()
     {
         $services = Service::with('department')->get();
-        return view('admin.services.index', compact('services'));
+        $departments = Department::all();
+    
+        return view('admin.services.index', compact('services', 'departments'));
     }
 
     public function create()
@@ -20,18 +22,19 @@ class ServiceController extends Controller
         $departments = Department::all();
         return view('admin.services.create', compact('departments'));
     }
-
     public function store(Request $request)
     {
-        $request->validate([
-            'name' => 'required',
-            'department_id' => 'required|exists:departments,id',
-        ]);
-
-        Service::create($request->all());
-        return redirect()->route('admin.services.index')->with('success', 'Service created successfully.');
+        $validated = $request->validate(Service::createRules($request->department_id));
+    
+        $service = Service::create($validated);
+    
+        if($request->ajax()){
+            return response()->json(['success' => true, 'service' => $service]);
+        }
+    
+        return redirect()->route('services.index')
+            ->with('success', 'Service created successfully.');
     }
-
     public function edit(Service $service)
     {
         $departments = Department::all();
@@ -40,19 +43,16 @@ class ServiceController extends Controller
 
     public function update(Request $request, Service $service)
     {
-        $request->validate([
-            'name' => 'required',
-            'department_id' => 'required|exists:departments,id',
-        ]);
+        $request->validate(Service::updateRules($service->id, $request->department_id));
 
         $service->update($request->all());
-        return redirect()->route('admin.services.index')->with('success', 'Service updated successfully.');
+        return redirect()->route('services.index')->with('success', 'Service updated successfully.');
     }
 
     public function destroy(Service $service)
     {
         $service->delete();
-        return redirect()->route('admin.services.index')->with('success', 'Service deleted successfully.');
+        return redirect()->route('services.index')->with('success', 'Service deleted successfully.');
     }
     public function getByDepartment($departmentId)
 {

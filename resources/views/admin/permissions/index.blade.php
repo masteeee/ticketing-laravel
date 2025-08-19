@@ -1,34 +1,128 @@
 @extends('layouts.admin')
 
 @section('content')
-<div class="container">
-    <h1 class="mb-4">Daftar Permission</h1>
-    <a href="{{ route('admin.permissions.create') }}" class="btn btn-danger mb-3">+ Tambah Permission</a>
+<div class="container py-4">
+    <div class="d-flex justify-between items-center">
+        <h1 class="text-xl font-bold">Daftar Permission</h1>
+        <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#addPermissionModal">+ Tambah Permission</button>
+    </div>
+
     @if(session('success'))
         <div class="alert alert-success">{{ session('success') }}</div>
     @endif
-    <table class="table table-bordered">
-        <thead>
-            <tr>
-                <th>Nama</th>
-                <th>Aksi</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach ($permissions as $permission)
-            <tr>
-                <td>{{ $permission->name }}</td>
-                <td>
-                    <a href="{{ route('admin.permissions.edit', $permission) }}" class="btn btn-warning btn-sm m-2">Edit</a>
-                    <form action="{{ route('admin.permissions.destroy', $permission) }}" method="POST" class="d-inline" onsubmit="return confirm('Yakin hapus?')">
-                        @csrf @method('DELETE')
-                        <button class="btn btn-danger btn-sm">Hapus</button>
-                    </form>
-                </td>
-            </tr>
-            @endforeach
-        </tbody>
-    </table>
+    
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul class="mb-0">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
+    <div class="bg-white mt-4 table table-bordered">
+        <table class="table table-responsive  rounded">
+            <thead>
+                <tr class="text-black">
+                    <th>Nama</th>
+                    <th class="text-center" style="width: 160px;">Aksi</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach ($permissions as $permission)
+                <tr>
+                    <td>{{ $permission->name }}</td>
+                    <td class="d-flex gap-2 justify-center">
+                        <button class="btn btn-warning btn-sm"
+                            data-bs-toggle="modal"
+                            data-bs-target="#editPermissionModal"
+                            data-id="{{ $permission->id }}"
+                            data-name="{{ $permission->name }}">
+                            Edit
+                        </button>
+                        <form action="{{ route('permissions.destroy', $permission) }}" method="POST" onsubmit="return confirm('Yakin hapus?')">
+                            @csrf @method('DELETE')
+                            <button class="btn btn-danger btn-sm">Hapus</button>
+                        </form>
+                    </td>
+                </tr>
+                @endforeach
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="d-flex justify-content-center">
     {{ $permissions->links() }}
 </div>
-@endsection 
+
+<!-- Modal Tambah -->
+<div class="modal fade" id="addPermissionModal" tabindex="-1" aria-labelledby="addPermissionLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <form class="modal-content" action="{{ route('permissions.store') }}" method="POST">
+            @csrf
+            <div class="modal-header">
+                <h5 class="modal-title">Tambah Permission</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label for="permission_name" class="form-label">Nama Permission</label>
+                    <input type="text" name="name" id="permission_name" class="form-control @error('name') is-invalid @enderror" value="{{ old('name') }}" required>
+                    @error('name')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                <button type="submit" class="btn btn-danger">Simpan</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Modal Edit -->
+<div class="modal fade" id="editPermissionModal" tabindex="-1" aria-labelledby="editPermissionLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <form class="modal-content" method="POST" id="editPermissionForm">
+            @csrf @method('PUT')
+            <div class="modal-header">
+                <h5 class="modal-title">Edit Permission</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" name="id" id="edit_id">
+                <div class="mb-3">
+                    <label for="edit_name" class="form-label">Nama Permission</label>
+                    <input type="text" name="name" id="edit_name" class="form-control @error('name') is-invalid @enderror" required>
+                    @error('name')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                <button type="submit" class="btn btn-danger">Update</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Script: Populate Edit Modal -->
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const editModal = document.getElementById('editPermissionModal');
+    editModal.addEventListener('show.bs.modal', function (event) {
+        const button = event.relatedTarget;
+        const id = button.getAttribute('data-id');
+        const name = button.getAttribute('data-name');
+
+        const form = editModal.querySelector('#editPermissionForm');
+        form.action = `/admin/permissions/${id}`;
+        form.querySelector('#edit_id').value = id;
+        form.querySelector('#edit_name').value = name;
+    });
+});
+</script>
+@endsection

@@ -3,11 +3,25 @@
 @section('content')
 <div class="container">
     <h1>Edit Role</h1>
-    <form action="{{ route('admin.roles.update', $role) }}" method="POST">
+    
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul class="mb-0">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+    
+    <form action="{{ route('roles.update', $role) }}" method="POST">
         @csrf @method('PUT')
         <div class="mb-3">
             <label for="name" class="form-label">Nama Role</label>
-            <input type="text" name="name" class="form-control" value="{{ $role->name }}" required>
+            <input type="text" name="name" class="form-control @error('name') is-invalid @enderror" value="{{ old('name', $role->name) }}" required>
+            @error('name')
+                <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
         </div>
         <div class="mb-3">
             <label class="form-label">Permissions</label>
@@ -17,11 +31,11 @@
                     <label for="checkAll"><strong>Centang Semua Permission</strong></label>
                 </div>
                 @foreach($permissions as $group => $perms)
-                    <div class="mb-2">
+                    <div class="">
                         <input type="checkbox" class="check-section" id="checkSection_{{ $group }}" onclick="toggleSection('{{ $group }}', this)">
                         <label for="checkSection_{{ $group }}"><strong>{{ ucfirst($group) }}</strong></label>
                     </div>
-                    <div class="row mb-2">
+                    <div class="row mb-4">
                         @foreach($perms as $perm)
                             <div class="col-12 col-md-6 col-lg-4 mb-1">
                                 <div class="form-check">

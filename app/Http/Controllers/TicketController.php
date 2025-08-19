@@ -39,8 +39,9 @@ class TicketController extends Controller
         $tickets = $query->latest()->paginate(10);
         $departments = Department::all();
         $services = Service::all();
+        $users = User::all();
     
-        return view('admin.tickets.index', compact('tickets', 'departments', 'services'));
+        return view('admin.tickets.index', compact('tickets', 'departments', 'services','users'));
     }
     
 
@@ -79,7 +80,7 @@ class TicketController extends Controller
         // Generate invoice_id jika belum ada
         $invoiceId = $request->invoice_id;
         if (!$invoiceId) {
-            $invoiceId = 'INV-' . date('Ymd') . '-' . strtoupper(substr(uniqid(), -6));
+            $invoiceId = 'TR-' . date('Ymd') . '-' . strtoupper(substr(uniqid(), -6));
         }
 
         $ticket = Ticket::create([
@@ -130,7 +131,7 @@ class TicketController extends Controller
             ->where('email', $request->email)
             ->first();
         if (!$ticket) {
-            return redirect()->route('ticket.view.form')->with('error', 'Ticket tidak ditemukan atau email salah.');
+            return redirect()->route('ticket.view.form')->with('error', 'Tiket Anda tidak ditemukan. Mohon periksa kembali Email atau ID tiket Anda.');
         }
         $conversations = $ticket->conversations()->with('user')->get();
         return view('public.ticket.detail', compact('ticket', 'conversations'));
@@ -139,30 +140,75 @@ class TicketController extends Controller
     public function publicReply(Request $request)
     {
         $request->validate([
-            'inv' => 'required|string',
-            'email' => 'required|email',
-            'message' => 'required|string',
+            'inv'     => 'required|string',
+            'email'   => 'required|email',
+            'message' => 'required|string|max:5000',
         ]);
+    
         $ticket = Ticket::where('invoice_id', $request->inv)
             ->where('email', $request->email)
             ->first();
+    
         if (!$ticket) {
-            return redirect()->route('ticket.view.form')->with('error', 'Ticket tidak ditemukan atau email salah.');
+            if ($request->ajax()) {
+                return response()->json([
+                    'success' => false,
+                    'error'   => 'Tiket tidak ditemukan.'
+                ], 404);
+            }
+    
+            return redirect()
+                ->route('ticket.view.form')
+                ->with('error', 'Tiket Anda tidak ditemukan. Mohon periksa kembali Email atau ID tiket Anda.');
         }
-        $ticket->conversations()->create([
-            'user_id' => null, // public user
+    
+        // Simpan pesan baru
+        $conversation = $ticket->conversations()->create([
+            'user_id' => null, // public user (karena bukan login sistem)
             'message' => $request->message,
         ]);
+    
         // Kirim notifikasi ke admin/staff
         $admins = User::whereHas('role', function($q) {
             $q->whereIn('name', ['admin', 'staff']);
         })->get();
+    
         \Notification::send($admins, new TicketSubmitted($ticket));
-        return redirect()->route('ticket.public.detail', ['inv' => $ticket->invoice_id, 'email' => $ticket->email]);
-          }
+    
+        // === Jika request AJAX ===
+        if ($request->ajax()) {
+            return response()->json([
+                'success'     => true,
+                'message'     => $conversation->message,
+                'time_human'  => $conversation->created_at->diffForHumans(),
+                'sender_name' => 'Anda',
+                'id'          => $conversation->id,
+            ], 200);
+        }
+    
+        // === Jika request biasa (non-AJAX) ===
+        return redirect()->route('ticket.public.detail', [
+            'inv'   => $ticket->invoice_id,
+            'email' => $ticket->email
+        ]);
+    }
+    
+
         public function getServices($department_id)
         {
             $services = \App\Models\Service::where('department_id', $department_id)->get();
             return response()->json($services);
         }
+        public function assignHandler(Request $request, Ticket $ticket)
+{
+    $request->validate([
+        'handler_id' => 'nullable|exists:users,id',
+    ]);
+
+    $ticket->handler_id = $request->handler_id;
+    $ticket->save();
+
+    return redirect()->back()->with('success', 'Tiket berhasil di-assign.');
+}
+
 }

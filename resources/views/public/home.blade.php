@@ -8,36 +8,34 @@
           <div class="relative">
                <div class="items-center space-x-4 hidden md:flex">
                     <div class="relative flex-1">
-                         <form id="desktop-search-form" action="{{ route('knowledge.base') }}" method="GET">
+                         <form id="desktop-search-form" action="{{ route('knowledge.search') }}" method="GET">
                              <input id="desktop-search-input" name="search" type="text" placeholder="Search articles"
                                   class="w-4/5 p-4 pr-32 border border-gray-primary outline-none">
                          </form>
                          <button id="desktop-search-dropdown"
                               class="absolute right-[20%] top-0 h-full px-4 rounded-r-lg flex items-center hover:shadow-md">
-                              <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 ml-1" fill="none"
-                                   viewBox="0 0 24 24" stroke="currentColor">
+                              <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M19 9l-7 7-7-7" />
+                                        d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 1110.5 3a7.5 7.5 0 016.15 13.65z" />
                               </svg>
                          </button>
-
                     </div>
 
                </div>
                <!-- Mobile search -->
                <div class="md:hidden">
-                    <form id="mobile-search-form" action="{{ route('knowledge.base') }}" method="GET">
+                    <form id="mobile-search-form" action="{{ route('knowledge.search') }}" method="GET">
                         <input id="mobile-search-input" name="search" type="text" placeholder="Search articles"
                              class="w-full p-4 border border-gray-primary outline-none rounded">
                     </form>
                     <button id="mobile-search-dropdown"
-                         class="absolute right-0 top-0 h-full px-4 rounded-r-lg flex items-center hover:shadow-md">
-                         <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 ml-1" fill="none"
-                              viewBox="0 0 24 24" stroke="currentColor">
+                         class="absolute right-[20%] top-0 h-full px-4 rounded-r-lg flex items-center hover:shadow-md">
+                         <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                   d="M19 9l-7 7-7-7" />
+                                   d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 1110.5 3a7.5 7.5 0 016.15 13.65z" />
                          </svg>
                     </button>
+
 
                     <div class="fixed bottom-6 right-6 z-50">
                          <button id="mobile-fab"
@@ -71,9 +69,9 @@
          <div class="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-6">
              @foreach($departments as $department)
                  <div class="bg-white-primary shadow rounded-lg p-6">
-                     <div class="flex flex-wrap border-b border-card-bor-keloola mb-4 pb-2">
+                     <div class="flex flex-wrap border-b border-card-bor-keloola mb-4 pb-2 gap-4">
                          @if($department->logo_url)
-                         <img src="{{ asset('storage/' . $department->logo_url) }}" alt="icon-{{ Str::slug($department->name) }}" class="w-20 h-20 mr-2 rounded-full object-cover">
+                         <img src="{{ asset('storage/' . $department->logo_url) }}" style="object-fit:cover;" alt="icon-{{ Str::slug($department->name) }}" class="w-20 h-20 mr-2 rounded-full object-cover">
                          @endif 
                            <h3 class="text-lg font-semibold flex items-center">{{ $department->name }}</h3>
                          {{-- <a href="{{ route('ticket.create', ['department' => $department->id]) }}" target="_blank" class="hover:text-primary cursor-pointer">

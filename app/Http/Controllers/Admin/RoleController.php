@@ -22,13 +22,12 @@ class RoleController extends Controller
     }
 
     public function store(Request $request) {
-        $request->validate([
-            'name' => 'required|unique:roles,name',
+        $request->validate(Role::rules() + [
             'permissions' => 'array',
         ]);
         $role = Role::create(['name' => $request->name]);
         $role->permissions()->sync($request->permissions ?? []);
-        return redirect()->route('admin.roles.index')->with('success', 'Role ditambahkan');
+        return redirect()->route('roles.index')->with('success', 'Role ditambahkan');
     }
 
     public function edit(Role $role) {
@@ -40,13 +39,12 @@ class RoleController extends Controller
     }
 
     public function update(Request $request, Role $role) {
-        $request->validate([
-            'name' => 'required|unique:roles,name,' . $role->id,
+        $request->validate(Role::updateRules($role->id) + [
             'permissions' => 'array',
         ]);
         $role->update(['name' => $request->name]);
         $role->permissions()->sync($request->permissions ?? []);
-        return redirect()->route('admin.roles.index')->with('success', 'Role diupdate');
+        return redirect()->route('roles.index')->with('success', 'Role diupdate');
     }
 
     public function destroy(Role $role) {

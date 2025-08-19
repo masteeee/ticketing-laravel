@@ -21,7 +21,7 @@
 
         {{-- KODE INV --}}
         <div class="mb-4">
-            <p class="text-sm text-gray-800">Kode INV Anda:</p>
+            <p class="text-sm text-gray-800">Kode Tracking Anda:</p>
             <div class="flex items-center justify-center gap-2 mt-1">
                 <p id="invCode" class="text-xl font-mono font-bold text-blue-600 tracking-wide">{{ $invoice }}</p>
                 <button onclick="copyInvoice()" class="text-xs bg-blue-100 border border-blue-500 p-2 rounded-full text-blue-500">Copy</button>
@@ -48,7 +48,7 @@
     function copyInvoice() {
         const inv = document.getElementById('invCode').textContent;
         navigator.clipboard.writeText(inv).then(() => {
-            alert('Kode INV berhasil disalin!');
+            alert('Kode Tracking Anda berhasil disalin!');
         });
     }
 
