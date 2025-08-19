@@ -79,19 +79,31 @@
 </section>
 <section class="bg-form-section py-10">
     <div class="container mx-auto px-4">
+
         {{-- SECTIONS jika kategori punya children --}}
-        @if(isset($currentCategory) && $currentCategory && ($categories?->count() ?? 0) > 0)
+            @if(isset($currentCategory) && $currentCategory && ($categories?->count() ?? 0) > 0)
             <h2 class="text-lg font-semibold mb-4">Sections</h2>
             <div class="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-6 mb-10">
                 @foreach($categories as $cat)
-                    @php
-                        $total = totalArticlesView($cat);
-                        $first = firstArticleView($cat);
-                        $goUrl = ($total === 1 && $first)
-                            ? route('public.articles.show', $first->slug)
-                            : route('knowledge.category', ['category' => $cat->id]);
-                        $icon = asset('assets/keloola-logo.png');
-                    @endphp
+                @php
+                $total = totalArticlesView($cat);
+                $first = firstArticleView($cat);
+            
+                if (($cat->children?->count() ?? 0) > 0) {
+                    // Ada child → ke halaman kategori (list child)
+                    $goUrl = route('knowledge.category', ['category' => $cat->id]);
+                } else {
+                    // Tidak ada child → langsung ke artikel
+                    if ($total === 1 && $first) {
+                        // Kalau artikelnya cuma 1 → direct ke artikel
+                        $goUrl = route('public.articles.show', $first->slug);
+                    } else {
+                        // Kalau artikelnya banyak → tampil list artikel
+                        $goUrl = route('knowledge.category', ['category' => $cat->id]);
+                    }
+                }
+            @endphp
+            
 
                     <a href="{{ $goUrl }}" class="bg-white-primary shadow rounded-lg p-6 block hover:shadow-md transition">
                         <div class="flex flex-wrap border-b border-card-bor-keloola gap-4 pb-3">
@@ -107,33 +119,34 @@
                         </div>
                     </a>
                 @endforeach
-            </div>
-        @endif
+              </div>
+            @endif
 
-        {{-- Articles di halaman kategori --}}
-        @if(isset($currentCategory) && $currentCategory)
-            <h2 class="text-lg font-semibold mb-4">Articles in {{ $currentCategory->name }}</h2>
-            @if(($articles?->count() ?? 0) > 0)
-                <div class="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-6">
-                    @foreach($articles as $article)
-                        <a href="{{ route('public.articles.show', $article->slug) }}"
-                           class="bg-white-primary p-6 rounded-lg shadow hover:shadow-md transition block">
-                            <div class="flex items-start">
-                                @if($article->thumbnail)
-                                    <img src="{{ asset('storage/'.$article->thumbnail) }}" alt="{{ $article->title }}"
-                                         class="w-16 h-16 object-cover rounded mr-3">
-                                @endif
-                                <div>
-                                    <h3 class="font-semibold text-base mb-1">{{ $article->title }}</h3>
-                                    <p class="text-sm text-gray-600">
-                                        {{ Str::limit(strip_tags($article->excerpt ?? $article->content ?? ''), 120) }}
-                                    </p>
+            {{-- Articles di halaman kategori --}}
+            @if(isset($currentCategory) && $currentCategory)
+                <h2 class="text-lg font-semibold mb-4">Articles in {{ $currentCategory->name }}</h2>
+                @if(($articles?->count() ?? 0) > 0)
+                    <div class="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-6">
+                        @foreach($articles as $article)
+                            <a href="{{ route('public.articles.show', $article->slug) }}"
+                            class="bg-white-primary p-6 rounded-lg shadow hover:shadow-md transition block">
+                                <div class="flex items-start">
+                                    @if($article->thumbnail)
+                                        <img src="{{ asset('storage/'.$article->thumbnail) }}" alt="{{ $article->title }}"
+                                            class="w-16 h-16 object-cover rounded mr-3">
+                                    @endif
+                                    <div>
+                                        <h3 class="font-semibold text-base mb-1">{{ $article->title }}</h3>
+                                        <p class="text-sm text-gray-600">
+                                            {{ Str::limit(strip_tags($article->excerpt ?? $article->content ?? ''), 120) }}
+                                        </p>
+                                    </div>
                                 </div>
-                            </div>
-                        </a>
-                    @endforeach
-                </div>
-            @else
+                            </a>
+                        @endforeach
+                    </div>
+                @else
+
                 <div class="bg-white-primary rounded-lg p-6 shadow">
                     <p>Tidak ada artikel pada kategori ini.</p>
                 </div>

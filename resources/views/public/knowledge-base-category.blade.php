@@ -62,36 +62,37 @@
 
                     {{-- Sub Categories --}}
                     @if($category->children->count())
-                        <ul class="space-y-4">
-                            @foreach($category->children as $child)
-                                @php
-                                    $articleCount = $child->articles->count();
-                                    $sectionCount = $child->children->count();
-                                    $url = ($articleCount === 1 && $sectionCount === 0)
-                                        ? route('public.articles.show', $child->articles->first()->slug)
-                                        : route('knowledge.category', ['category' => $child->id]);
-                                @endphp
-                                <li>
-                                    <a href="{{ $url }}" class="flex items-start gap-2 text-black-keloola hover:text-blue-primary">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 mb-1 flex-shrink-0"
-                                             fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                  d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9.5a2.5 2.5 0 00-2.5-2.5H15"/>
-                                        </svg>
-                                        <div class="flex flex-col">
-                                            <h2 class="text-lg font-semibold">{{ $child->name }}</h2>
-                                            <div class="flex gap-x-5 text-sm my-2 text-gray-600">
-                                                <p>{{ $articleCount }} Articles</p>
-                                                <p>{{ $sectionCount }} Sections</p>
+                            <ul class="space-y-4">
+                                @foreach($category->children as $child)
+                                    @php
+                                        $articleCount = $child->articles->count();
+                                        $sectionCount = $child->children->count();
+                                
+                                        $url = route('knowledge.category', ['category' => $child->id]);
+                                    @endphp
+                                    <li>
+                                        <a href="{{ $url }}" class="flex items-start gap-2 text-black-keloola hover:text-blue-primary">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 mb-1 flex-shrink-0"
+                                                fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9.5a2.5 2.5 0 00-2.5-2.5H15"/>
+                                            </svg>
+                                            <div class="flex flex-col">
+                                                <h2 class="text-lg font-semibold">{{ $child->name }}</h2>
+                                                <div class="flex gap-x-5 text-sm my-2 text-gray-600">
+                                                    <p>{{ $articleCount }} Articles</p>
+                                                    <p>{{ $sectionCount }} Sections</p>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </a>
-                                </li>
-                            @endforeach
-                        </ul>
-                    @elseif(!$articles->count())
-                        <p class="text-gray-600">No articles or sections available in this category.</p>
-                    @endif
+                                        </a>
+                                    </li>
+                                @endforeach
+                            </ul>
+                        @elseif(!$articles->count())
+                    <p class="text-gray-600">No articles or sections available in this category.</p>
+                @endif
+
+                    {{-- Divider --}}
 
                     @if($category->children->count() && $articles->count())
                         <hr class="my-4">    

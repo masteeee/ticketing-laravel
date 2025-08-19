@@ -161,44 +161,41 @@ class KnowledgeBaseController extends Controller
     }
 
     public function showCategory(Request $request)
-    {
-        $categoryId = $request->query('category');
-        $keyword    = $request->query('search');
-    
-        $category = Category::with(['articles', 'children.articles', 'children.children', 'parent'])
-            ->findOrFail($categoryId);
-    
-        // Artikel **hanya di kategori ini** (tanpa anak-anak)
-        $articles = $category->articles;
-    
-        // Filter jika ada keyword
-        if ($keyword) {
-            $articles = $articles->filter(function ($a) use ($keyword) {
-                $hay = strtolower(($a->title ?? '') . ' ' . ($a->content ?? ''));
-                return str_contains($hay, strtolower($keyword));
-            });
-        }
-    
-        // Jika kategori tidak punya sub-kategori dan hanya 1 artikel → langsung redirect
-        if ($articles->count() === 1 && $category->children->count() === 0) {
+{
+    $categoryId = $request->query('category');
+    $keyword    = $request->query('search');
+
+    $category = Category::with(['articles', 'children.articles', 'children.children', 'parent'])
+        ->findOrFail($categoryId);
+
+    // Artikel hanya di kategori ini (tanpa anak-anak)
+    $articles = $category->articles;
+
+    // Filter keyword
+    if ($keyword) {
+        $articles = $articles->filter(function ($a) use ($keyword) {
+            $hay = strtolower(($a->title ?? '') . ' ' . ($a->content ?? ''));
+            return str_contains($hay, strtolower($keyword));
+        });
+    }
+
+    // 🔑 Logic perbaikan
+    if ($category->children->count() === 0) {
+        // Kalau tidak ada child
+        if ($articles->count() === 1) {
+            // Artikel cuma 1 → langsung redirect ke artikel
             return redirect()->route('public.articles.show', $articles->first()->id);
         }
-    
-        $recentArticles  = Article::latest()->take(5)->get();
-        $popularArticles = Article::orderBy('views', 'desc')->take(5)->get();
-    
-        // Generate breadcrumb
-        $breadcrumbs = $this->getCategoryBreadcrumb($category);
-    
-        return view('public.knowledge-base-category', [
-            'category'        => $category,
-            'articles'        => $articles,
-            'recentArticles'  => $recentArticles,
-            'popularArticles' => $popularArticles,
-            'breadcrumbs'     => $breadcrumbs,
-        ]);
+        // Artikel lebih dari 1 → tampil list artikel
     }
-    
+
+    // Default → tampil view kategori (list child atau list artikel)
+    return view('public.knowledge.category', [
+        'category' => $category,
+        'articles' => $articles,
+    ]);
+}
+
     private function getCategoryBreadcrumb($category)
         {
             $breadcrumbs = collect([]);
