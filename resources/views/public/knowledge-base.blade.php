@@ -85,24 +85,25 @@
             <h2 class="text-lg font-semibold mb-4">Sections</h2>
             <div class="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-6 mb-10">
                 @foreach($categories as $cat)
-                @php
-                $total = totalArticlesView($cat);
-                $first = firstArticleView($cat);
+                    @php
+                        $total = totalArticlesView($cat);
+                        $first = firstArticleView($cat);
+                    
+                        if (($cat->children?->count() ?? 0) > 0) {
+                            // Kalau punya child → selalu ke halaman kategori (list child)
+                            $goUrl = route('knowledge.category', ['category' => $cat->id]);
+                        } else {
+                            // Tidak punya child
+                            if ($total === 1 && $first) {
+                                // Kalau hanya ada 1 artikel → langsung ke artikel
+                                $goUrl = route('public.articles.show', $first->slug);
+                            } else {
+                                // Kalau lebih dari 1 artikel → list artikel
+                                $goUrl = route('knowledge.category', ['category' => $cat->id]);
+                            }
+                        }
+                    @endphp
             
-                if (($cat->children?->count() ?? 0) > 0) {
-                    // Ada child → ke halaman kategori (list child)
-                    $goUrl = route('knowledge.category', ['category' => $cat->id]);
-                } else {
-                    // Tidak ada child → langsung ke artikel
-                    if ($total === 1 && $first) {
-                        // Kalau artikelnya cuma 1 → direct ke artikel
-                        $goUrl = route('public.articles.show', $first->slug);
-                    } else {
-                        // Kalau artikelnya banyak → tampil list artikel
-                        $goUrl = route('knowledge.category', ['category' => $cat->id]);
-                    }
-                }
-            @endphp
             
 
                     <a href="{{ $goUrl }}" class="bg-white-primary shadow rounded-lg p-6 block hover:shadow-md transition">
@@ -158,9 +159,23 @@
                     @php
                         $total = totalArticlesView($cat);
                         $first = firstArticleView($cat);
-                        $goUrl = ($total === 1 && $first)
-                            ? route('public.articles.show', $first->slug)
-                            : route('knowledge.category', ['category' => $cat->id]);
+                        // $goUrl = ($total === 1 && $first)
+                        //     ? route('public.articles.show', $first->slug)
+                        //     : route('knowledge.category', ['category' => $cat->id]);
+                        if (($cat->children?->count() ?? 0) > 0) {
+                            // Kalau punya child → selalu ke halaman kategori (list child)
+                            $goUrl = route('knowledge.category', ['category' => $cat->id]);
+                        } else {
+                            // Tidak punya child
+                            if ($total === 1 && $first) {
+                                // Kalau hanya ada 1 artikel → langsung ke artikel
+                                $goUrl = route('public.articles.show', $first->slug);
+                            } else {
+                                // Kalau lebih dari 1 artikel → list artikel
+                                $goUrl = route('knowledge.category', ['category' => $cat->id]);
+                            }
+                        }
+
                         $icon = asset('assets/keloola-logo.png');
                     @endphp
                     <a href="{{ $goUrl }}" class="bg-white-primary shadow rounded-lg p-6 block hover:shadow-md transition">
