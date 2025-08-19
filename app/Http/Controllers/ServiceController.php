@@ -22,16 +22,19 @@ class ServiceController extends Controller
         $departments = Department::all();
         return view('admin.services.create', compact('departments'));
     }
-
     public function store(Request $request)
     {
         $validated = $request->validate(Service::createRules($request->department_id));
-
-        Service::create($validated);
+    
+        $service = Service::create($validated);
+    
+        if($request->ajax()){
+            return response()->json(['success' => true, 'service' => $service]);
+        }
+    
         return redirect()->route('services.index')
             ->with('success', 'Service created successfully.');
     }
-
     public function edit(Service $service)
     {
         $departments = Department::all();
