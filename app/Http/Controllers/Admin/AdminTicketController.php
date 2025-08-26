@@ -74,8 +74,15 @@ class AdminTicketController extends Controller
         
             $query->where('status', $status);
         }
+        // Filter Email
+        if ($request->filled('email')) {
+            $query->where('email', 'like', '%' . $request->email . '%');
+        }
         
-
+        //  Filter berdasarkan nomor tiket (invoice_id)
+        if ($request->filled('invoice_id')) {
+            $query->where('invoice_id', 'like', '%' . $request->invoice_id . '%');
+        }
         // Filter tanggal
         if ($request->filled('start_date') && $request->filled('end_date')) {
             $startDate = $request->start_date . ' 00:00:00';
