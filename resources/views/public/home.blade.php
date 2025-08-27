@@ -6,50 +6,60 @@
 <section class="bg-search-section py-8">
      <div class="container mx-auto px-4">
           <div class="relative">
+               <!-- Desktop search -->
                <div class="items-center space-x-4 hidden md:flex">
                     <div class="relative flex-1">
-                         <form id="desktop-search-form" action="{{ route('knowledge.search') }}" method="GET">
-                             <input id="desktop-search-input" name="search" type="text" placeholder="Search articles"
-                                  class="w-4/5 p-4 pr-32 border border-gray-primary outline-none">
+                         <form id="desktop-search-form" action="{{ route('knowledge.search') }}" method="GET" class="w-full">
+                              <div class="w-full flex items-center border border-gray-primary rounded-lg overflow-hidden">
+                                   <input id="desktop-search-input" name="search" type="text" placeholder="Search articles"
+                                        class="flex-1 px-4 py-4 outline-none border-0 focus:ring-0">
+                                   <button type="submit" id="desktop-search-dropdown" style="background: white"
+                                        class="px-4 py-4 text-gray-500 hover:text-gray-700">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5"
+                                             fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                             <path stroke-linecap="round" stroke-linejoin="round"
+                                                  d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 
+                                                       1110.5 3a7.5 7.5 0 016.15 13.65z" />
+                                        </svg>
+                                   </button>
+                              </div>
                          </form>
-                         <button id="desktop-search-dropdown"
-                              class="absolute right-[20%] top-0 h-full px-4 rounded-r-lg flex items-center hover:shadow-md">
-                              <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 1110.5 3a7.5 7.5 0 016.15 13.65z" />
-                              </svg>
-                         </button>
                     </div>
-
                </div>
+
                <!-- Mobile search -->
-               <div class="md:hidden">
-                    <form id="mobile-search-form" action="{{ route('knowledge.search') }}" method="GET">
-                        <input id="mobile-search-input" name="search" type="text" placeholder="Search articles"
-                             class="w-full p-4 border border-gray-primary outline-none rounded">
+               <div class="md:hidden relative mt-4">
+                    <form id="mobile-search-form" action="{{ route('knowledge.search') }}" method="GET" class="w-full">
+                         <div class="w-full flex items-center border border-gray-primary rounded-lg overflow-hidden">
+                              <input id="mobile-search-input" name="search" type="text" placeholder="Search articles"
+                                   class="flex-1 px-4 py-4 outline-none border-0 focus:ring-0">
+                              <button type="submit" id="mobile-search-dropdown" style="background: white"
+                                   class="px-4 py-4 text-gray-500 hover:text-gray-700">
+                                   <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5"
+                                        fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                             d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 
+                                                  1110.5 3a7.5 7.5 0 016.15 13.65z" />
+                                   </svg>
+                              </button>
+                         </div>
                     </form>
-                    <button id="mobile-search-dropdown"
-                         class="absolute right-[20%] top-0 h-full px-4 rounded-r-lg flex items-center hover:shadow-md">
-                         <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                   d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 1110.5 3a7.5 7.5 0 016.15 13.65z" />
-                         </svg>
-                    </button>
 
-
+                    <!-- Floating Action Button (Mobile Only) -->
                     <div class="fixed bottom-6 right-6 z-50">
                          <button id="mobile-fab"
                               class="w-14 h-14 bg-red-keloola text-white-primary rounded-full shadow-lg flex items-center justify-center">
                               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                   stroke-width="2" stroke="currentColor" class="w-8 h-8">
-                                   <path stroke-linecap="round" stroke-linejoin="round"
-                                        d="M12 4.5v15m7.5-7.5h-15" />
+                              stroke-width="2" stroke="currentColor" class="w-8 h-8">
+                              <path stroke-linecap="round" stroke-linejoin="round"
+                                   d="M12 4.5v15m7.5-7.5h-15" />
                               </svg>
                          </button>
                     </div>
                </div>
           </div>
      </div>
+
      <!-- Breadcrumb -->
      <div class="container mx-auto px-4 py-4">
           <div class="text-sm text-primary">

@@ -5,9 +5,6 @@
 @section('content')
 <section class="bg-form-section py-5">
     <div class="departments-container container mx-auto px-4">
-        <div class="bg-section-text-form p-4 border border-section-bor-form rounded-md my-4 flex lg:w-[73.5%] md:w-full">
-            <h2 class="lg:text-xl sm:text-sm font-semibold">Keloola Corporation's Help Center is hosted in our US data center</h2>
-        </div>
         <div class="flex flex-col lg:flex-row gap-8">
             <!-- Form kiri -->
             <div class="lg:w-3/4 bg-white-primary border border-section-bor rounded-md">

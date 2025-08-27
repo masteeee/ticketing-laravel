@@ -27,7 +27,7 @@
 
             {{-- Info --}}
             <div class="mt-6 text-center text-gray-500 text-sm">
-                Masukkan kode Tracking ID (INV) dan email Anda untuk melihat status dan balasan tiket.
+                Masukkan kode Tracking ID dan email Anda untuk melihat status dan balasan tiket.
             </div>
         </div>
     </div>

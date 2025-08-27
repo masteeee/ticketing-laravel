@@ -44,26 +44,52 @@
     <div class="container mx-auto px-4">
         {{-- Search --}}
         <div class="relative">
+            {{-- Mobile search --}}
+            <div class="md:hidden">
+                <div class="relative">
+                    <form method="GET" action="{{ route('knowledge.search') }}" class="w-full">
+                        <div class="w-full flex items-center border border-gray-primary rounded-lg overflow-hidden">
+                            <input id="mobile-search-input"
+                                   name="search"
+                                   type="text"
+                                   value="{{ request('search') }}"
+                                   placeholder="Search articles"
+                                   class="flex-1 px-4 py-3 outline-none border-0 focus:ring-0">
+                            <button type="submit" aria-label="Search" id="mobile-search-button" style="background: white"
+                                    class="px-4 py-3 text-gray-500 hover:text-gray-700">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                          d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 1110.5 3a7.5 7.5 0 016.15 13.65z" />
+                                </svg>
+                            </button>
+                        </div>
+                    </form>
+                    <ul id="mobile-search-menu" class="absolute hidden left-0 mt-1 w-full bg-white-primary shadow-md rounded-md z-50"></ul>
+                </div>
+            </div>
+
+            {{-- Desktop search --}}
             <div class="items-center space-x-4 hidden md:flex">
                 <div class="relative flex-1">
-                    <form method="GET" action="{{ route('knowledge.search') }}">
-                        <input id="desktop-search-input" 
-                               name="search"
-                               type="text"
-                               value="{{ request('search') }}"
-                               placeholder="Search articles"
-                               class="w-4/5 p-4 pr-32 border border-gray-primary outline-none">
-                        <button id="desktop-search-dropdown"
-                            class="absolute right-[20%] top-0 h-full px-4 rounded-r-lg flex items-center hover:shadow-md">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 1110.5 3a7.5 7.5 0 016.15 13.65z" />
-                            </svg>
-                        </button>
+                    <form method="GET" action="{{ route('knowledge.search') }}" class="w-full">
+                        <div class="w-full flex items-center border border-gray-primary rounded-lg overflow-hidden">
+                            <input id="desktop-search-input"
+                                   name="search"
+                                   type="text"
+                                   value="{{ request('search') }}"
+                                   placeholder="Search articles"
+                                   class="flex-1 px-4 py-4 outline-none border-0 focus:ring-0">
+                            <button type="submit" aria-label="Search" id="desktop-search-button" style="background: white"
+                                    class="px-4 py-4 text-gray-500 hover:text-gray-700">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                          d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 1110.5 3a7.5 7.5 0 016.15 13.65z" />
+                                </svg>
+                            </button>
+                        </div>
                     </form>
                     {{-- Dropdown search (opsional AJAX) --}}
-                    <ul id="desktop-search-menu"
-                        class="absolute hidden right-[15%] mt-1 w-48 bg-white-primary shadow-md rounded-md z-50"></ul>
+                    <ul id="desktop-search-menu" class="absolute hidden left-0 mt-1 w-full bg-white-primary shadow-md rounded-md z-50"></ul>
                 </div>
             </div>
         </div>
