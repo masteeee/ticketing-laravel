@@ -23,10 +23,11 @@
         <div class="card-body">
             <h4 class="text-danger fw-bold mb-4 fs-5">Filter Tiket</h4>
             <form method="GET" action="{{ route('tickets.index') }}">
-                <div class="row gy-1 gx-2 mb-3">
+                {{-- Baris 1 --}}
+                <div class="row gy-2 gx-3 mb-3">
                     <div class="col-md-3">
                         <label for="department_id" class="form-label fs-6">Departemen</label>
-                        <select name="department_id" id="department_id" class="form-select form-control border">
+                        <select name="department_id" id="department_id" class="form-control">
                             <option value="">-- Semua --</option>
                             @foreach($departments as $dept)
                                 <option value="{{ $dept->id }}" {{ request('department_id') == $dept->id ? 'selected' : '' }}>
@@ -37,7 +38,7 @@
                     </div>
                     <div class="col-md-3">
                         <label for="service_id" class="form-label fs-6">Layanan</label>
-                        <select name="service_id" id="service_id" class="form-select form-control border">
+                        <select name="service_id" id="service_id" class="form-control">
                             <option value="">-- Semua --</option>
                             @foreach($services as $service)
                                 <option value="{{ $service->id }}" {{ request('service_id') == $service->id ? 'selected' : '' }}>
@@ -48,16 +49,16 @@
                     </div>
                     <div class="col-md-3">
                         <label for="status" class="form-label fs-6">Status</label>
-                        <select name="status" id="status" class="form-select form-control border">
+                        <select name="status" id="status" class="form-control">
                             <option value="">-- Semua --</option>
                             <option value="Dalam Antrean" {{ request('status') == 'Dalam Antrean' ? 'selected' : '' }}>Open</option>
                             <option value="Dalam Pengerjaan" {{ request('status') == 'Dalam Pengerjaan' ? 'selected' : '' }}>Dalam Pengerjaan</option>
-                            <option value="Solved" {{ request('status') == 'Solved' ? 'selected' : '' }}>Selesai</option>                            
+                            <option value="Solved" {{ request('status') == 'Solved' ? 'selected' : '' }}>Selesai</option>
                         </select>
                     </div>
                     <div class="col-md-3">
                         <label for="assigned_to" class="form-label fs-6">Assigned To</label>
-                        <select name="assigned_to" id="assigned_to" class="form-select form-control border">
+                        <select name="assigned_to" id="assigned_to" class="form-control">
                             <option value="">-- Semua --</option>
                             <option value="unassigned" {{ request('assigned_to') == 'unassigned' ? 'selected' : '' }}>Belum Di-assign</option>
                             @foreach($users as $user)
@@ -68,8 +69,18 @@
                         </select>
                     </div>
                 </div>
-
-                <div class="row gy-3 gx-2 align-items-end">
+    
+                {{-- Baris 2 --}}
+                <div class="row gy-2 gx-3 mb-3">
+                    <div class="col-md-3">
+                        <label for="email" class="form-label fs-6">Email</label>
+                        <input type="text" name="email" id="email" class="form-control" placeholder="Cari email..." value="{{ request('email') }}">
+                    </div>
+                    <div class="col-md-3">
+                        <label for="invoice_id" class="form-label fs-6">ID Tiket</label>
+                        <input type="text" name="invoice_id" id="invoice_id" class="form-control" 
+                               placeholder="Cari ID Tiket..." value="{{ request('invoice_id') }}">
+                    </div>
                     <div class="col-md-3">
                         <label for="start_date" class="form-label fs-6">Dari Tanggal</label>
                         <input type="date" name="start_date" id="start_date" class="form-control" value="{{ request('start_date') }}">
@@ -78,11 +89,15 @@
                         <label for="end_date" class="form-label fs-6">Sampai Tanggal</label>
                         <input type="date" name="end_date" id="end_date" class="form-control" value="{{ request('end_date') }}">
                     </div>
-                    <div class="col-md-3 d-flex gap-2">
-                        <button type="submit" class="btn btn-danger flex-fill">
+                </div>
+    
+                {{-- Tombol --}}
+                <div class="row mt-3">
+                    <div class="col d-flex gap-2">
+                        <button type="submit" class="btn btn-danger">
                             <i class="fas fa-filter me-1"></i> Terapkan
                         </button>
-                        <a href="{{ route('tickets.index') }}" class="btn btn-secondary flex-fill">
+                        <a href="{{ route('tickets.index') }}" class="btn btn-secondary">
                             <i class="fas fa-times me-1"></i> Reset
                         </a>
                     </div>
@@ -90,6 +105,7 @@
             </form>
         </div>
     </div>
+    
 
     <div class="table-responsive table-bordered">
         <table class="table table-bordered align-middle text-center shadow-sm fs-6">

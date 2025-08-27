@@ -16,11 +16,12 @@ class KnowledgeBaseController extends Controller
         $categoryId = $request->query('category');
 
         // Eager-load tree sampai 3 level + filter keyword pada relasi articles
-        $withArticles = function ($q) use ($keyword) {
-            if ($keyword) {
-                $q->where(function ($s) use ($keyword) {
-                    $s->where('title', 'like', "%{$keyword}%")
-                      ->orWhere('content', 'like', "%{$keyword}%");
+        $kw = $keyword ? mb_strtolower($keyword) : null;
+        $withArticles = function ($q) use ($kw) {
+            if ($kw !== null && $kw !== '') {
+                $q->where(function ($s) use ($kw) {
+                    $s->whereRaw('LOWER(title) LIKE ?', ['%' . $kw . '%'])
+                      ->orWhereRaw('LOWER(content) LIKE ?', ['%' . $kw . '%']);
                 });
             }
         };
@@ -249,8 +250,9 @@ class KnowledgeBaseController extends Controller
     public function search(Request $request)
     {
         $keyword = $request->query('search');
-        $articles = Article::where('title', 'like', "%{$keyword}%")
-            ->orWhere('content', 'like', "%{$keyword}%")
+        $kw = $keyword ? mb_strtolower($keyword) : '';
+        $articles = Article::whereRaw('LOWER(title) LIKE ?', ['%' . $kw . '%'])
+            ->orWhereRaw('LOWER(content) LIKE ?', ['%' . $kw . '%'])
             ->get();
 
         $recentArticles  = Article::latest()->take(5)->get();
